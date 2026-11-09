@@ -330,7 +330,7 @@ fn valid_source(s: &str) -> bool {
     s.strip_prefix(prefix).and_then(|tail| tail.strip_suffix(".pdf"))
         .is_some_and(|date| date.len() == 8 && date.bytes().all(|b| b.is_ascii_digit()))
 }
-fn valid_phrase(s: &str) -> bool { !s.is_empty() && s.len() <= 40 && s.bytes().all(|b| b.is_ascii_alphabetic() || b == b' ') && !s.starts_with(' ') && !s.ends_with(' ') }
+fn valid_phrase(s: &str) -> bool { !s.is_empty() && s.len() <= 40 && s.split(' ').all(|word| !word.is_empty() && word.bytes().all(|b| b.is_ascii_alphabetic())) }
 fn token_id(id: &str, yes: bool) -> String { format!("{id}:{}", if yes { "YES" } else { "NO" }) }
 fn parse_token(token: &str) -> Option<(String, bool)> {
     let (id, side) = token.rsplit_once(':')?;

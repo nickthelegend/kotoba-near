@@ -24,6 +24,7 @@ async fn market_and_attacker_guards_on_real_local_chain() -> anyhow::Result<()> 
     let deadline = close + 7 * 86_400_000_000_000;
     creator.call(contract.id(), "create_market").args_json(json!({"id":"fomc-jan-inflation","event":"January 2026 FOMC press conference","source_url":"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf","phrase":"inflation","threshold":40,"close_ns":close,"deadline_ns":deadline,"b":1000})).deposit(NearToken::from_near(1)).transact().await?.into_result()?;
     rejected(creator.call(contract.id(), "create_market").args_json(json!({"id":"bad-fed-url","event":"Invalid source rejection","source_url":"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf?swap=1","phrase":"inflation","threshold":1,"close_ns":close,"deadline_ns":deadline,"b":1000})).deposit(NearToken::from_near(1)).transact().await?, "ERR_SOURCE");
+    rejected(creator.call(contract.id(), "create_market").args_json(json!({"id":"bad-double-space","event":"Invalid phrase rejection","source_url":"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf","phrase":"rate  cut","threshold":1,"close_ns":close,"deadline_ns":deadline,"b":1000})).deposit(NearToken::from_near(1)).transact().await?, "ERR_PHRASE");
     let market: serde_json::Value = contract.view("get_market").args_json(json!({"id":"fomc-jan-inflation"})).await?.json()?;
     assert_eq!(market["status"], "Open");
     let quote: String = contract.view("quote").args_json(json!({"id":"fomc-jan-inflation","yes":true,"quantity":10})).await?.json()?;

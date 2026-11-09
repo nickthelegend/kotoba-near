@@ -51,7 +51,7 @@ fn valid_source(s: &str) -> bool {
     let prefix = "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf";
     s.strip_prefix(prefix).and_then(|tail| tail.strip_suffix(".pdf")).is_some_and(|date| date.len() == 8 && date.bytes().all(|b| b.is_ascii_digit()))
 }
-fn valid_phrase(s: &str) -> bool { !s.is_empty() && s.len() <= 40 && s.bytes().all(|b| b.is_ascii_alphabetic() || b == b' ') && !s.starts_with(' ') && !s.ends_with(' ') }
+fn valid_phrase(s: &str) -> bool { !s.is_empty() && s.len() <= 40 && s.split(' ').all(|word| !word.is_empty() && word.bytes().all(|b| b.is_ascii_alphabetic())) }
 
 fn count_pdf(pdf: &[u8], phrase: &str) -> Result<u32, Box<dyn std::error::Error>> {
     let doc = lopdf::Document::load_mem(pdf)?;
@@ -77,6 +77,6 @@ fn count_words(text: &str, phrase: &str) -> u32 {
 mod tests {
     use super::*;
     #[test] fn words() { assert_eq!(count_words("Recession recessionary RECESSION.", "recession"), 2); assert_eq!(count_words("rate\ncut; RATE cut", "rate cut"), 2); }
-    #[test] fn source_allowlist() { assert!(valid_source("https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf")); assert!(!valid_source("https://evil.example/FOMCpresconf20260128.pdf")); }
+    #[test] fn source_allowlist() { assert!(valid_source("https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf")); assert!(!valid_source("https://evil.example/FOMCpresconf20260128.pdf")); assert!(valid_phrase("rate cut")); assert!(!valid_phrase("rate  cut")); }
     #[test] fn real_pdf() { let pdf = include_bytes!("../../sdk/fixtures/FOMCpresconf20260128.pdf"); assert_eq!(format!("{:x}", Sha256::digest(pdf)), "2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3"); assert_eq!(count_pdf(pdf, "inflation").unwrap(), 40); assert_eq!(count_pdf(pdf, "recession").unwrap(), 0); }
 }
