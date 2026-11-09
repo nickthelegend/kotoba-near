@@ -75,6 +75,15 @@ export async function viewMarket(contractId, id, rpc = TESTNET_RPC) {
   return JSON.parse(Buffer.from(body.result.result).toString('utf8'));
 }
 
+export async function estimateOutlayerCost(resourceLimits = { max_instructions: 10_000_000_000, max_memory_mb: 256, max_execution_seconds: 60 }, inputLen = 200) {
+  const args_base64 = Buffer.from(JSON.stringify({ resource_limits: resourceLimits, input_len: inputLen })).toString('base64');
+  const response = await fetch(TESTNET_RPC, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba-outlayer-cost', method: 'query', params: { request_type: 'call_function', finality: 'final', account_id: 'outlayer.testnet', method_name: 'estimate_execution_cost', args_base64 } }) });
+  if (!response.ok) throw new Error(`NEAR testnet RPC HTTP ${response.status}`);
+  const body = await response.json();
+  if (body.error) throw new Error(`OutLayer estimate failed: ${body.error.message || JSON.stringify(body.error)}`);
+  return BigInt(JSON.parse(Buffer.from(body.result.result).toString('utf8')));
+}
+
 /** A read-only 1Click preview. It never returns a deposit address or executes a swap. */
 export async function oneClickDryQuote({ originAsset, destinationAsset, amount, recipient, refundTo, accountId = process.env.NEAR_MAINNET_ACCOUNT, jwt = process.env.ONECLICK_JWT }) {
   if (!accountId) throw new Error('Setup required: NEAR_MAINNET_ACCOUNT');

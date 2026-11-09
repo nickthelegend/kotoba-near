@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { countPhrase, fetchFomcDates, fetchOfficialPdf, highlightPhrase, lmsrCost, lmsrPrices, lmsrQuote, oneClickDryQuote, sha256, viewMarket } from '../src/index.mjs';
+import { countPhrase, estimateOutlayerCost, fetchFomcDates, fetchOfficialPdf, highlightPhrase, lmsrCost, lmsrPrices, lmsrQuote, oneClickDryQuote, sha256, viewMarket } from '../src/index.mjs';
 
 test('LMSR prices sum to 1 over imbalanced inventories', () => {
   for (const yes of [0, 1, 100, 10000]) for (const no of [0, 2, 100, 30000]) {
@@ -46,6 +46,10 @@ test('official Fed PDF is fetched live and matches the pinned FINAL fixture', as
 test('official Fed calendar supplies the December 2026 meeting', async () => {
   const dates = await fetchFomcDates(2026);
   assert.ok(dates.some(d => d.month === 12 && d.day === 9));
+});
+test('OutLayer testnet returns a live compute estimate', async () => {
+  const cost = await estimateOutlayerCost();
+  assert.ok(cost > 0n);
 });
 test('RPC reader requires an actual testnet contract ID', async () => {
   await assert.rejects(viewMarket('', 'foo'), /Setup required: NEAR_TESTNET_CONTRACT/);
