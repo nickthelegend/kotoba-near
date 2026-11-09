@@ -114,8 +114,8 @@ impl Kotoba {
 
     pub fn prices(&self, id: String) -> (f64, f64) {
         let m = self.markets.get(&id).expect("ERR_UNKNOWN_MARKET");
-        let x = ((m.yes as f64 - m.no as f64) / m.b as f64).exp();
-        (x / (1.0 + x), 1.0 / (1.0 + x))
+        let yes = yes_price(m.yes, m.no, m.b);
+        (yes, 1.0 - yes)
     }
 
     #[payable]
@@ -313,6 +313,11 @@ fn cost(yes: u32, no: u32, b: u32) -> f64 {
     let lo = yes.min(no) as f64 / b as f64;
     b as f64 * (hi + (1.0 + (lo - hi).exp()).ln())
 }
+fn yes_price(yes: u32, no: u32, b: u32) -> f64 {
+    let difference = (yes as f64 - no as f64) / b as f64;
+    if difference >= 0.0 { 1.0 / (1.0 + (-difference).exp()) }
+    else { let ratio = difference.exp(); ratio / (1.0 + ratio) }
+}
 fn is_sha256(s: &str) -> bool { s.len() == 64 && s.bytes().all(|b| b.is_ascii_hexdigit()) }
 fn valid_id(s: &str) -> bool { !s.is_empty() && s.len() <= 64 && s.bytes().all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'-') }
 fn valid_source(s: &str) -> bool {
@@ -342,4 +347,5 @@ mod tests {
     #[test] fn lmsr_complete_set() { let c=cost(100, 100, 1000)-cost(0,0,1000); assert!((c-100.0).abs()<1e-9); }
     #[test] fn lmsr_monotonic() { assert!(cost(5,0,1000)>cost(0,0,1000)); assert!(cost(10,0,1000)>cost(5,0,1000)); }
     #[test] fn no_roundtrip_profit() { let c=cost(10,0,1000)-cost(0,0,1000); assert!(c>=5.0); }
+    #[test] fn extreme_prices_are_finite() { for (yes, no) in [(100_000, 0), (0, 100_000)] { let price = yes_price(yes, no, 100); assert!(price.is_finite() && (0.0..=1.0).contains(&price)); } }
 }
