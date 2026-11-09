@@ -22,8 +22,9 @@ export type Step = {
 
 export const CONTRACT: string = (import.meta.env.VITE_NEAR_TESTNET_CONTRACT as string | undefined) || deployment.contract_id;
 export const RPC: string = (import.meta.env.VITE_NEAR_TESTNET_RPC as string | undefined) || 'https://test.rpc.fastnear.com';
-// FastNEAR answers 429 without CORS headers when busy, so reads fall back to the official endpoint.
-const RPCS = [...new Set([RPC, 'https://rpc.testnet.near.org'])];
+// FastNEAR answers 429 when busy (sometimes without CORS headers), so reads fail over to dRPC's public testnet endpoint.
+// rpc.testnet.near.org is deprecated and answers every call with a -429 body, so it is not in the list.
+const RPCS = [...new Set([RPC, 'https://near-testnet.drpc.org'])];
 let preferred = 0;
 async function rpcPost(body: unknown): Promise<any> {
   let last: unknown;
@@ -32,8 +33,10 @@ async function rpcPost(body: unknown): Promise<any> {
     try {
       const response = await fetch(RPCS[k], { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
       if (!response.ok) throw new Error(`NEAR RPC HTTP ${response.status}`);
+      const json = await response.json();
+      if (json?.error?.code === -429) throw new Error(`NEAR RPC rate limited: ${json.error.message}`);
       preferred = k;
-      return await response.json();
+      return json;
     } catch (e) { last = e; }
   }
   throw new Error(`NEAR testnet RPC unreachable (${RPCS.map((u) => new URL(u).host).join(', ')}): ${(last as Error)?.message ?? last}`);
@@ -105,3 +108,19 @@ export function splitHits(text: string, phrase: string) {
   parts.push({ text: text.slice(last), hit: false });
   return parts;
 }
+
+/** One scheduled event (a press conference) and the word markets opened on it. */
+export type KEvent = { key: string; title: string; source: string; date: Date | null; closeMs: number; markets: Market[]; open: boolean };
+export function groupEvents(markets: Market[], now: number): KEvent[] {
+  const map = new Map<string, Market[]>();
+  for (const m of markets) map.set(m.source_url, [...(map.get(m.source_url) ?? []), m]);
+  return [...map.entries()].map(([source, list]) => {
+    const date = eventDate(list[0]);
+    const closeMs = Math.min(...list.map((m) => m.close_ns / 1e6));
+    const open = list.some((m) => m.status === 'Open' && m.close_ns / 1e6 > now);
+    return { key: source, title: 'Fed press conference', source, date, closeMs, markets: list, open };
+  }).sort((a, b) => Number(b.open) - Number(a.open) || (a.open ? a.closeMs - b.closeMs : b.closeMs - a.closeMs));
+}
+export const isOpen = (m: Market, now: number) => m.status === 'Open' && m.close_ns / 1e6 > now;
+export const shares = (m: Market) => m.yes + m.no;
+export const fmtTimeUTC = (ms: number) => new Date(ms).toISOString().slice(11, 16);

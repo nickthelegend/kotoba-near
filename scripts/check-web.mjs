@@ -5,7 +5,7 @@ const { chromium } = require('/Volumes/Extreme SSD/Projects/tasteprobe/node_modu
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 try {
   const base = process.env.KOTOBA_WEB || 'http://127.0.0.1:5198';
-  for (const route of ['/', '/app', '/market/fomc-2026-01-inflation-40', '/creators']) for (const width of [1440, 390]) {
+  for (const route of ['/', '/app', '/resolved', '/you', '/market/fomc-2026-01-inflation-40', '/creators']) for (const width of [1440, 390]) {
     const page = await browser.newPage({ viewport: { width, height: 900 } });
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));

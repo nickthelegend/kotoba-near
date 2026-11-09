@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Copy, Countdown, Icon, Link, OddsBar, State, useNow } from './ui';
+import { Copy, Countdown, Icon, Link, SplitBar, State, useNow } from './ui';
 import { DEPLOYMENT, PINNED_PDF_SHA, PINNED_TEXT_SHA, eventDate, fmtDate, getMarket, outcome, runsFor, sha256Hex, short, splitHits, txUrl, type Market, type Step } from './lib';
 import { verifyLive, type LiveVerification } from './verify';
 
@@ -81,16 +81,16 @@ export default function MarketPage({ id }: { id: string }) {
   const res = outcome(m);
   const open = m.status === 'Open' && m.close_ns / 1e6 > now;
   return <div className="page market">
-    <Link to="/app" className="back"><Icon name="arrow" size={15} /> Board</Link>
+    <Link to={m.status === 'Open' ? '/app' : '/resolved'} className="back"><Icon name="chevL" size={16} /> {m.status === 'Open' ? 'Board' : 'Resolved'}</Link>
     <header className="market-head">
       <div>
-        <p className="label">{m.event}</p>
+        <span className="chip-src"><i className="dot-fed" />{m.event.replace('FOMC press conference', 'Fed press conference')}</span>
         <h1>Will they say <q>{m.phrase}</q>{m.threshold > 1 ? <> at least {m.threshold} times</> : ''}?</h1>
         <p className="market-meta mono">{m.id} · creator {m.creator} · {m.status}</p>
       </div>
-      <div className="verdict">
+      <div className={`verdict ${m.result ? 'verdict-res' : ''}`}>
         {m.result ? <><span className="verdict-n">{m.result.count}</span><span className="verdict-l">hits · needed {m.threshold}</span><span className={`stamp stamp-big stamp-${res!.toLowerCase()}`}>{res}</span></>
-          : open ? <><span className="label">Bets close in</span><Countdown target={m.close_ns / 1e6} now={now} /><OddsBar m={m} /></>
+          : open ? <><span className="label">Bets close in</span><Countdown target={m.close_ns / 1e6} now={now} /><SplitBar m={m} label={<>“{m.phrase}”</>} /></>
           : <span className="label">Closed · awaiting resolution</span>}
       </div>
     </header>

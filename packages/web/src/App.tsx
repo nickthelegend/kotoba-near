@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import Landing from './Landing';
 import Board from './Board';
+import Resolved from './Resolved';
+import You from './You';
 import MarketPage from './MarketPage';
 import Creators from './Creators';
-import { Icon, Link } from './ui';
-import { useWallet } from './wallet';
+import { Icon, Link, Mark, useMedia } from './ui';
+import { useWallet, type Wallet } from './wallet';
 import { CONTRACT, accountUrl, short } from './lib';
 
 function useRoute() {
@@ -13,44 +15,62 @@ function useRoute() {
   return path;
 }
 
+type Page = 'home' | 'app' | 'resolved' | 'you' | 'creators' | 'market';
+const TABS: { page: Page; to: string; label: string; icon: string }[] = [
+  { page: 'app', to: '/app', label: 'Board', icon: 'board' },
+  { page: 'resolved', to: '/resolved', label: 'Resolved', icon: 'resolved' },
+  { page: 'you', to: '/you', label: 'You', icon: 'user' },
+];
+
+function Sidebar({ page, wallet }: { page: Page; wallet: Wallet }) {
+  const cur = (p: Page) => (page === p || (p === 'resolved' && page === 'market') ? 'page' : undefined);
+  return <aside className="side">
+    <Link to="/" className="side-logo" aria-label="Kotoba home"><Mark size={36} /></Link>
+    <nav aria-label="App">
+      {TABS.map((t) => <Link key={t.page} to={t.to} aria-current={cur(t.page)}><Icon name={t.icon} />{t.label}</Link>)}
+      <Link to="/creators" aria-current={cur('creators')}><Icon name="pen" />Creators</Link>
+      <Link to="/#how"><Icon name="book" />How it settles</Link>
+    </nav>
+    <div className="side-foot">
+      <span className="net"><i className="live-dot" />NEAR testnet</span>
+      <a href={accountUrl(CONTRACT)} target="_blank" rel="noreferrer" className="mono">{short(CONTRACT, 10, 8)} <Icon name="external" size={11} /></a>
+      {wallet.account && <button className="side-out" onClick={wallet.disconnect}>Sign out {short(wallet.account, 8, 6)}</button>}
+    </div>
+  </aside>;
+}
+
+function TabBar({ page }: { page: Page }) {
+  return <nav className="tabbar" aria-label="App">
+    {TABS.map((t) => <Link key={t.page} to={t.to} className="tab" aria-current={page === t.page ? 'page' : undefined}><Icon name={t.icon} size={20} /><span>{t.label}</span></Link>)}
+  </nav>;
+}
+
 export default function App() {
   const path = useRoute();
   const wallet = useWallet();
+  const desktop = useMedia('(min-width: 960px)');
   const marketId = path.match(/^\/market\/([a-z0-9-]+)/)?.[1];
-  const page = marketId ? 'market' : path.startsWith('/app') ? 'app' : path.startsWith('/creators') ? 'creators' : 'home';
+  const page: Page = marketId ? 'market' : path.startsWith('/app') ? 'app' : path.startsWith('/resolved') ? 'resolved' : path.startsWith('/you') ? 'you' : path.startsWith('/creators') ? 'creators' : 'home';
   useEffect(() => {
-    document.title = page === 'home' ? 'Kotoba · Bet on what they’ll say' : page === 'app' ? 'Kotoba · Board' : page === 'creators' ? 'Kotoba · Creators' : `Kotoba · ${marketId}`;
-  }, [page, marketId]);
-  const cur = (p: string) => (page === p ? 'page' : undefined);
-  return <div className={`shell page-${page}`}>
+    const t: Record<Page, string> = { home: 'Kotoba · Bet on what they’ll say', app: 'Kotoba · Board', resolved: 'Kotoba · Resolved', you: 'Kotoba · You', creators: 'Kotoba · Creators', market: `Kotoba · ${marketId}` };
+    document.title = t[page];
+    document.querySelector('meta[name=theme-color]')?.setAttribute('content', page === 'home' || !desktop ? '#141210' : '#f7efe6');
+  }, [page, marketId, desktop]);
+
+  const banner = wallet.error && <p className="banner" role="alert">{wallet.error} <button onClick={() => wallet.setError('')} aria-label="Dismiss"><Icon name="x" size={14} /></button></p>;
+  if (page === 'home') return <div className="site"><a className="skip" href="#main">Skip to content</a>{banner}<Landing /></div>;
+
+  return <div className={`app ${desktop ? 'app-web' : 'app-phone'}`}>
     <a className="skip" href="#main">Skip to content</a>
-    <header className="topbar">
-      <Link to="/" className="wordmark"><span className="wm-kanji">言葉</span><span className="wm-latin">Kotoba</span></Link>
-      <nav className="nav" aria-label="Primary">
-        <Link to="/app" aria-current={cur('app')}>Board</Link>
-        <Link to="/creators" aria-current={cur('creators')}>Creators</Link>
-        <Link to="/#how">How it settles</Link>
-      </nav>
-      <div className="topbar-end">
-        <span className="net"><i className="live-dot" />Testnet</span>
-        {wallet.account ? <button className="btn btn-ghost btn-sm" onClick={wallet.disconnect} title="Sign out">{short(wallet.account, 10, 8)}</button>
-          : page === 'home' ? <Link to="/app" className="btn btn-red btn-sm">Open board</Link>
-          : <button className="btn btn-red btn-sm" onClick={wallet.connect} disabled={!wallet.ready}>Connect</button>}
-      </div>
-    </header>
-    {wallet.error && <p className="banner" role="alert">{wallet.error} <button onClick={() => wallet.setError('')} aria-label="Dismiss"><Icon name="x" size={14} /></button></p>}
-    <main id="main">
-      {page === 'home' && <Landing />}
-      {page === 'app' && <Board wallet={wallet} />}
+    {desktop && <Sidebar page={page} wallet={wallet} />}
+    <main id="main" className="app-main">
+      {banner}
+      {page === 'app' && <Board wallet={wallet} desktop={desktop} />}
+      {page === 'resolved' && <Resolved wallet={wallet} desktop={desktop} />}
+      {page === 'you' && <You wallet={wallet} desktop={desktop} />}
       {page === 'creators' && <Creators wallet={wallet} />}
       {page === 'market' && <MarketPage id={marketId!} />}
     </main>
-    <footer className="foot">
-      <div className="foot-row">
-        <p>Word markets on NEAR testnet, settled by an attested OutLayer program. Inspired by Mentioned and Memetic Machines (Colosseum Frontier 2026).</p>
-        <div className="foot-links"><a href={accountUrl(CONTRACT)} target="_blank" rel="noreferrer">Contract <Icon name="external" size={12} /></a><a href="https://outlayer.ai" target="_blank" rel="noreferrer">OutLayer <Icon name="external" size={12} /></a><span>MIT · © 2026 Nivesh Gajengi</span></div>
-      </div>
-      <div className="foot-mark" aria-hidden="true"><span>言葉</span>KOTOBA</div>
-    </footer>
+    {!desktop && <TabBar page={page === 'creators' ? 'you' : page} />}
   </div>;
 }

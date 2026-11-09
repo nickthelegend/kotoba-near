@@ -41,8 +41,8 @@ function Composer({ wallet }: { wallet: Wallet }) {
     </dl>
     {phrase !== '' && !phraseOk && <p className="sheet-err">Letters and single spaces only, up to 40 characters. The oracle counts whole words, ignoring case.</p>}
     {err && <p className="sheet-err" role="alert">{err}</p>}
-    {wallet.account ? <button className="btn btn-red btn-block notch" disabled={!phraseOk || !idOk || b < 100} onClick={create}>Open market as {wallet.account}</button>
-      : <button className="btn btn-red btn-block notch" onClick={wallet.connect} disabled={!wallet.ready}>Connect a NEAR testnet wallet</button>}
+    {wallet.account ? <button className="btn btn-coral btn-block" disabled={!phraseOk || !idOk || b < 100} onClick={create}>Open market as {wallet.account}</button>
+      : <button className="btn btn-coral btn-block" onClick={wallet.connect} disabled={!wallet.ready}>Connect a NEAR testnet wallet</button>}
     <p className="sheet-note">Sources are limited to federalreserve.gov press conference PDFs, the only free transcript feed we could verify. Podcast and stream transcripts are not supported yet.</p>
   </div>;
 }
@@ -56,8 +56,7 @@ export default function Creators({ wallet }: { wallet: Wallet }) {
   }, [markets]);
   return <div className="page creators">
     <header className="page-head">
-      <p className="label">Creators</p>
-      <h1>Open the market.<br /><span className="dim">Keep 1% of every trade.</span></h1>
+            <h1>Open the market.<br /><span className="dim">Keep 1% of every trade.</span></h1>
       <p className="lead">Anyone can open a word market on a Fed press conference by seeding the LMSR subsidy. Creators earn a 1% fee on every buy, paid to their account the moment the trade lands.</p>
     </header>
     <div className="creators-grid">
