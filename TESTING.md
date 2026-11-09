@@ -32,14 +32,17 @@ The transcript-swap case: the challenge rule compares `count` and `transcript_sh
 
 ## Browser QA
 
-We ran `vite build`, then `vite preview` on port 5198, and drove headless Chrome (playwright-core, channel `chrome`).
+Nov 9 2026, after the news-markets UI rebuild. `vite build` passes. On the dev server at port 5198, `node scripts/check-web.mjs` drove headless Chrome (playwright-core, channel `chrome`) over every route at 1440 and 390, and we screenshotted each route again at 375.
 
-| Route | 1440×900 | 390×844 |
+| Route | 1440×900 (desktop: off-white, sidebar) | 390×844 and 375×812 (phone: dark, tab bar) |
 | --- | --- | --- |
 | `/` | no overflow, 0 page errors | no overflow, 0 page errors |
-| `/app` | no overflow, 0 page errors | no overflow, 0 page errors |
-| `/app` with the bet sheet open | live contract quote shown (0.0061 NEAR for 10 YES) | bottom sheet, same quote |
+| `/app` | 2-column card grid of the 4 open Dec 9 markets, live LMSR odds | event carousel, week strip (Dec 9: 4 markets), market list |
+| `/app` with a sheet open | YES/NO bet sheet shows the live contract quote (0.0061 NEAR for 10 shares) | "Your call" event sheet, then the bet sheet as a bottom sheet with the same quote |
+| `/resolved` | the 2 settled Jan 28 markets | same |
+| `/you` | "No wallet connected" state with Connect | same |
 | `/market/fomc-2026-01-inflation-40` | 5 of 5 in-browser seal checks pass on both runs; browser count 40 = attested 40 | same |
+| `/market/fomc-2026-12-inflation` | countdown, live odds, YES/NO buttons open the bet sheet | same |
 | `/creators` | no overflow, 0 page errors | no overflow, 0 page errors |
 
-During QA, FastNEAR returned HTTP 429 without CORS headers, so the web app now falls back to `rpc.testnet.near.org`. The preview server was stopped afterwards.
+FastNEAR (`test.rpc.fastnear.com`) often answers HTTP 429 without CORS headers, which Chrome logs as a console error. Reads then fail over to `near-testnet.drpc.org`, and the data still loads. `rpc.testnet.near.org` is deprecated and answers every call with a -429 body, so we removed it from the list. The dev server was stopped afterwards.

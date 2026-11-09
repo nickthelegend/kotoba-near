@@ -69,7 +69,7 @@ export default function App() {
       {page === 'resolved' && <Resolved wallet={wallet} desktop={desktop} />}
       {page === 'you' && <You wallet={wallet} desktop={desktop} />}
       {page === 'creators' && <Creators wallet={wallet} />}
-      {page === 'market' && <MarketPage id={marketId!} />}
+      {page === 'market' && <MarketPage id={marketId!} wallet={wallet} />}
     </main>
     {!desktop && <TabBar page={page === 'creators' ? 'you' : page} />}
   </div>;

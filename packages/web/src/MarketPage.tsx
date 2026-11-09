@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Copy, Countdown, Icon, Link, SplitBar, State, useNow } from './ui';
-import { DEPLOYMENT, PINNED_PDF_SHA, PINNED_TEXT_SHA, eventDate, fmtDate, getMarket, outcome, runsFor, sha256Hex, short, splitHits, txUrl, type Market, type Step } from './lib';
+import { DEPLOYMENT, PINNED_PDF_SHA, PINNED_TEXT_SHA, eventDate, fmtDate, getMarket, outcome, runsFor, sha256Hex, short, splitHits, txUrl, pct, yesPrice, type Market, type Step } from './lib';
 import { verifyLive, type LiveVerification } from './verify';
+import { BetSheet } from './Trade';
+import type { Wallet } from './wallet';
 
 function RunCard({ run, label }: { run: Step; label: string }) {
   const o = run.outlayer!;
@@ -69,8 +71,9 @@ function Transcript({ m }: { m: Market }) {
   </div>;
 }
 
-export default function MarketPage({ id }: { id: string }) {
+export default function MarketPage({ id, wallet }: { id: string; wallet: Wallet }) {
   const [m, setM] = useState<Market | null | undefined>(undefined);
+  const [side, setSide] = useState<boolean | null>(null);
   const [err, setErr] = useState('');
   const now = useNow();
   useEffect(() => { getMarket(id).then(setM).catch((e) => setErr(String(e.message || e))); }, [id]);
@@ -90,7 +93,7 @@ export default function MarketPage({ id }: { id: string }) {
       </div>
       <div className={`verdict ${m.result ? 'verdict-res' : ''}`}>
         {m.result ? <><span className="verdict-n">{m.result.count}</span><span className="verdict-l">hits · needed {m.threshold}</span><span className={`stamp stamp-big stamp-${res!.toLowerCase()}`}>{res}</span></>
-          : open ? <><span className="label">Bets close in</span><Countdown target={m.close_ns / 1e6} now={now} /><SplitBar m={m} label={<>“{m.phrase}”</>} /></>
+          : open ? <><span className="label">Bets close in</span><Countdown target={m.close_ns / 1e6} now={now} /><SplitBar m={m} label={<>“{m.phrase}”</>} /><div className="yn yn-wide"><button className="yn-yes" onClick={() => setSide(true)}><Icon name="arrowUp" size={15} />Yes {pct(yesPrice(m))}</button><button className="yn-no" onClick={() => setSide(false)}><Icon name="arrowDown" size={15} />No {pct(1 - yesPrice(m))}</button></div></>
           : <span className="label">Closed · awaiting resolution</span>}
       </div>
     </header>
@@ -107,5 +110,6 @@ export default function MarketPage({ id }: { id: string }) {
     </section>}
 
     <section className="board-sec"><header className="board-head"><h2>Every counted word</h2></header><Transcript m={m} /></section>
+    {side !== null && <BetSheet m={m} side={side} wallet={wallet} onClose={() => setSide(null)} />}
   </div>;
 }
