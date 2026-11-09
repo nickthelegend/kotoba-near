@@ -58,7 +58,7 @@ Any testnet account can create a Fed-source market by paying the LMSR subsidy. T
 | --- | --- | --- | --- | --- |
 | Local near-workspaces sandbox | `kotoba-contract` WASM | Create market, buy, transfer and attack calls | Reproduced by `pnpm test`; sandbox is ephemeral | PASS |
 | NEAR testnet | No deployment | Account creation via official helper | Helper returned HTTP 429 on 2026-11-09; no transaction exists | BLOCKED |
-| OutLayer testnet | WASI P2 artifact SHA-256 `cc1391dae45ced2c8e56ca5061010b8c56b73a1c8e29ac959a39210acaa9ac6e` built locally | Upload and execute official PDF | Live cost view passed; no execution ID or attestation exists | BLOCKED |
+| OutLayer testnet | WASI P2 artifact SHA-256 `b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314` built locally | Upload and execute official PDF | Live cost view passed; no execution ID or attestation exists | BLOCKED |
 | NEAR mainnet Intents | No transaction | 1Click quote is dry only | `NEAR_MAINNET_ACCOUNT` not configured | BLOCKED |
 
 No explorer transaction links are claimed because no public-chain transaction has succeeded. The exact dependencies are in [BLOCKED.md](BLOCKED.md). This repository has no remote; Nick publishes it, not the build agent.
