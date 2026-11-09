@@ -1,0 +1,447 @@
+{
+  "network": "testnet",
+  "contract": "kotoba-edfa2b47.testnet",
+  "steps": [
+    {
+      "step": "create player sub-account",
+      "signer": "kotoba-edfa2b47.testnet",
+      "tx": "HWU7NPqqP2LD62Q2eBVak8zyVmGVvmnXmCT9CrnVMM7S",
+      "explorer": "https://testnet.nearblocks.io/txns/HWU7NPqqP2LD62Q2eBVak8zyVmGVvmnXmCT9CrnVMM7S",
+      "at": "2026-11-09T16:25:39.536Z",
+      "ok": true,
+      "account": "player.kotoba-edfa2b47.testnet"
+    },
+    {
+      "step": "create market fomc-2026-01-inflation-40",
+      "signer": "kotoba-edfa2b47.testnet",
+      "method": "create_market",
+      "args": {
+        "id": "fomc-2026-01-inflation-40",
+        "event": "FOMC press conference, Jan 28 2026 (Powell)",
+        "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf",
+        "phrase": "inflation",
+        "threshold": 40,
+        "close_ns": 1794241779780000000,
+        "deadline_ns": 1794846339902000000,
+        "b": 100
+      },
+      "deposit_yocto": "70000000000000000000000",
+      "tx": "DDJBJq1gKYUozj6Pk5oWxPSVb9KHcoL3ztxSHuUGHB75",
+      "explorer": "https://testnet.nearblocks.io/txns/DDJBJq1gKYUozj6Pk5oWxPSVb9KHcoL3ztxSHuUGHB75",
+      "at": "2026-11-09T16:25:43.474Z",
+      "ok": true,
+      "return": null,
+      "failure": null,
+      "logs": []
+    },
+    {
+      "step": "create market fomc-2026-01-recession",
+      "signer": "kotoba-edfa2b47.testnet",
+      "method": "create_market",
+      "args": {
+        "id": "fomc-2026-01-recession",
+        "event": "FOMC press conference, Jan 28 2026 (Powell)",
+        "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf",
+        "phrase": "recession",
+        "threshold": 1,
+        "close_ns": 1794241779780000000,
+        "deadline_ns": 1794846339902000000,
+        "b": 100
+      },
+      "deposit_yocto": "70000000000000000000000",
+      "tx": "9jGxuGNaJmq86qxaYNgj1cv9G1VqSFtPszw48RtCdTCk",
+      "explorer": "https://testnet.nearblocks.io/txns/9jGxuGNaJmq86qxaYNgj1cv9G1VqSFtPszw48RtCdTCk",
+      "at": "2026-11-09T16:25:47.131Z",
+      "ok": true,
+      "return": null,
+      "failure": null,
+      "logs": []
+    },
+    {
+      "step": "buy 25 YES on fomc-2026-01-inflation-40",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "method": "buy",
+      "args": {
+        "id": "fomc-2026-01-inflation-40",
+        "yes": true,
+        "quantity": 25
+      },
+      "deposit_yocto": "14140000000000000000000",
+      "tx": "3TwLfxmR2nA7NW8pwbQGSjXuZNhUHAEwiUJazFyr6BcK",
+      "explorer": "https://testnet.nearblocks.io/txns/3TwLfxmR2nA7NW8pwbQGSjXuZNhUHAEwiUJazFyr6BcK",
+      "at": "2026-11-09T16:25:52.680Z",
+      "ok": true,
+      "return": "\"14140000000000000000000\"",
+      "failure": null,
+      "logs": [
+        "EVENT_JSON:{\"standard\":\"nep245\",\"version\":\"1.0.0\",\"event\":\"mt_mint\",\"data\":[{\"owner_id\":\"player.kotoba-edfa2b47.testnet\",\"token_ids\":[\"fomc-2026-01-inflation-40:YES\"],\"amounts\":[\"25\"]}]}"
+      ]
+    },
+    {
+      "step": "buy 10 NO on fomc-2026-01-inflation-40",
+      "signer": "kotoba-edfa2b47.testnet",
+      "method": "buy",
+      "args": {
+        "id": "fomc-2026-01-inflation-40",
+        "yes": false,
+        "quantity": 10
+      },
+      "deposit_yocto": "5050000000000000000000",
+      "tx": "BYChi1bjSA7Z4ZJDZN4FKVBi3uaTQPZwjBgtDk3YRSyr",
+      "explorer": "https://testnet.nearblocks.io/txns/BYChi1bjSA7Z4ZJDZN4FKVBi3uaTQPZwjBgtDk3YRSyr",
+      "at": "2026-11-09T16:25:57.502Z",
+      "ok": true,
+      "return": "\"5050000000000000000000\"",
+      "failure": null,
+      "logs": [
+        "EVENT_JSON:{\"standard\":\"nep245\",\"version\":\"1.0.0\",\"event\":\"mt_mint\",\"data\":[{\"owner_id\":\"kotoba-edfa2b47.testnet\",\"token_ids\":[\"fomc-2026-01-inflation-40:NO\"],\"amounts\":[\"10\"]}]}"
+      ]
+    },
+    {
+      "step": "buy 15 NO on fomc-2026-01-recession",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "method": "buy",
+      "args": {
+        "id": "fomc-2026-01-recession",
+        "yes": false,
+        "quantity": 15
+      },
+      "deposit_yocto": "8080000000000000000000",
+      "tx": "FSAurVubcRt4c6E1qJHyzGPDf6Hn7cSrJFQRC7ttkJqa",
+      "explorer": "https://testnet.nearblocks.io/txns/FSAurVubcRt4c6E1qJHyzGPDf6Hn7cSrJFQRC7ttkJqa",
+      "at": "2026-11-09T16:26:12.746Z",
+      "ok": true,
+      "return": "\"8080000000000000000000\"",
+      "failure": null,
+      "logs": [
+        "EVENT_JSON:{\"standard\":\"nep245\",\"version\":\"1.0.0\",\"event\":\"mt_mint\",\"data\":[{\"owner_id\":\"player.kotoba-edfa2b47.testnet\",\"token_ids\":[\"fomc-2026-01-recession:NO\"],\"amounts\":[\"15\"]}]}"
+      ]
+    },
+    {
+      "step": "resolve fomc-2026-01-inflation-40 through OutLayer",
+      "signer": "kotoba-edfa2b47.testnet",
+      "method": "resolve",
+      "args": {
+        "id": "fomc-2026-01-inflation-40"
+      },
+      "deposit_yocto": "120000000000000000000000",
+      "tx": "3PahtoukKPJJvMMYPHe5YudFvWoEyTKxDKHqDcjiUGqj",
+      "explorer": "https://testnet.nearblocks.io/txns/3PahtoukKPJJvMMYPHe5YudFvWoEyTKxDKHqDcjiUGqj",
+      "at": "2026-11-09T16:27:16.182Z",
+      "ok": false,
+      "return": null,
+      "failure": "{\"ActionError\":{\"index\":0,\"kind\":{\"FunctionCallError\":{\"ExecutionError\":\"Smart contract panicked: ERR_RESOLUTION_TIME\"}}}}",
+      "logs": []
+    },
+    {
+      "step": "buy 1 YES on fomc-2026-01-inflation-40",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "method": "buy",
+      "args": {
+        "id": "fomc-2026-01-inflation-40",
+        "yes": true,
+        "quantity": 1
+      },
+      "deposit_yocto": "1010000000000000000000",
+      "tx": "23d3vj4BQaDJAgdK1jJxWyEvKYn5iPrhMBfvgE5V5h1a",
+      "explorer": "https://testnet.nearblocks.io/txns/23d3vj4BQaDJAgdK1jJxWyEvKYn5iPrhMBfvgE5V5h1a",
+      "at": "2026-11-09T16:29:55.929Z",
+      "ok": false,
+      "return": null,
+      "failure": "{\"ActionError\":{\"index\":0,\"kind\":{\"FunctionCallError\":{\"ExecutionError\":\"Smart contract panicked: ERR_CLOSED\"}}}}",
+      "logs": []
+    },
+    {
+      "step": "resolve fomc-2026-01-inflation-40 through OutLayer",
+      "signer": "kotoba-edfa2b47.testnet",
+      "method": "resolve",
+      "args": {
+        "id": "fomc-2026-01-inflation-40"
+      },
+      "deposit_yocto": "120000000000000000000000",
+      "tx": "33sMfUjXnhbPmL3jad6ijjXZwYWYXodeHLH9fTQujAyV",
+      "explorer": "https://testnet.nearblocks.io/txns/33sMfUjXnhbPmL3jad6ijjXZwYWYXodeHLH9fTQujAyV",
+      "at": "2026-11-09T16:30:08.740Z",
+      "ok": true,
+      "return": "true",
+      "failure": null,
+      "logs": [
+        "EVENT_JSON:{\"standard\":\"near-outlayer\",\"version\":\"1.0.0\",\"event\":\"execution_requested\",\"data\":[{\"request_data\":\"{\\\"request_id\\\":14918,\\\"sender_id\\\":\\\"kotoba-edfa2b47.testnet\\\",\\\"predecessor_id\\\":\\\"kotoba-edfa2b47.testnet\\\",\\\"code_source\\\":{\\\"WasmUrl\\\":{\\\"url\\\":\\\"https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314.wasm\\\",\\\"hash\\\":\\\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\\\",\\\"build_target\\\":\\\"wasm32-wasip2\\\"}},\\\"resource_limits\\\":{\\\"max_instructions\\\":50000000000,\\\"max_memory_mb\\\":256,\\\"max_execution_seconds\\\":90},\\\"input_data\\\":\\\"{\\\\\\\"source_url\\\\\\\":\\\\\\\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf\\\\\\\",\\\\\\\"phrase\\\\\\\":\\\\\\\"inflation\\\\\\\",\\\\\\\"code_hash\\\\\\\":\\\\\\\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\\\\\\\"}\\\",\\\"input_data_in_state\\\":false,\\\"secrets_ref\\\":null,\\\"response_format\\\":\\\"Json\\\",\\\"payment\\\":\\\"20000000000000000000000\\\",\\\"attached_usd\\\":\\\"0\\\",\\\"timestamp\\\":1794241797509198353,\\\"compile_only\\\":false,\\\"force_rebuild\\\":false,\\\"store_on_fastfs\\\":false,\\\"use_bound_identity\\\":false,\\\"project_uuid\\\":null,\\\"project_id\\\":null}\",\"data_id\":[117,190,250,185,58,55,156,230,218,78,199,54,50,87,213,83,208,251,235,37,169,91,192,164,177,128,144,251,221,250,251,75],\"timestamp\":1794241797509198353}]}",
+        "EVENT_JSON:{\"standard\":\"near-outlayer\",\"version\":\"1.0.0\",\"event\":\"execution_completed\",\"data\":[{\"sender_id\":\"kotoba-edfa2b47.testnet\",\"code_source\":{\"WasmUrl\":{\"url\":\"https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314.wasm\",\"hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\",\"build_target\":\"wasm32-wasip2\"}},\"resources_used\":{\"instructions\":789166995,\"time_ms\":1715,\"compile_time_ms\":null},\"success\":true,\"error_message\":null,\"payment_charged\":\"1171578900000000000000\",\"payment_refunded\":\"18828421100000000000000\",\"compilation_note\":\"Cached WASM from 2026-11-09T16:22:35.525391+00:00\",\"timestamp\":1794241805415403106}]}",
+        "Execution completed successfully. Output: Json(267 bytes), Resources: { instructions: 789166995, time_ms: 1715 }, Cost: 1171578900000000000000 yoctoNEAR, Refund: 18828421100000000000000 yoctoNEAR, Cached WASM from 2026-11-09T16:22:35.525391+00:00"
+      ],
+      "outlayer": {
+        "input": "{\"source_url\":\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf\",\"phrase\":\"inflation\",\"code_hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\"}",
+        "output": "{\"code_hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\",\"count\":40,\"source_url\":\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf\",\"transcript_sha256\":\"2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3\"}",
+        "log": "Execution completed successfully. Output: Json(267 bytes), Resources: { instructions: 789166995, time_ms: 1715 }, Cost: 1171578900000000000000 yoctoNEAR, Refund: 18828421100000000000000 yoctoNEAR, Cached WASM from 2026-11-09T16:22:35.525391+00:00",
+        "attestation": {
+          "request_id": 14918,
+          "attestation_id": 25556,
+          "tx": "33sMfUjXnhbPmL3jad6ijjXZwYWYXodeHLH9fTQujAyV",
+          "caller": "kotoba-edfa2b47.testnet",
+          "block_height": 276944802,
+          "timestamp": 1794241802,
+          "wasm_hash": "b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314",
+          "input_hash": "c7823d68a8182969c0751cd916bf40bb47bd1858ad81093b480b646c56276edf",
+          "output_hash": "51d8ea68af3882e41d829bb5844ae8b1a0c9fa7b3e199b5e08bea2b682f5163c",
+          "measurements": {
+            "mrtd": "7fe60787222bd394cb516abca2435f22f035ab2cc9c0a4b4b3b148e46297f3d931a237b72f359052c6e657d8c1409173",
+            "rtmr3": "41655a43141096e5d4891c0ac6b56da3bd144d94129410cb72b7d46c107e8c6950255793eb7f42cb8cfadbebd6f3e92c"
+          },
+          "report_data": "a3511c4469ce82e66856219720a251a53be0aa060e557f210830910c0954e1cd",
+          "tcb": {
+            "status": "UpToDate",
+            "advisory_ids": []
+          },
+          "checks": {
+            "wasm_hash_pinned": true,
+            "input_hash": true,
+            "output_hash": true,
+            "report_data_binds_task": true,
+            "measurements_approved_on_chain": true,
+            "intel_signature_chain": true
+          },
+          "ok": true,
+          "source": "https://testnet-api.outlayer.ai/attestations/by-tx/33sMfUjXnhbPmL3jad6ijjXZwYWYXodeHLH9fTQujAyV"
+        }
+      }
+    },
+    {
+      "step": "challenge fomc-2026-01-inflation-40 through OutLayer",
+      "signer": "kotoba-edfa2b47.testnet",
+      "method": "challenge",
+      "args": {
+        "id": "fomc-2026-01-inflation-40"
+      },
+      "deposit_yocto": "120000000000000000000000",
+      "tx": "BT5BmcjyhUdheNEMqNuwyB294e6oD9uqEa4Rk4rSP15E",
+      "explorer": "https://testnet.nearblocks.io/txns/BT5BmcjyhUdheNEMqNuwyB294e6oD9uqEa4Rk4rSP15E",
+      "at": "2026-11-09T16:30:25.542Z",
+      "ok": true,
+      "return": "true",
+      "failure": null,
+      "logs": [
+        "EVENT_JSON:{\"standard\":\"near-outlayer\",\"version\":\"1.0.0\",\"event\":\"execution_requested\",\"data\":[{\"request_data\":\"{\\\"request_id\\\":14919,\\\"sender_id\\\":\\\"kotoba-edfa2b47.testnet\\\",\\\"predecessor_id\\\":\\\"kotoba-edfa2b47.testnet\\\",\\\"code_source\\\":{\\\"WasmUrl\\\":{\\\"url\\\":\\\"https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314.wasm\\\",\\\"hash\\\":\\\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\\\",\\\"build_target\\\":\\\"wasm32-wasip2\\\"}},\\\"resource_limits\\\":{\\\"max_instructions\\\":50000000000,\\\"max_memory_mb\\\":256,\\\"max_execution_seconds\\\":90},\\\"input_data\\\":\\\"{\\\\\\\"source_url\\\\\\\":\\\\\\\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf\\\\\\\",\\\\\\\"phrase\\\\\\\":\\\\\\\"inflation\\\\\\\",\\\\\\\"code_hash\\\\\\\":\\\\\\\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\\\\\\\"}\\\",\\\"input_data_in_state\\\":false,\\\"secrets_ref\\\":null,\\\"response_format\\\":\\\"Json\\\",\\\"payment\\\":\\\"20000000000000000000000\\\",\\\"attached_usd\\\":\\\"0\\\",\\\"timestamp\\\":1794241815105629930,\\\"compile_only\\\":false,\\\"force_rebuild\\\":false,\\\"store_on_fastfs\\\":false,\\\"use_bound_identity\\\":false,\\\"project_uuid\\\":null,\\\"project_id\\\":null}\",\"data_id\":[178,228,25,229,160,217,245,33,20,48,118,90,146,113,10,84,124,27,158,78,196,172,127,86,190,121,237,120,238,49,132,117],\"timestamp\":1794241815105629930}]}",
+        "EVENT_JSON:{\"standard\":\"near-outlayer\",\"version\":\"1.0.0\",\"event\":\"execution_completed\",\"data\":[{\"sender_id\":\"kotoba-edfa2b47.testnet\",\"code_source\":{\"WasmUrl\":{\"url\":\"https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314.wasm\",\"hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\",\"build_target\":\"wasm32-wasip2\"}},\"resources_used\":{\"instructions\":789168878,\"time_ms\":1648,\"compile_time_ms\":null},\"success\":true,\"error_message\":null,\"payment_charged\":\"1164878900000000000000\",\"payment_refunded\":\"18835121100000000000000\",\"compilation_note\":\"Cached WASM from 2026-11-09T16:22:35.525391+00:00\",\"timestamp\":1794241821673981503}]}",
+        "Execution completed successfully. Output: Json(267 bytes), Resources: { instructions: 789168878, time_ms: 1648 }, Cost: 1164878900000000000000 yoctoNEAR, Refund: 18835121100000000000000 yoctoNEAR, Cached WASM from 2026-11-09T16:22:35.525391+00:00"
+      ],
+      "outlayer": {
+        "input": "{\"source_url\":\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf\",\"phrase\":\"inflation\",\"code_hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\"}",
+        "output": "{\"code_hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\",\"count\":40,\"source_url\":\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf\",\"transcript_sha256\":\"2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3\"}",
+        "log": "Execution completed successfully. Output: Json(267 bytes), Resources: { instructions: 789168878, time_ms: 1648 }, Cost: 1164878900000000000000 yoctoNEAR, Refund: 18835121100000000000000 yoctoNEAR, Cached WASM from 2026-11-09T16:22:35.525391+00:00",
+        "attestation": {
+          "request_id": 14919,
+          "attestation_id": 25558,
+          "tx": "BT5BmcjyhUdheNEMqNuwyB294e6oD9uqEa4Rk4rSP15E",
+          "caller": "kotoba-edfa2b47.testnet",
+          "block_height": 276944831,
+          "timestamp": 1794241818,
+          "wasm_hash": "b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314",
+          "input_hash": "c7823d68a8182969c0751cd916bf40bb47bd1858ad81093b480b646c56276edf",
+          "output_hash": "51d8ea68af3882e41d829bb5844ae8b1a0c9fa7b3e199b5e08bea2b682f5163c",
+          "measurements": {
+            "mrtd": "7fe60787222bd394cb516abca2435f22f035ab2cc9c0a4b4b3b148e46297f3d931a237b72f359052c6e657d8c1409173",
+            "rtmr3": "41655a43141096e5d4891c0ac6b56da3bd144d94129410cb72b7d46c107e8c6950255793eb7f42cb8cfadbebd6f3e92c"
+          },
+          "report_data": "dcedd6183911ec7326ee62058ff38e300581ed2affdccb5ef843874b6a25ce4a",
+          "tcb": {
+            "status": "UpToDate",
+            "advisory_ids": []
+          },
+          "checks": {
+            "wasm_hash_pinned": true,
+            "input_hash": true,
+            "output_hash": true,
+            "report_data_binds_task": true,
+            "measurements_approved_on_chain": true,
+            "intel_signature_chain": true
+          },
+          "ok": true,
+          "source": "https://testnet-api.outlayer.ai/attestations/by-tx/BT5BmcjyhUdheNEMqNuwyB294e6oD9uqEa4Rk4rSP15E"
+        }
+      }
+    },
+    {
+      "step": "resolve fomc-2026-01-recession through OutLayer",
+      "signer": "kotoba-edfa2b47.testnet",
+      "method": "resolve",
+      "args": {
+        "id": "fomc-2026-01-recession"
+      },
+      "deposit_yocto": "120000000000000000000000",
+      "tx": "GiwqWBNzKtN96xeRfkhhEJCVdzPHYwZm8znysas2bpGf",
+      "explorer": "https://testnet.nearblocks.io/txns/GiwqWBNzKtN96xeRfkhhEJCVdzPHYwZm8znysas2bpGf",
+      "at": "2026-11-09T16:30:38.035Z",
+      "ok": true,
+      "return": "true",
+      "failure": null,
+      "logs": [
+        "EVENT_JSON:{\"standard\":\"near-outlayer\",\"version\":\"1.0.0\",\"event\":\"execution_requested\",\"data\":[{\"request_data\":\"{\\\"request_id\\\":14920,\\\"sender_id\\\":\\\"kotoba-edfa2b47.testnet\\\",\\\"predecessor_id\\\":\\\"kotoba-edfa2b47.testnet\\\",\\\"code_source\\\":{\\\"WasmUrl\\\":{\\\"url\\\":\\\"https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314.wasm\\\",\\\"hash\\\":\\\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\\\",\\\"build_target\\\":\\\"wasm32-wasip2\\\"}},\\\"resource_limits\\\":{\\\"max_instructions\\\":50000000000,\\\"max_memory_mb\\\":256,\\\"max_execution_seconds\\\":90},\\\"input_data\\\":\\\"{\\\\\\\"source_url\\\\\\\":\\\\\\\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf\\\\\\\",\\\\\\\"phrase\\\\\\\":\\\\\\\"recession\\\\\\\",\\\\\\\"code_hash\\\\\\\":\\\\\\\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\\\\\\\"}\\\",\\\"input_data_in_state\\\":false,\\\"secrets_ref\\\":null,\\\"response_format\\\":\\\"Json\\\",\\\"payment\\\":\\\"20000000000000000000000\\\",\\\"attached_usd\\\":\\\"0\\\",\\\"timestamp\\\":1794241827828950398,\\\"compile_only\\\":false,\\\"force_rebuild\\\":false,\\\"store_on_fastfs\\\":false,\\\"use_bound_identity\\\":false,\\\"project_uuid\\\":null,\\\"project_id\\\":null}\",\"data_id\":[88,214,175,18,54,180,75,215,228,118,187,163,239,133,226,95,201,80,119,39,63,124,120,46,252,47,166,218,74,161,143,141],\"timestamp\":1794241827828950398}]}",
+        "EVENT_JSON:{\"standard\":\"near-outlayer\",\"version\":\"1.0.0\",\"event\":\"execution_completed\",\"data\":[{\"sender_id\":\"kotoba-edfa2b47.testnet\",\"code_source\":{\"WasmUrl\":{\"url\":\"https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314.wasm\",\"hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\",\"build_target\":\"wasm32-wasip2\"}},\"resources_used\":{\"instructions\":788968733,\"time_ms\":1747,\"compile_time_ms\":null},\"success\":true,\"error_message\":null,\"payment_charged\":\"1174778800000000000000\",\"payment_refunded\":\"18825221200000000000000\",\"compilation_note\":\"Cached WASM from 2026-11-09T16:22:35.525391+00:00\",\"timestamp\":1794241834458336684}]}",
+        "Execution completed successfully. Output: Json(266 bytes), Resources: { instructions: 788968733, time_ms: 1747 }, Cost: 1174778800000000000000 yoctoNEAR, Refund: 18825221200000000000000 yoctoNEAR, Cached WASM from 2026-11-09T16:22:35.525391+00:00"
+      ],
+      "outlayer": {
+        "input": "{\"source_url\":\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf\",\"phrase\":\"recession\",\"code_hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\"}",
+        "output": "{\"code_hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\",\"count\":0,\"source_url\":\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf\",\"transcript_sha256\":\"2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3\"}",
+        "log": "Execution completed successfully. Output: Json(266 bytes), Resources: { instructions: 788968733, time_ms: 1747 }, Cost: 1174778800000000000000 yoctoNEAR, Refund: 18825221200000000000000 yoctoNEAR, Cached WASM from 2026-11-09T16:22:35.525391+00:00",
+        "attestation": {
+          "request_id": 14920,
+          "attestation_id": 25559,
+          "tx": "GiwqWBNzKtN96xeRfkhhEJCVdzPHYwZm8znysas2bpGf",
+          "caller": "kotoba-edfa2b47.testnet",
+          "block_height": 276944852,
+          "timestamp": 1794241831,
+          "wasm_hash": "b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314",
+          "input_hash": "d86f6fdd560e246d9b9853428769371a870b3b10c44433fde01a796283af1ca6",
+          "output_hash": "0274a8dd60a6340f3c01f4979b4376c37cb609a709357c4bfc729261968f4246",
+          "measurements": {
+            "mrtd": "7fe60787222bd394cb516abca2435f22f035ab2cc9c0a4b4b3b148e46297f3d931a237b72f359052c6e657d8c1409173",
+            "rtmr3": "b1773e4dd9db7e54c2564f15913872cb6a8acd6ce6d4e28dc4008c6b90f6dfec43eae5021d3055a1917fe7360d73dcc9"
+          },
+          "report_data": "ee16a72f0169f4b88a8d6ecf9a6709ee6d17fd75ac2ae9cbbe1356120a67d58c",
+          "tcb": {
+            "status": "UpToDate",
+            "advisory_ids": []
+          },
+          "checks": {
+            "wasm_hash_pinned": true,
+            "input_hash": true,
+            "output_hash": true,
+            "report_data_binds_task": true,
+            "measurements_approved_on_chain": true,
+            "intel_signature_chain": true
+          },
+          "ok": true,
+          "source": "https://testnet-api.outlayer.ai/attestations/by-tx/GiwqWBNzKtN96xeRfkhhEJCVdzPHYwZm8znysas2bpGf"
+        }
+      }
+    },
+    {
+      "step": "claim fomc-2026-01-inflation-40 as player",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "method": "claim",
+      "args": {
+        "id": "fomc-2026-01-inflation-40"
+      },
+      "deposit_yocto": "0",
+      "tx": "Eoudkc8kzcrL9qSydTm41HnfKk52gYJfdMQzMSvKUZFE",
+      "explorer": "https://testnet.nearblocks.io/txns/Eoudkc8kzcrL9qSydTm41HnfKk52gYJfdMQzMSvKUZFE",
+      "at": "2026-11-09T16:30:43.867Z",
+      "ok": true,
+      "return": null,
+      "failure": null,
+      "logs": [
+        "EVENT_JSON:{\"standard\":\"nep245\",\"version\":\"1.0.0\",\"event\":\"mt_burn\",\"data\":[{\"owner_id\":\"player.kotoba-edfa2b47.testnet\",\"token_ids\":[\"fomc-2026-01-inflation-40:YES\"],\"amounts\":[\"25\"]}]}"
+      ]
+    },
+    {
+      "step": "claim fomc-2026-01-inflation-40 as creator",
+      "signer": "kotoba-edfa2b47.testnet",
+      "method": "claim",
+      "args": {
+        "id": "fomc-2026-01-inflation-40"
+      },
+      "deposit_yocto": "0",
+      "tx": "4HPAvPfnKhxyeXVkDgMoj874BhX5L3qtXyNvTDujgrRf",
+      "explorer": "https://testnet.nearblocks.io/txns/4HPAvPfnKhxyeXVkDgMoj874BhX5L3qtXyNvTDujgrRf",
+      "at": "2026-11-09T16:30:48.027Z",
+      "ok": false,
+      "return": null,
+      "failure": "{\"ActionError\":{\"index\":0,\"kind\":{\"FunctionCallError\":{\"ExecutionError\":\"Smart contract panicked: ERR_NO_WINNING_SHARES\"}}}}",
+      "logs": []
+    },
+    {
+      "step": "claim fomc-2026-01-inflation-40 as player",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "method": "claim",
+      "args": {
+        "id": "fomc-2026-01-inflation-40"
+      },
+      "deposit_yocto": "0",
+      "tx": "HLzDkSrJnzhdF7RThgrFk66Wdn7wPt3kN7NGjtb7KT3x",
+      "explorer": "https://testnet.nearblocks.io/txns/HLzDkSrJnzhdF7RThgrFk66Wdn7wPt3kN7NGjtb7KT3x",
+      "at": "2026-11-09T16:30:59.607Z",
+      "ok": false,
+      "return": null,
+      "failure": "{\"ActionError\":{\"index\":0,\"kind\":{\"FunctionCallError\":{\"ExecutionError\":\"Smart contract panicked: ERR_NO_WINNING_SHARES\"}}}}",
+      "logs": []
+    },
+    {
+      "step": "attack: forged on_result for fomc-2026-01-recession",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "method": "on_result",
+      "args": {
+        "id": "fomc-2026-01-recession",
+        "challenged": false
+      },
+      "deposit_yocto": "0",
+      "tx": "4b14MmNgrgiyATcGQfHPVPc5Cepd8VwDc4v54FxNh43X",
+      "explorer": "https://testnet.nearblocks.io/txns/4b14MmNgrgiyATcGQfHPVPc5Cepd8VwDc4v54FxNh43X",
+      "at": "2026-11-09T16:31:04.421Z",
+      "ok": false,
+      "return": null,
+      "failure": "{\"ActionError\":{\"index\":0,\"kind\":{\"FunctionCallError\":{\"ExecutionError\":\"Smart contract panicked: Method on_result is private\"}}}}",
+      "logs": []
+    },
+    {
+      "step": "buy 12 YES on fomc-2026-12-inflation",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "method": "buy",
+      "args": {
+        "id": "fomc-2026-12-inflation",
+        "yes": true,
+        "quantity": 12
+      },
+      "deposit_yocto": "7070000000000000000000",
+      "tx": "A2PVdgjQ7C9vHK6oFoUVT8jUSPavoZs5DcVCf58cqzBf",
+      "explorer": "https://testnet.nearblocks.io/txns/A2PVdgjQ7C9vHK6oFoUVT8jUSPavoZs5DcVCf58cqzBf",
+      "at": "2026-11-09T16:31:32.518Z",
+      "ok": true,
+      "return": "\"7070000000000000000000\"",
+      "failure": null,
+      "logs": [
+        "EVENT_JSON:{\"standard\":\"nep245\",\"version\":\"1.0.0\",\"event\":\"mt_mint\",\"data\":[{\"owner_id\":\"player.kotoba-edfa2b47.testnet\",\"token_ids\":[\"fomc-2026-12-inflation:YES\"],\"amounts\":[\"12\"]}]}"
+      ]
+    },
+    {
+      "step": "buy 8 NO on fomc-2026-12-recession",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "method": "buy",
+      "args": {
+        "id": "fomc-2026-12-recession",
+        "yes": false,
+        "quantity": 8
+      },
+      "deposit_yocto": "5050000000000000000000",
+      "tx": "6N7AaiWfmsDBvoR9HB975TSf1RTHUnPjP33diW66fQ8M",
+      "explorer": "https://testnet.nearblocks.io/txns/6N7AaiWfmsDBvoR9HB975TSf1RTHUnPjP33diW66fQ8M",
+      "at": "2026-11-09T16:31:37.717Z",
+      "ok": true,
+      "return": "\"5050000000000000000000\"",
+      "failure": null,
+      "logs": [
+        "EVENT_JSON:{\"standard\":\"nep245\",\"version\":\"1.0.0\",\"event\":\"mt_mint\",\"data\":[{\"owner_id\":\"player.kotoba-edfa2b47.testnet\",\"token_ids\":[\"fomc-2026-12-recession:NO\"],\"amounts\":[\"8\"]}]}"
+      ]
+    },
+    {
+      "step": "buy 5 YES on fomc-2026-12-tariffs",
+      "signer": "kotoba-edfa2b47.testnet",
+      "method": "buy",
+      "args": {
+        "id": "fomc-2026-12-tariffs",
+        "yes": true,
+        "quantity": 5
+      },
+      "deposit_yocto": "3030000000000000000000",
+      "tx": "HsV3W2JqLmX3uvM1zCausZWRX84cAXP7s5nMHi8ZuMwM",
+      "explorer": "https://testnet.nearblocks.io/txns/HsV3W2JqLmX3uvM1zCausZWRX84cAXP7s5nMHi8ZuMwM",
+      "at": "2026-11-09T16:31:42.102Z",
+      "ok": true,
+      "return": "\"3030000000000000000000\"",
+      "failure": null,
+      "logs": [
+        "EVENT_JSON:{\"standard\":\"nep245\",\"version\":\"1.0.0\",\"event\":\"mt_mint\",\"data\":[{\"owner_id\":\"kotoba-edfa2b47.testnet\",\"token_ids\":[\"fomc-2026-12-tariffs:YES\"],\"amounts\":[\"5\"]}]}"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "source": "official Fed calendar",
+  "results": [
+    {
+      "id": "fomc-2026-12-recession",
+      "tx_hash": "GibRyZH1ti95gVLpTdXU7wyM6ZysaBhdJYf5XxciLdC",
+      "explorer": "https://testnet.nearblocks.io/txns/GibRyZH1ti95gVLpTdXU7wyM6ZysaBhdJYf5XxciLdC"
+    },
+    {
+      "id": "fomc-2026-12-inflation",
+      "tx_hash": "BeihjRnbfzAzVjox7TPEv5jxdLE1o7ngg45MVLf2SfKq",
+      "explorer": "https://testnet.nearblocks.io/txns/BeihjRnbfzAzVjox7TPEv5jxdLE1o7ngg45MVLf2SfKq"
+    },
+    {
+      "id": "fomc-2026-12-tariffs",
+      "tx_hash": "8XwUG72GJQhaa5kTSQ2aQB2zToHBFKfE8ocHxeJ7JcTh",
+      "explorer": "https://testnet.nearblocks.io/txns/8XwUG72GJQhaa5kTSQ2aQB2zToHBFKfE8ocHxeJ7JcTh"
+    },
+    {
+      "id": "fomc-2026-12-employment",
+      "tx_hash": "AUBv3NUYGKMHh6TvvfF5yLH6XzFibe8p65DxsXFajuat",
+      "explorer": "https://testnet.nearblocks.io/txns/AUBv3NUYGKMHh6TvvfF5yLH6XzFibe8p65DxsXFajuat"
+    }
+  ]
+}
