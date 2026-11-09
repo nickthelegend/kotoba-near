@@ -20,6 +20,8 @@ The official NEAR testnet account helper returned HTTP 429 with a one-hour retry
 
 Email sign-in, a NEP-366 relayer, per-market subaccount escrow, NEP-141 test collateral, custom creator transcript sources, and a funded mainnet `NEAR_MAINNET_ACCOUNT` for a 1Click dry quote are also missing. No mainnet swap or spend was attempted. This repository remains local and has no remote.
 
+There is no live end-to-end demo video, public repository or X demo post. Nick must publish these and complete the human submission fields before the November 14 deadline; no application was submitted.
+
 ## Demo commands
 
 From the repository root:

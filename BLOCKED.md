@@ -7,3 +7,5 @@
 5. **Remaining engineering, not fixed by credentials alone:** named per-market subaccounts, creator transcript sources, test NEP-141 collateral, an end-to-end challenge and payout test through real OutLayer, and a live market-result heatmap are not complete. The 1% creator fee was verified on the local chain. The archive heatmap is from a real pinned Fed PDF; it is not a live resolved market.
 
 No mainnet funds have been spent. No public repository was created or pushed.
+
+6. **Submission evidence:** no live end-to-end video or public demo post exists. Nick must record a real run after deployment, publish the repository, supply the public X demo post, and fill the human fields in `HACKATHON_SUBMISSION_FORM.md`. The application was not submitted.
