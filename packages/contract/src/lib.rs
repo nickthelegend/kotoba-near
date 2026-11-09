@@ -346,6 +346,14 @@ mod tests {
     #[test] fn prices_sum() { for y in [0, 1, 100, 10000] { for n in [0, 2, 100, 30000] { let x=((y as f64-n as f64)/1000.0).exp(); assert!(((x/(1.0+x))+(1.0/(1.0+x))-1.0).abs()<1e-12); } } }
     #[test] fn lmsr_complete_set() { let c=cost(100, 100, 1000)-cost(0,0,1000); assert!((c-100.0).abs()<1e-9); }
     #[test] fn lmsr_monotonic() { assert!(cost(5,0,1000)>cost(0,0,1000)); assert!(cost(10,0,1000)>cost(5,0,1000)); }
-    #[test] fn no_roundtrip_profit() { let c=cost(10,0,1000)-cost(0,0,1000); assert!(c>=5.0); }
+    #[test] fn no_risk_free_complete_set() {
+        for yes in [0, 1, 10, 100, 10_000] {
+            for no in [0, 1, 10, 100, 10_000] {
+                let paid = cost(yes, no, 1000) - cost(0, 0, 1000);
+                let guaranteed_payout = yes.min(no) as f64;
+                assert!(paid + 1e-9 >= guaranteed_payout, "{yes} YES / {no} NO cost {paid} below guaranteed {guaranteed_payout}");
+            }
+        }
+    }
     #[test] fn extreme_prices_are_finite() { for (yes, no) in [(100_000, 0), (0, 100_000)] { let price = yes_price(yes, no, 100); assert!(price.is_finite() && (0.0..=1.0).contains(&price)); } }
 }
