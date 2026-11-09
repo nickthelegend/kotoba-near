@@ -401,3 +401,4 @@ q { quotes: '“' '”'; }
 }
 @media (min-width: 1180px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .page .board-sec { padding-left: 0; padding-right: 0; }
+.paper .btn { white-space: normal; max-width: 100%; padding-top: 12px; padding-bottom: 12px; }
