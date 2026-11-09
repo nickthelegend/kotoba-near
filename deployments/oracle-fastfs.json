@@ -1,0 +1,17 @@
+{
+  "url": "https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314.wasm",
+  "sha256": "b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314",
+  "bytes": 1064688,
+  "txs": [
+    {
+      "chunk": 1,
+      "hash": "9R7w4vtjxpCsZoc7vuzk2i3iqapiTmSSPfq8UUGkiciF",
+      "explorer": "https://testnet.nearblocks.io/txns/9R7w4vtjxpCsZoc7vuzk2i3iqapiTmSSPfq8UUGkiciF"
+    },
+    {
+      "chunk": 2,
+      "hash": "mPZQ85xHx4evsDFGmoXPNeMAeqDKUqLrkR91McCoczS",
+      "explorer": "https://testnet.nearblocks.io/txns/mPZQ85xHx4evsDFGmoXPNeMAeqDKUqLrkR91McCoczS"
+    }
+  ]
+}

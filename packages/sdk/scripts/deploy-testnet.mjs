@@ -14,8 +14,9 @@ if (process.env.NEAR_TESTNET_ACCOUNT || process.env.NEAR_TESTNET_PRIVATE_KEY) {
   catch { credentials = {}; }
 }
 if (!credentials.account_id?.endsWith('.testnet') || !credentials.secret_key) throw new Error('Setup required: NEAR_TESTNET_ACCOUNT and NEAR_TESTNET_PRIVATE_KEY (or .near-credentials/deployer.json)');
-const wasmUrl = process.env.OUTLAYER_WASM_URL;
-const wasmHash = process.env.OUTLAYER_WASM_SHA256;
+let wasmUrl = process.env.OUTLAYER_WASM_URL;
+let wasmHash = process.env.OUTLAYER_WASM_SHA256;
+if (!wasmUrl) { try { const f = JSON.parse(await readFile(resolve(root, 'deployments/oracle-fastfs.json'), 'utf8')); wasmUrl = f.url; wasmHash = f.sha256; } catch {} }
 if (!wasmUrl?.startsWith('https://') || !/^[a-f0-9]{64}$/i.test(wasmHash || '')) throw new Error('Setup required: OUTLAYER_WASM_URL and OUTLAYER_WASM_SHA256');
 const oracleBytes = await readFile(resolve(root, 'packages/oracle/target/wasm32-wasip2/release/kotoba-oracle.wasm'));
 const localHash = createHash('sha256').update(oracleBytes).digest('hex');
@@ -33,7 +34,7 @@ const submit = async (receiverId, action) => {
   return { hash: result.transaction.hash, explorer: `https://testnet.nearblocks.io/txns/${result.transaction.hash}` };
 };
 const deployment = await submit(credentials.account_id, actions.deployContract(contractBytes));
-const initialization = await submit(credentials.account_id, actions.functionCall('new', { wasm_url: wasmUrl, wasm_hash: localHash }, 100_000_000_000_000n, 0n));
+const initialization = await submit(credentials.account_id, actions.functionCall('new', { wasm_url: wasmUrl, wasm_hash: localHash, challenge_window_ns: Number(process.env.KOTOBA_CHALLENGE_WINDOW_MIN || 15) * 60 * 1e9 }, 100_000_000_000_000n, 0n));
 const record = { network: 'testnet', contract_id: credentials.account_id, contract_sha256: createHash('sha256').update(contractBytes).digest('hex'), oracle_sha256: localHash, oracle_url: wasmUrl, deploy: deployment, initialize: initialization };
 await mkdir(resolve(root, 'deployments'), { recursive: true });
 const path = resolve(root, `deployments/testnet-${new Date().toISOString().slice(0, 10)}.json`);

@@ -1,0 +1,15 @@
+{
+  "network": "testnet",
+  "contract_id": "kotoba-edfa2b47.testnet",
+  "contract_sha256": "a9cfa596bdaf3fcfe7b180dd608003f3889c385b7307f00518f487bc6ad8d28a",
+  "oracle_sha256": "b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314",
+  "oracle_url": "https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314.wasm",
+  "deploy": {
+    "hash": "GT6mg7jYHgAAe7ETHvpiebABgJU2mLgmBXCWtq4i66ea",
+    "explorer": "https://testnet.nearblocks.io/txns/GT6mg7jYHgAAe7ETHvpiebABgJU2mLgmBXCWtq4i66ea"
+  },
+  "initialize": {
+    "hash": "Gz2LyFjqBaA9svLUoNC5yjQiaAv2AmD8banUnyMCL2QP",
+    "explorer": "https://testnet.nearblocks.io/txns/Gz2LyFjqBaA9svLUoNC5yjQiaAv2AmD8banUnyMCL2QP"
+  }
+}

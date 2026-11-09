@@ -328,7 +328,7 @@ impl Kotoba {
         let args = near_sdk::serde_json::json!({
             "source": {"WasmUrl": {"url": self.wasm_url, "hash": self.wasm_hash, "build_target": "wasm32-wasip2"}},
             "input_data": near_sdk::serde_json::json!({"source_url":m.source_url,"phrase":m.phrase,"code_hash":self.wasm_hash}).to_string(),
-            "resource_limits": {"max_instructions":10_000_000_000u64,"max_memory_mb":256,"max_execution_seconds":60},
+            "resource_limits": {"max_instructions":50_000_000_000u64,"max_memory_mb":256,"max_execution_seconds":90},
             "response_format":"Json"
         });
         Promise::new(OUTLAYER.parse().unwrap()).function_call("request_execution", args.to_string().into_bytes(), deposit, Gas::from_tgas(100))

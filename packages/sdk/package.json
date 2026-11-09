@@ -9,6 +9,7 @@
     ".": "./src/index.mjs"
   },
   "dependencies": {
+    "@phala/dcap-qvl": "0.7.1",
     "near-api-js": "7.3.1"
   }
 }
