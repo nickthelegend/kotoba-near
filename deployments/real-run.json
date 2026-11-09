@@ -442,6 +442,40 @@
       "logs": [
         "EVENT_JSON:{\"standard\":\"nep245\",\"version\":\"1.0.0\",\"event\":\"mt_mint\",\"data\":[{\"owner_id\":\"kotoba-edfa2b47.testnet\",\"token_ids\":[\"fomc-2026-12-tariffs:YES\"],\"amounts\":[\"5\"]}]}"
       ]
+    },
+    {
+      "step": "finalize fomc-2026-01-recession",
+      "signer": "kotoba-edfa2b47.testnet",
+      "method": "finalize",
+      "args": {
+        "id": "fomc-2026-01-recession"
+      },
+      "deposit_yocto": "0",
+      "tx": "61M2LbzkmKjzi8wShPC5K8HPSePWtetp493FofZG3YG2",
+      "explorer": "https://testnet.nearblocks.io/txns/61M2LbzkmKjzi8wShPC5K8HPSePWtetp493FofZG3YG2",
+      "at": "2026-11-09T16:46:16.985Z",
+      "ok": true,
+      "return": null,
+      "failure": null,
+      "logs": []
+    },
+    {
+      "step": "claim fomc-2026-01-recession as player",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "method": "claim",
+      "args": {
+        "id": "fomc-2026-01-recession"
+      },
+      "deposit_yocto": "0",
+      "tx": "EX1z8F8LDvGYSFAiD92FrvoGzArD56UGVezfR5p9TBGf",
+      "explorer": "https://testnet.nearblocks.io/txns/EX1z8F8LDvGYSFAiD92FrvoGzArD56UGVezfR5p9TBGf",
+      "at": "2026-11-09T16:46:21.429Z",
+      "ok": true,
+      "return": null,
+      "failure": null,
+      "logs": [
+        "EVENT_JSON:{\"standard\":\"nep245\",\"version\":\"1.0.0\",\"event\":\"mt_burn\",\"data\":[{\"owner_id\":\"player.kotoba-edfa2b47.testnet\",\"token_ids\":[\"fomc-2026-01-recession:NO\"],\"amounts\":[\"15\"]}]}"
+      ]
     }
   ]
 }
