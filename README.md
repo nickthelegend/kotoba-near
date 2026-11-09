@@ -27,7 +27,7 @@ It currently plans four word markets for the December 9, 2026 FOMC press confere
 
 | Component | What a reviewer can verify |
 | --- | --- |
-| `packages/contract` | Rust near-sdk contract with seeded LMSR quotes, native NEAR escrow, YES/NO shares, NEP-245 views/transfers/transfer-call, close time, private OutLayer callback, one bonded challenge, and burn-on-claim payout. Sandbox tests send signed transactions and demonstrate rejection of forged callback and other attacks. |
+| `packages/contract` | Rust near-sdk contract with seeded LMSR quotes, native NEAR escrow, YES/NO shares, NEP-245 views/transfers/transfer-call, a 1% trade fee paid to the creator, close time, private OutLayer callback, one bonded challenge, and burn-on-claim payout. Sandbox tests send signed transactions and demonstrate rejection of forged callback and other attacks. |
 | `packages/oracle` | Rust WASI P2 program that fetches only official Fed press conference PDFs over HTTPS, hashes the PDF, extracts text with `lopdf`, and counts case-insensitive whole words/phrases. A real January 2026 PDF is pinned as a fixture. |
 | `packages/sdk` | LMSR math, official source fetch, live Fed calendar parser, live OutLayer testnet cost view, and a read-only 1Click `dry: true` quote method gated on a funded mainnet account. |
 | `packages/web` | Responsive landing page and market dashboard. Live odds and the position preview quote come from the testnet contract RPC. It shows explicit setup, empty and error states and a hash-checked archive word heatmap. Browser bets require the missing email/relayer layer. |
@@ -49,6 +49,8 @@ node packages/sdk/scripts/verify-transcript.mjs https://www.federalreserve.gov/m
 - **OutLayer TEE** is the intended transcript oracle. The contract calls `outlayer.testnet` using a hash-pinned WASI source, and only its private callback accepts output. A testnet execution and independent attestation check remain blocked.
 - **NEAR Intents 1Click** is exposed only as a dry quote preview in the SDK. It cannot fund a testnet market from mainnet, and there is no swap execution path.
 - **Named subaccounts, function-call keys, NEP-366 meta transactions, NEP-141 collateral and email sign-in** are not implemented. Current escrow is within the factory account in native testnet NEAR.
+
+Any testnet account can create a Fed-source market by paying the LMSR subsidy. The contract quote includes a 1% fee that is sent to that creator on each buy. Custom creator transcript URLs are still pending.
 
 ## Deployment and evidence
 

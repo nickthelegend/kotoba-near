@@ -6,7 +6,7 @@ Command: `pnpm test` from the repository root. Result: **23 passed, 0 failed, 0 
 | --- | ---: | --- |
 | Oracle Rust | 3 | Whole-word rule, official URL allowlist, pinned real Fed PDF extraction and hash (40 `inflation`, 0 `recession`). |
 | Contract Rust unit | 5 | LMSR prices sum to 1, complete-set cost, monotonicity, no risk-free complete set across imbalanced purchases, and finite prices at extreme share imbalance. |
-| Contract near-workspaces sandbox | 1 | One integrated test using signed transactions against a real local nearcore sandbox. It created a market, bought shares, transferred NEP-245 shares, refunded a failed transfer-call, and rejected an oracle-incompatible URL, unauthorized transfer, underfunded buy, direct private callback, premature claim, early resolution, challenge before provisional result, and late buy. |
+| Contract near-workspaces sandbox | 1 | One integrated test using signed transactions against a real local nearcore sandbox. It created a market, bought shares, verified the creator received a trade fee, transferred NEP-245 shares, refunded a failed transfer-call, and rejected an oracle-incompatible URL, unauthorized transfer, underfunded buy, direct private callback, premature claim, early resolution, challenge before provisional result, and late buy. |
 | SDK Node | 13 | Pricing, phrase rules, fixture hashes, live official Fed PDF fetch, live official Fed calendar parse, live OutLayer testnet compute-cost view, source-swap hash change, and setup guards. |
 | MCP Node | 1 | Started a real MCP stdio server, listed tools and verified the explicit setup error. |
 
