@@ -1,0 +1,9 @@
+{
+  "name": "@kotoba/mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {"kotoba-mcp": "src/main.mjs"},
+  "scripts": {"test": "node --test test/*.test.mjs"},
+  "dependencies": {"@modelcontextprotocol/sdk": "^1.32.1", "@kotoba/sdk": "workspace:*", "zod": "^3.25.76"}
+}
