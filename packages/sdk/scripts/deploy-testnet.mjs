@@ -7,8 +7,12 @@ import { TESTNET_RPC } from '../src/index.mjs';
 const root = resolve(import.meta.dirname, '../../..');
 const credentialsFile = resolve(root, '.near-credentials/deployer.json');
 let credentials;
-try { credentials = JSON.parse(await readFile(credentialsFile, 'utf8')); }
-catch { credentials = { account_id: process.env.NEAR_TESTNET_ACCOUNT, secret_key: process.env.NEAR_TESTNET_PRIVATE_KEY }; }
+if (process.env.NEAR_TESTNET_ACCOUNT || process.env.NEAR_TESTNET_PRIVATE_KEY) {
+  credentials = { account_id: process.env.NEAR_TESTNET_ACCOUNT, secret_key: process.env.NEAR_TESTNET_PRIVATE_KEY };
+} else {
+  try { credentials = JSON.parse(await readFile(credentialsFile, 'utf8')); }
+  catch { credentials = {}; }
+}
 if (!credentials.account_id?.endsWith('.testnet') || !credentials.secret_key) throw new Error('Setup required: NEAR_TESTNET_ACCOUNT and NEAR_TESTNET_PRIVATE_KEY (or .near-credentials/deployer.json)');
 const wasmUrl = process.env.OUTLAYER_WASM_URL;
 const wasmHash = process.env.OUTLAYER_WASM_SHA256;

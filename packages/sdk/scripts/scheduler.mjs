@@ -20,7 +20,12 @@ const plan = dates.flatMap(d => {
 if (!process.argv.includes('--send')) { console.log(JSON.stringify({ source: 'official Fed calendar', planned: plan }, null, 2)); process.exit(0); }
 const file = resolve(root, '.near-credentials/deployer.json');
 let credentials;
-try { credentials = JSON.parse(await readFile(file, 'utf8')); } catch { throw new Error('Setup required: NEAR_TESTNET_ACCOUNT and NEAR_TESTNET_PRIVATE_KEY (or .near-credentials/deployer.json)'); }
+if (process.env.NEAR_TESTNET_ACCOUNT || process.env.NEAR_TESTNET_PRIVATE_KEY) {
+  credentials = { account_id: process.env.NEAR_TESTNET_ACCOUNT, secret_key: process.env.NEAR_TESTNET_PRIVATE_KEY };
+} else {
+  try { credentials = JSON.parse(await readFile(file, 'utf8')); } catch { credentials = {}; }
+}
+if (!credentials.account_id || !credentials.secret_key) throw new Error('Setup required: NEAR_TESTNET_ACCOUNT and NEAR_TESTNET_PRIVATE_KEY (or .near-credentials/deployer.json)');
 if (!credentials.account_id.endsWith('.testnet')) throw new Error('Testnet account required');
 const signer = new Account(credentials.account_id, new JsonRpcProvider({ url: TESTNET_RPC }), new KeyPairSigner(KeyPair.fromString(credentials.secret_key)));
 const results = [];

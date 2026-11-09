@@ -16,7 +16,7 @@ An additional manual CLI check fetched the official PDF again and confirmed its 
 
 ## Blocked
 
-The official NEAR testnet account helper returned HTTP 429 with a one-hour retry instruction. The generated key is held only in gitignored `.near-credentials/deployer.json`; the account was not created. A retry is pending. Nick can instead provide a funded `NEAR_TESTNET_ACCOUNT` and `NEAR_TESTNET_PRIVATE_KEY` through a gitignored `.env`. OutLayer upload, live TEE execution, independent attestation verification, real challenge/payout tests, and testnet explorer hashes depend on that account. The exact inputs and missing engineering are listed in [BLOCKED.md](BLOCKED.md).
+The official NEAR testnet account helper returned HTTP 429 with a one-hour retry instruction. The generated key is held only in gitignored `.near-credentials/deployer.json`; the account was not created. Retry `node packages/sdk/scripts/create-testnet.mjs` from the root after the cooldown. Nick can instead provide a funded `NEAR_TESTNET_ACCOUNT` and `NEAR_TESTNET_PRIVATE_KEY` through a gitignored `.env`. OutLayer upload, live TEE execution, independent attestation verification, real challenge/payout tests, and testnet explorer hashes depend on that account. The exact inputs and missing engineering are listed in [BLOCKED.md](BLOCKED.md).
 
 Email sign-in, a NEP-366 relayer, per-market subaccount escrow, NEP-141 test collateral, custom creator transcript sources, and a funded mainnet `NEAR_MAINNET_ACCOUNT` for a 1Click dry quote are also missing. No mainnet swap or spend was attempted. This repository remains local and has no remote.
 
