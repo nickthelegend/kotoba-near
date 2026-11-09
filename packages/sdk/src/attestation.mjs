@@ -5,7 +5,7 @@
 // The quote signature chain is verified with Phala's dcap-qvl against Intel collateral from the Phala PCCS.
 import { createHash } from 'node:crypto';
 import { getCollateralAndVerify } from '@phala/dcap-qvl';
-import { TESTNET_RPC } from './index.mjs';
+import { TESTNET_RPC, testnetFetch } from './index.mjs';
 
 export const OUTLAYER_TESTNET_API = 'https://testnet-api.outlayer.ai';
 const sha = (b) => createHash('sha256').update(b).digest('hex');
@@ -39,7 +39,7 @@ export function quoteFields(quote) {
 
 async function measurementsApproved(m, registry = 'worker.outlayer.testnet', rpc = TESTNET_RPC) {
   const args_base64 = Buffer.from(JSON.stringify({ measurements: { mrtd: m.mrtd, rtmr0: m.rtmr0, rtmr1: m.rtmr1, rtmr2: m.rtmr2, rtmr3: m.rtmr3 } })).toString('base64');
-  const response = await fetch(rpc, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba', method: 'query', params: { request_type: 'call_function', finality: 'final', account_id: registry, method_name: 'is_measurements_approved', args_base64 } }) });
+  const response = await testnetFetch({ method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba', method: 'query', params: { request_type: 'call_function', finality: 'final', account_id: registry, method_name: 'is_measurements_approved', args_base64 } }) }, rpc);
   const body = await response.json();
   if (body.error || body.result?.error) throw new Error(`is_measurements_approved failed: ${JSON.stringify(body.error || body.result.error).slice(0, 200)}`);
   return JSON.parse(Buffer.from(body.result.result).toString()) === true;
@@ -67,4 +67,18 @@ export async function verifyExecution({ txHash, input, output, wasmHash }) {
     checks.intel_signature_chain = false;
   }
   return { request_id: a.request_id, attestation_id: a.id, tx: a.transaction_hash, caller: a.caller_account_id, block_height: a.block_height, timestamp: a.timestamp, wasm_hash: a.wasm_hash, input_hash: a.input_hash, output_hash: a.output_hash, measurements: { mrtd: fields.mrtd, rtmr3: fields.rtmr3 }, report_data: fields.report_data.slice(0, 64), tcb, checks, ok: Object.values(checks).every(Boolean), source: `${OUTLAYER_TESTNET_API}/attestations/by-tx/${txHash}` };
+}
+
+/** Reads the exact OutLayer input and output from a resolve/challenge transaction, then verifies the attestation. */
+export async function verifyResolutionTx(txHash, senderId, wasmHash, rpc = TESTNET_RPC) {
+  const response = await testnetFetch({ method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba', method: 'EXPERIMENTAL_tx_status', params: { tx_hash: txHash, sender_account_id: senderId, wait_until: 'FINAL' } }) }, rpc);
+  const body = await response.json();
+  if (body.error) throw new Error(`tx_status: ${JSON.stringify(body.error).slice(0, 200)}`);
+  const request = body.result.receipts.flatMap((r) => r.receipt?.Action?.actions ?? []).map((a) => a.FunctionCall).find((f) => f?.method_name === 'request_execution');
+  if (!request) throw new Error('This transaction made no OutLayer request_execution call');
+  const args = JSON.parse(Buffer.from(request.args, 'base64').toString());
+  const outcome = body.result.receipts_outcome.find((r) => r.outcome.executor_id.startsWith('outlayer.') && r.outcome.status.SuccessValue && Buffer.from(r.outcome.status.SuccessValue, 'base64').toString().includes('transcript_sha256'));
+  if (!outcome) throw new Error('OutLayer returned no oracle output in this transaction');
+  const output = Buffer.from(outcome.outcome.status.SuccessValue, 'base64').toString();
+  return { output: JSON.parse(output), verification: await verifyExecution({ txHash, input: args.input_data, output, wasmHash: wasmHash ?? args.source?.WasmUrl?.hash }) };
 }

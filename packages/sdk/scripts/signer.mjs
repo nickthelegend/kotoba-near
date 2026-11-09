@@ -1,5 +1,5 @@
 // Loads the gitignored deployer key for scripts. Never prints the key.
-import { Account, KeyPair, KeyPairSigner, JsonRpcProvider } from 'near-api-js';
+import { Account, KeyPair, KeyPairSigner, JsonRpcProvider, FailoverRpcProvider } from 'near-api-js';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { TESTNET_RPC } from '../src/index.mjs';
@@ -17,7 +17,9 @@ export async function loadCredentials(file = '.near-credentials/deployer.json') 
 export async function signerFor(file) {
   const credentials = await loadCredentials(file);
   if (!credentials.account_id?.endsWith('.testnet') || !credentials.secret_key) throw new Error('Setup required: a testnet account and key');
-  const provider = new JsonRpcProvider({ url: process.env.NEAR_TESTNET_RPC || TESTNET_RPC });
+  // FastNEAR rate-limits shared IPs (HTTP 429); fall back to the official endpoint.
+  const urls = [...new Set([process.env.NEAR_TESTNET_RPC || TESTNET_RPC, 'https://rpc.testnet.near.org'])];
+  const provider = new FailoverRpcProvider(urls.map((url) => new JsonRpcProvider({ url })));
   return new Account(credentials.account_id, provider, new KeyPairSigner(KeyPair.fromString(credentials.secret_key)));
 }
 

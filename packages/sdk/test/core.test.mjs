@@ -57,3 +57,35 @@ test('RPC reader requires an actual testnet contract ID', async () => {
 test('1Click preview requires a mainnet account before any request', async () => {
   await assert.rejects(oneClickDryQuote({ accountId: '' }), /Setup required: NEAR_MAINNET_ACCOUNT/);
 });
+
+// Live checks against the public testnet deployment and OutLayer's attestation API (no stubs).
+import { verifyExecution, taskHash, fetchAttestationByTx } from '../src/attestation.mjs';
+const run = JSON.parse(await readFile(new URL('../../../deployments/real-run.json', import.meta.url), 'utf8'));
+const deployment = JSON.parse(await readFile(new URL('../../../deployments/testnet-2026-11-09.json', import.meta.url), 'utf8'));
+
+test('recorded OutLayer resolution re-verifies: code, input, output, TDX report_data, approved measurements, Intel chain', async () => {
+  const resolve = run.steps.find((s) => s.method === 'resolve' && s.outlayer);
+  const result = await verifyExecution({ txHash: resolve.tx, input: resolve.outlayer.input, output: resolve.outlayer.output, wasmHash: deployment.oracle_sha256 });
+  assert.equal(result.ok, true, JSON.stringify(result.checks));
+  assert.equal(JSON.parse(resolve.outlayer.output).count, 40);
+});
+test('a tampered output does not match the attestation', async () => {
+  const resolve = run.steps.find((s) => s.method === 'resolve' && s.outlayer);
+  const forged = resolve.outlayer.output.replace('"count":40', '"count":39');
+  const result = await verifyExecution({ txHash: resolve.tx, input: resolve.outlayer.input, output: forged, wasmHash: deployment.oracle_sha256 });
+  assert.equal(result.checks.output_hash, false);
+  assert.equal(result.ok, false);
+});
+test('a different program hash does not match the attestation', async () => {
+  const a = await fetchAttestationByTx(run.steps.find((s) => s.method === 'challenge').tx);
+  assert.notEqual(taskHash({ ...a, wasm_hash: '0'.repeat(64) }), taskHash(a));
+});
+test('deployed contract holds the settled Jan 28 markets with attested hashes', async () => {
+  const inflation = await viewMarket(deployment.contract_id, 'fomc-2026-01-inflation-40');
+  assert.equal(inflation.status, 'Final');
+  assert.equal(inflation.result.count, 40);
+  assert.equal(inflation.result.transcript_sha256, '2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3');
+  assert.equal(inflation.result.code_hash, deployment.oracle_sha256);
+  const recession = await viewMarket(deployment.contract_id, 'fomc-2026-01-recession');
+  assert.equal(recession.result.count, 0);
+});

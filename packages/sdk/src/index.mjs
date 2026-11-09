@@ -2,6 +2,17 @@ import { createHash } from 'node:crypto';
 export const TESTNET_RPC = 'https://test.rpc.fastnear.com';
 export const MAINNET_RPC = 'https://rpc.fastnear.com';
 export const UNIT = 10n ** 21n;
+// FastNEAR rate-limits busy shared IPs with HTTP 429; reads fall back to the official testnet endpoint.
+export const TESTNET_RPC_FALLBACK = 'https://rpc.testnet.near.org';
+export async function testnetFetch(init, primary = TESTNET_RPC) {
+  let last;
+  for (const url of [...new Set([primary, TESTNET_RPC_FALLBACK])]) {
+    const response = await fetch(url, init).catch((e) => { last = e; return null; });
+    if (response?.ok) return response;
+    if (response) last = new Error(`NEAR testnet RPC HTTP ${response.status} at ${url}`);
+  }
+  throw last;
+}
 
 export function lmsrCost(yes, no, b) {
   if (![yes, no, b].every(Number.isFinite) || yes < 0 || no < 0 || b <= 0) throw new Error('Invalid LMSR parameters');
@@ -68,7 +79,7 @@ export async function fetchOfficialPdf(url) {
 export async function viewMarket(contractId, id, rpc = TESTNET_RPC) {
   if (!/^[a-z0-9._-]+\.testnet$/.test(contractId)) throw new Error('Setup required: NEAR_TESTNET_CONTRACT');
   const args_base64 = Buffer.from(JSON.stringify({ id })).toString('base64');
-  const response = await fetch(rpc, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba', method: 'query', params: { request_type: 'call_function', finality: 'final', account_id: contractId, method_name: 'get_market', args_base64 } }) });
+  const response = await testnetFetch({ method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba', method: 'query', params: { request_type: 'call_function', finality: 'final', account_id: contractId, method_name: 'get_market', args_base64 } }) }, rpc);
   if (!response.ok) throw new Error(`NEAR RPC HTTP ${response.status}`);
   const body = await response.json();
   if (body.error) throw new Error(`NEAR RPC: ${body.error.message ?? JSON.stringify(body.error)}`);
@@ -77,7 +88,7 @@ export async function viewMarket(contractId, id, rpc = TESTNET_RPC) {
 
 export async function estimateOutlayerCost(resourceLimits = { max_instructions: 10_000_000_000, max_memory_mb: 256, max_execution_seconds: 60 }, inputLen = 200) {
   const args_base64 = Buffer.from(JSON.stringify({ resource_limits: resourceLimits, input_len: inputLen })).toString('base64');
-  const response = await fetch(TESTNET_RPC, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba-outlayer-cost', method: 'query', params: { request_type: 'call_function', finality: 'final', account_id: 'outlayer.testnet', method_name: 'estimate_execution_cost', args_base64 } }) });
+  const response = await testnetFetch({ method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba-outlayer-cost', method: 'query', params: { request_type: 'call_function', finality: 'final', account_id: 'outlayer.testnet', method_name: 'estimate_execution_cost', args_base64 } }) });
   if (!response.ok) throw new Error(`NEAR testnet RPC HTTP ${response.status}`);
   const body = await response.json();
   if (body.error) throw new Error(`OutLayer estimate failed: ${body.error.message || JSON.stringify(body.error)}`);

@@ -6,7 +6,8 @@
     "test": "node --test test/*.test.mjs"
   },
   "exports": {
-    ".": "./src/index.mjs"
+    ".": "./src/index.mjs",
+    "./attestation": "./src/attestation.mjs"
   },
   "dependencies": {
     "@phala/dcap-qvl": "0.7.1",
