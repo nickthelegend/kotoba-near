@@ -37,6 +37,12 @@ It currently plans four word markets for the December 9, 2026 FOMC press confere
 
 All occurrences in the **full official press conference PDF** count, including reporters' questions. `lopdf` extraction collapses whitespace, then matching ignores ASCII case and requires non-alphanumeric boundaries around the word or phrase. The January 28, 2026 PDF SHA-256 is `2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3`. The oracle counts **40** occurrences of `inflation` and **0** of `recession`; Poppler extraction gives a different inflation count, so the extractor is part of the pinned code. Source: [Federal Reserve PDF](https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf). Research: [docs/RESEARCH.md](docs/RESEARCH.md).
 
+Verify the PDF hash against the live official source with:
+
+```sh
+node packages/sdk/scripts/verify-transcript.mjs https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf 2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3
+```
+
 ### NEAR features
 
 - **NEP-245** represents each market's YES/NO share classes and supports balance, supply, direct and callback transfers. Payout burns winning shares.

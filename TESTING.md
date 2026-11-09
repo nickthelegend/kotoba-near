@@ -21,4 +21,6 @@ Browser build command: `pnpm --filter @kotoba/web build`. Chrome verification co
 
 The browser check also loaded the pinned archive text. The market sheet contains a live RPC quote preview when a deployed contract has an open market; no real market existed for that browser path in this run. The server and Chrome process were stopped after verification.
 
+The independent source check `node packages/sdk/scripts/verify-transcript.mjs https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf 2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3` fetched the official PDF live and confirmed the expected hash. It is a manual check in addition to the 23 test cases above.
+
 **Not verified:** public testnet deployment, OutLayer upload/execution/attestation, challenge rerun via OutLayer, a winning payout and double-claim rejection on a live chain, email sign-in, 1Click quote with a funded mainnet account, and a live market result heatmap. These are recorded in [BLOCKED.md](BLOCKED.md). The official testnet account helper returned HTTP 429, so there is no testnet transaction or explorer link.

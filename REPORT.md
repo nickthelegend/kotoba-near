@@ -12,6 +12,8 @@
 
 `pnpm test`: **23 passed, 0 failed, 0 skipped** (3 oracle, 5 contract unit, 1 integrated nearcore sandbox, 13 SDK, 1 MCP). `pnpm build` passed. Built web app in headless Chrome: 1440px and 375px both had a nonempty root, zero uncaught page errors, and no horizontal overflow. No external service was replaced by a mock or stub.
 
+An additional manual CLI check fetched the official PDF again and confirmed its SHA-256 using `packages/sdk/scripts/verify-transcript.mjs`.
+
 ## Blocked
 
 The official NEAR testnet account helper returned HTTP 429 with a one-hour retry instruction. The generated key is held only in gitignored `.near-credentials/deployer.json`; the account was not created. A retry is pending. Nick can instead provide a funded `NEAR_TESTNET_ACCOUNT` and `NEAR_TESTNET_PRIVATE_KEY` through a gitignored `.env`. OutLayer upload, live TEE execution, independent attestation verification, real challenge/payout tests, and testnet explorer hashes depend on that account. The exact inputs and missing engineering are listed in [BLOCKED.md](BLOCKED.md).
