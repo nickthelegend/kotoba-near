@@ -5,6 +5,7 @@ use near_sdk::{env, near, require, AccountId, Gas, NearToken, PanicOnDefault, Pr
 use std::collections::BTreeMap;
 
 const UNIT: u128 = 1_000_000_000_000_000_000_000; // 0.001 NEAR
+const FEE_BPS: u128 = 100; // 1% of the rounded LMSR cost, paid to the market creator
 const WINDOW_NS: u64 = 24 * 60 * 60 * 1_000_000_000;
 const OUTLAYER: &str = "outlayer.testnet";
 
@@ -93,12 +94,15 @@ impl Kotoba {
         let before = cost(market.yes, market.no, market.b);
         if yes { market.yes = market.yes.checked_add(quantity).expect("ERR_OVERFLOW"); }
         else { market.no = market.no.checked_add(quantity).expect("ERR_OVERFLOW"); }
-        let amount = ((cost(market.yes, market.no, market.b) - before).ceil() as u128) * UNIT;
+        let base = ((cost(market.yes, market.no, market.b) - before).ceil() as u128) * UNIT;
+        let amount = with_fee(base);
         require!(amount > 0 && env::attached_deposit().as_yoctonear() >= amount, "ERR_DEPOSIT");
         let key = (id.clone(), env::predecessor_account_id().to_string(), yes);
         *self.shares.entry(key).or_default() += quantity;
         mt_event("mt_mint", near_sdk::serde_json::json!({"owner_id":env::predecessor_account_id(),"token_ids":[token_id(&id, yes)],"amounts":[quantity.to_string()]}));
+        let creator: AccountId = market.creator.parse().expect("ERR_CREATOR");
         self.markets.insert(id, market);
+        Promise::new(creator).transfer(NearToken::from_yoctonear(amount - base)).detach();
         let excess = env::attached_deposit().as_yoctonear() - amount;
         if excess > 0 { Promise::new(env::predecessor_account_id()).transfer(NearToken::from_yoctonear(excess)).detach(); }
         U128(amount)
@@ -109,7 +113,7 @@ impl Kotoba {
         require!(quantity > 0 && quantity <= 100_000, "ERR_QUANTITY");
         let before = cost(m.yes, m.no, m.b);
         let after = if yes { cost(m.yes + quantity, m.no, m.b) } else { cost(m.yes, m.no + quantity, m.b) };
-        U128(((after - before).ceil() as u128) * UNIT)
+        U128(with_fee(((after - before).ceil() as u128) * UNIT))
     }
 
     pub fn prices(&self, id: String) -> (f64, f64) {
@@ -313,6 +317,7 @@ fn cost(yes: u32, no: u32, b: u32) -> f64 {
     let lo = yes.min(no) as f64 / b as f64;
     b as f64 * (hi + (1.0 + (lo - hi).exp()).ln())
 }
+fn with_fee(base: u128) -> u128 { base + base * FEE_BPS / 10_000 }
 fn yes_price(yes: u32, no: u32, b: u32) -> f64 {
     let difference = (yes as f64 - no as f64) / b as f64;
     if difference >= 0.0 { 1.0 / (1.0 + (-difference).exp()) }

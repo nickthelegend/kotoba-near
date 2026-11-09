@@ -28,7 +28,10 @@ async fn market_and_attacker_guards_on_real_local_chain() -> anyhow::Result<()> 
     assert_eq!(market["status"], "Open");
     let quote: String = contract.view("quote").args_json(json!({"id":"fomc-jan-inflation","yes":true,"quantity":10})).await?.json()?;
     let amount: u128 = quote.parse()?;
+    let creator_before = creator.view_account().await?.balance.as_yoctonear();
     player.call(contract.id(), "buy").args_json(json!({"id":"fomc-jan-inflation","yes":true,"quantity":10})).deposit(NearToken::from_yoctonear(amount)).transact().await?.into_result()?;
+    let creator_after = creator.view_account().await?.balance.as_yoctonear();
+    assert!(creator_after > creator_before, "market creator must receive the trade fee on-chain");
     let balance: u32 = contract.view("balance_of").args_json(json!({"id":"fomc-jan-inflation","account":player.id(),"yes":true})).await?.json()?;
     assert_eq!(balance, 10);
     let recipient = worker.dev_create_account().await?;
