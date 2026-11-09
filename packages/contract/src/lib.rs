@@ -6,7 +6,8 @@ use std::collections::BTreeMap;
 
 const UNIT: u128 = 1_000_000_000_000_000_000_000; // 0.001 NEAR
 const FEE_BPS: u128 = 100; // 1% of the rounded LMSR cost, paid to the market creator
-const WINDOW_NS: u64 = 24 * 60 * 60 * 1_000_000_000;
+const MIN_WINDOW_NS: u64 = 10 * 60 * 1_000_000_000; // a challenge window is at least 10 minutes
+const BOND: u128 = 100 * UNIT; // 0.1 NEAR resolver or challenger bond
 const OUTLAYER: &str = "outlayer.testnet";
 
 #[derive(BorshDeserialize, BorshSerialize, BorshSchema, Serialize, Deserialize, schemars::JsonSchema, Clone)]
@@ -55,6 +56,7 @@ pub struct Kotoba {
     shares: BTreeMap<(String, String, bool), u32>,
     wasm_url: String,
     wasm_hash: String,
+    challenge_window_ns: u64,
 }
 
 #[derive(Serialize, schemars::JsonSchema)]
@@ -64,11 +66,16 @@ pub struct Token { token_id: String, owner_id: Option<String> }
 #[near]
 impl Kotoba {
     #[init]
-    pub fn new(wasm_url: String, wasm_hash: String) -> Self {
+    pub fn new(wasm_url: String, wasm_hash: String, challenge_window_ns: u64) -> Self {
         require!(wasm_url.starts_with("https://"), "ERR_WASM_URL");
-        require!(is_sha256(&wasm_hash), "ERR_WASM_HASH");
-        Self { markets: BTreeMap::new(), shares: BTreeMap::new(), wasm_url, wasm_hash }
+        // OutLayer refuses an uppercase hash, so a mixed-case pin could never resolve.
+        require!(is_sha256(&wasm_hash) && wasm_hash.bytes().all(|b| !b.is_ascii_uppercase()), "ERR_WASM_HASH");
+        require!(challenge_window_ns >= MIN_WINDOW_NS, "ERR_WINDOW");
+        Self { markets: BTreeMap::new(), shares: BTreeMap::new(), wasm_url, wasm_hash, challenge_window_ns }
     }
+
+    /// The pinned oracle program and the challenge window every market uses.
+    pub fn config(&self) -> (String, String, u64) { (self.wasm_url.clone(), self.wasm_hash.clone(), self.challenge_window_ns) }
 
     #[payable]
     pub fn create_market(&mut self, id: String, event: String, source_url: String, phrase: String, threshold: u32, close_ns: u64, deadline_ns: u64, b: u32) {
@@ -127,10 +134,10 @@ impl Kotoba {
         let m = self.markets.get_mut(&id).expect("ERR_UNKNOWN_MARKET");
         require!(m.status == Status::Open && !m.pending, "ERR_STATE");
         require!(env::block_timestamp() >= m.close_ns && env::block_timestamp() <= m.deadline_ns, "ERR_RESOLUTION_TIME");
-        require!(env::attached_deposit().as_yoctonear() > 100 * UNIT, "ERR_RESOLVER_BOND");
+        require!(env::attached_deposit().as_yoctonear() > BOND, "ERR_RESOLVER_BOND");
         m.pending = true;
         m.resolver = Some(env::predecessor_account_id().to_string());
-        self.request(id, false, NearToken::from_yoctonear(env::attached_deposit().as_yoctonear() - 100 * UNIT))
+        self.request(id, false, NearToken::from_yoctonear(env::attached_deposit().as_yoctonear() - BOND))
     }
 
     #[payable]
@@ -139,10 +146,10 @@ impl Kotoba {
         require!(m.status == Status::Provisional && !m.pending, "ERR_STATE");
         require!(env::block_timestamp() < m.challenge_until_ns.unwrap(), "ERR_WINDOW");
         // A fixed 0.1 NEAR bond is retained until callback. Re-running the same code is the sole adjudicator.
-        require!(env::attached_deposit().as_yoctonear() > 100 * UNIT, "ERR_BOND");
+        require!(env::attached_deposit().as_yoctonear() > BOND, "ERR_BOND");
         m.pending = true;
         m.challenger = Some(env::predecessor_account_id().to_string());
-        self.request(id, true, NearToken::from_yoctonear(env::attached_deposit().as_yoctonear() - 100 * UNIT))
+        self.request(id, true, NearToken::from_yoctonear(env::attached_deposit().as_yoctonear() - BOND))
     }
 
     #[private]
@@ -170,7 +177,7 @@ impl Kotoba {
             let previous = m.result.as_ref().unwrap();
             let changed = previous.count != output.count || previous.transcript_sha256 != output.transcript_sha256;
             let winner = if changed { m.challenger.take().unwrap() } else { m.resolver.take().unwrap() };
-            Promise::new(winner.parse().unwrap()).transfer(NearToken::from_yoctonear(200 * UNIT)).detach();
+            Promise::new(winner.parse().unwrap()).transfer(NearToken::from_yoctonear(2 * BOND)).detach();
             // One challenge is allowed. Its rerun is final, with no human override.
             m.result = Some(output);
             m.status = Status::Final;
@@ -182,7 +189,7 @@ impl Kotoba {
             m.result = Some(output);
             m.status = Status::Provisional;
         }
-        m.challenge_until_ns = Some(env::block_timestamp() + WINDOW_NS);
+        m.challenge_until_ns = Some(env::block_timestamp() + self.challenge_window_ns);
         true
     }
 
@@ -190,7 +197,7 @@ impl Kotoba {
         let m = self.markets.get_mut(&id).expect("ERR_UNKNOWN_MARKET");
         require!(m.status == Status::Provisional && !m.pending && env::block_timestamp() >= m.challenge_until_ns.unwrap(), "ERR_WINDOW");
         m.status = Status::Final;
-        if let Some(account) = m.resolver.take() { Promise::new(account.parse().unwrap()).transfer(NearToken::from_yoctonear(100 * UNIT)).detach(); }
+        if let Some(account) = m.resolver.take() { Promise::new(account.parse().unwrap()).transfer(NearToken::from_yoctonear(BOND)).detach(); }
     }
 
     pub fn claim(&mut self, id: String) -> Promise {
@@ -205,6 +212,23 @@ impl Kotoba {
         if winning_yes { m.burned_yes += qty; } else { m.burned_no += qty; }
         mt_event("mt_burn", near_sdk::serde_json::json!({"owner_id":account,"token_ids":[token_id(&id, winning_yes)],"amounts":[qty.to_string()]}));
         Promise::new(account).transfer(NearToken::from_yoctonear(qty as u128 * UNIT))
+    }
+
+    /// If no attested result settled the market by its deadline, every share redeems for half a unit.
+    /// Solvent: escrow = b·ln2 + C(q) − C(0) ≥ max(yes, no) ≥ (yes + no) / 2.
+    pub fn claim_void(&mut self, id: String) -> Promise {
+        let m = self.markets.get_mut(&id).expect("ERR_UNKNOWN_MARKET");
+        require!(m.status == Status::Open && !m.pending && env::block_timestamp() > m.deadline_ns, "ERR_NOT_VOID");
+        let account = env::predecessor_account_id();
+        let yes = self.shares.remove(&(id.clone(), account.to_string(), true)).unwrap_or(0);
+        let no = self.shares.remove(&(id.clone(), account.to_string(), false)).unwrap_or(0);
+        require!(yes + no > 0, "ERR_NO_SHARES");
+        m.burned_yes += yes;
+        m.burned_no += no;
+        for (qty, side) in [(yes, true), (no, false)] {
+            if qty > 0 { mt_event("mt_burn", near_sdk::serde_json::json!({"owner_id":account,"token_ids":[token_id(&id, side)],"amounts":[qty.to_string()]})); }
+        }
+        Promise::new(account).transfer(NearToken::from_yoctonear((yes + no) as u128 * UNIT / 2))
     }
 
     /// NEP-245 core views. Each market has `<market-id>:YES` and `<market-id>:NO` shares.
@@ -342,7 +366,7 @@ fn mt_event(event: &str, data: near_sdk::serde_json::Value) {
 }
 fn refund_bond(m: &mut Market, challenged: bool) {
     let payer = if challenged { m.challenger.take() } else { m.resolver.take() };
-    if let Some(account) = payer { Promise::new(account.parse().unwrap()).transfer(NearToken::from_yoctonear(100 * UNIT)).detach(); }
+    if let Some(account) = payer { Promise::new(account.parse().unwrap()).transfer(NearToken::from_yoctonear(BOND)).detach(); }
 }
 
 #[cfg(test)]

@@ -19,7 +19,7 @@ async fn market_and_attacker_guards_on_real_local_chain() -> anyhow::Result<()> 
     let player = worker.dev_create_account().await?;
     let contract = creator.deploy(&std::fs::read(WASM)?).await?.into_result()?;
     let oracle_hash = format!("{:x}", Sha256::digest(std::fs::read(ORACLE_WASM)?));
-    creator.call(contract.id(), "new").args_json(json!({"wasm_url":format!("https://test.fastfs.io/kotoba-test/{oracle_hash}.wasm"),"wasm_hash":oracle_hash})).transact().await?.into_result()?;
+    creator.call(contract.id(), "new").args_json(json!({"wasm_url":format!("https://test.fastfs.io/kotoba-test/{oracle_hash}.wasm"),"wasm_hash":oracle_hash,"challenge_window_ns":900_000_000_000u64})).transact().await?.into_result()?;
     let close = now_ns() + 3_600_000_000_000;
     let deadline = close + 7 * 86_400_000_000_000;
     creator.call(contract.id(), "create_market").args_json(json!({"id":"fomc-jan-inflation","event":"January 2026 FOMC press conference","source_url":"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf","phrase":"inflation","threshold":40,"close_ns":close,"deadline_ns":deadline,"b":1000})).deposit(NearToken::from_near(1)).transact().await?.into_result()?;
@@ -52,5 +52,16 @@ async fn market_and_attacker_guards_on_real_local_chain() -> anyhow::Result<()> 
     creator.call(contract.id(), "create_market").args_json(json!({"id":"fomc-short-window","event":"Clock-bound rejection test","source_url":"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf","phrase":"recession","threshold":1,"close_ns":short_close,"deadline_ns":short_close + 86_400_000_000_000u64,"b":1000})).deposit(NearToken::from_near(1)).transact().await?.into_result()?;
     worker.fast_forward(100).await?;
     rejected(player.call(contract.id(), "buy").args_json(json!({"id":"fomc-short-window","yes":true,"quantity":1})).deposit(NearToken::from_near(1)).transact().await?, "ERR_CLOSED");
+
+    // A market nobody could settle by its deadline refunds every share at half a unit, once.
+    let void_close = worker.view_block().await?.timestamp() + 20_000_000_000;
+    creator.call(contract.id(), "create_market").args_json(json!({"id":"fomc-void","event":"Unresolved market refund test","source_url":"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf","phrase":"recession","threshold":1,"close_ns":void_close,"deadline_ns":void_close + 4_000_000_000u64,"b":100})).deposit(NearToken::from_near(1)).transact().await?.into_result()?;
+    let void_quote: String = contract.view("quote").args_json(json!({"id":"fomc-void","yes":false,"quantity":6})).await?.json()?;
+    player.call(contract.id(), "buy").args_json(json!({"id":"fomc-void","yes":false,"quantity":6})).deposit(NearToken::from_yoctonear(void_quote.parse()?)).transact().await?.into_result()?;
+    rejected(player.call(contract.id(), "claim_void").args_json(json!({"id":"fomc-void"})).transact().await?, "ERR_NOT_VOID");
+    worker.fast_forward(200).await?;
+    player.call(contract.id(), "claim_void").args_json(json!({"id":"fomc-void"})).transact().await?.into_result()?;
+    rejected(player.call(contract.id(), "claim_void").args_json(json!({"id":"fomc-void"})).transact().await?, "ERR_NO_SHARES");
+    rejected(player.call(contract.id(), "resolve").args_json(json!({"id":"fomc-void"})).deposit(NearToken::from_near(1)).transact().await?, "ERR_RESOLUTION_TIME");
     Ok(())
 }
