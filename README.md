@@ -29,7 +29,7 @@ It currently plans four word markets for the December 9, 2026 FOMC press confere
 | --- | --- |
 | `packages/contract` | Rust near-sdk contract with seeded LMSR quotes, native NEAR escrow, YES/NO shares, NEP-245 views/transfers/transfer-call, close time, private OutLayer callback, one bonded challenge, and burn-on-claim payout. Sandbox tests send signed transactions and demonstrate rejection of forged callback and other attacks. |
 | `packages/oracle` | Rust WASI P2 program that fetches only official Fed press conference PDFs over HTTPS, hashes the PDF, extracts text with `lopdf`, and counts case-insensitive whole words/phrases. A real January 2026 PDF is pinned as a fixture. |
-| `packages/sdk` | LMSR math, official source fetch, live Fed calendar parser and a read-only 1Click `dry: true` quote method gated on a funded mainnet account. |
+| `packages/sdk` | LMSR math, official source fetch, live Fed calendar parser, live OutLayer testnet cost view, and a read-only 1Click `dry: true` quote method gated on a funded mainnet account. |
 | `packages/web` | Responsive landing page and market dashboard. Live odds and the position preview quote come from the testnet contract RPC. It shows explicit setup, empty and error states and a hash-checked archive word heatmap. Browser bets require the missing email/relayer layer. |
 | `packages/mcp` | Read-only MCP tools `kotoba_list_markets` and `kotoba_get_market`, backed by live testnet RPC. Without `NEAR_TESTNET_CONTRACT`, they return a setup error. |
 

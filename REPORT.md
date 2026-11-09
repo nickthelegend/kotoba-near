@@ -4,13 +4,13 @@
 
 ## What works live
 
-- The SDK fetches the current official Federal Reserve calendar and January 28, 2026 press conference PDF over HTTPS. The pinned PDF SHA-256 is `2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3`; the Rust oracle's deterministic extraction counts 40 whole-word `inflation` matches and zero `recession` matches.
+- The SDK fetches the current official Federal Reserve calendar and January 28, 2026 press conference PDF over HTTPS, and reads a live compute-cost estimate from `outlayer.testnet`. The pinned PDF SHA-256 is `2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3`; the Rust oracle's deterministic extraction counts 40 whole-word `inflation` matches and zero `recession` matches.
 - A real local nearcore sandbox deploys the actual contract WASM and executes signed market creation, share purchase, NEP-245 transfer, failed receiver refund, and on-chain attack rejections. The contract has seeded LMSR pricing and a programmed OutLayer request, challenge and payout path. The OutLayer path has not run live.
 - The SDK plans four December 9 FOMC word markets from the live calendar. The read-only MCP server starts and exposes live RPC tools with an explicit setup state. The web landing page, market board, position preview, and hash-checked archive render in Chrome.
 
 ## Verification
 
-`pnpm test`: **22 passed, 0 failed, 0 skipped** (3 oracle, 5 contract unit, 1 integrated nearcore sandbox, 12 SDK, 1 MCP). `pnpm build` passed. Built web app in headless Chrome: 1440px and 375px both had a nonempty root, zero uncaught page errors, and no horizontal overflow. No external service was replaced by a mock or stub.
+`pnpm test`: **23 passed, 0 failed, 0 skipped** (3 oracle, 5 contract unit, 1 integrated nearcore sandbox, 13 SDK, 1 MCP). `pnpm build` passed. Built web app in headless Chrome: 1440px and 375px both had a nonempty root, zero uncaught page errors, and no horizontal overflow. No external service was replaced by a mock or stub.
 
 ## Blocked
 
