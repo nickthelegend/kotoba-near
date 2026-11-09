@@ -18,9 +18,16 @@ A real `estimate_execution_cost` view on `outlayer.testnet` returned `7001000000
 | [White House briefings and statements](https://www.whitehouse.gov/briefings-statements/) | The official site has written statements, but a complete, predictable briefing transcript feed and publication SLA cannot be established. | Future source only. |
 | [SEC Item 2.02 guidance](https://www.sec.gov/rules-regulations/staff-guidance/corporation-finance-interpretations/non-gaap-financial-measures) | An earnings release in an 8-K is not the full spoken call. The SEC describes cases where a transcript *can* satisfy disclosure, not a general requirement to publish all calls. | Future source only, per issuer after checking a reliable official transcript feed. |
 
+## Verified on 2026-11-09 (live)
+
+- **Upload.** `outlayer upload` writes the WASM to FastFS as a `__fastdata_fastfs` function call carrying Borsh `SimpleFastfs`/`PartialFastfs` args. The call is sent with 1 gas, so it fails by design, and the indexer reads the bytes from the arguments ([outlayer-cli upload.rs](https://github.com/out-layer/outlayer-cli/blob/main/src/commands/upload.rs)). Files over 1 MB are chunked. Our 1,064,688-byte oracle took 2 transactions. It is served at `https://test.fastfs.io/<sender>/outlayer.testnet/<sha256>.wasm`.
+- **Return value.** `request_execution` returns `env::promise_return` of a yield promise, and `on_execution_response` returns the guest's JSON (`response_format: Json`) as raw bytes, or `null` on failure ([contract/src/execution.rs](https://github.com/out-layer/outlayer/blob/main/contract/src/execution.rs)). A calling contract's `.then` callback therefore sees the oracle JSON directly.
+- **Attestation.** Each run is available at `https://testnet-api.outlayer.ai/attestations/by-tx/<tx>` (also `/by-request/<id>`). `report_data[0..32]` = SHA-256(task_type ‖ task_id i64 LE ‖ build_target ‖ wasm_hash ‖ input_hash ‖ output_hash ‖ block_height u64 LE ‖ caller ‖ timestamp i64 LE ‖ attached_usd) ([worker/src/tdx_attestation.rs](https://github.com/out-layer/outlayer/blob/main/worker/src/tdx_attestation.rs)). Measurements are approved via `is_measurements_approved` on `worker.outlayer.testnet`. The quote verifies with `@phala/dcap-qvl` against Phala PCCS collateral. We reproduced all of this for requests #14913, #14918, #14919 and #14920.
+- **Cost.** A real run took 0.789B instructions and 1.7 to 1.8 s, and cost 0.00117 to 0.00127 NEAR. The rest of the deposit was refunded.
+
 ## What remains unverified
 
-The OutLayer WASM artifact, funded testnet execution, and independent attestation verification must be run before claiming automatic settlement works. A program that receives transcript text from an untrusted caller would not meet this design. An official PDF must be fetched within the TEE, and exact PDF-to-text extraction must be reproducible. The existing research does not establish a stable timing SLA for White House or earnings call transcripts.
+A program that receives transcript text from an untrusted caller would not meet this design. An official PDF must be fetched within the TEE, and exact PDF-to-text extraction must be reproducible. The existing research does not establish a stable timing SLA for White House or earnings call transcripts.
 
 ## Inspiration
 

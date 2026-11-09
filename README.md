@@ -1,84 +1,115 @@
 # Kotoba (言葉)
 
-Kotoba is a testnet prototype for markets on words in public transcripts. The problem is that a person can settle a word bet selectively or change the cited transcript. Kotoba pins a transcript source and a WASM code hash, prices YES/NO shares with a seeded LMSR curve, and routes resolution through an OutLayer callback with a challenge rerun. The current build has not completed a live OutLayer execution, so **automatic settlement is not yet verified end to end**.
+**Bet on what they'll say.** Kotoba runs word markets on NEAR testnet, for example "Will the Fed chair say 'recession' at the December 9 press conference?". Each market prices YES and NO shares with an LMSR market maker. After the event, the contract asks an **OutLayer** program running in an **Intel TDX enclave** to fetch the official federalreserve.gov transcript PDF, hash it, count the word and return the count. The contract settles on that answer. Anyone can verify the run's attestation, or bond 0.1 NEAR to re-run the same pinned program. No human settles anything.
 
-## Reproduce
+The problem it solves: a word bet needs a referee, and a referee can pick the wrong transcript, miscount, or be bribed. Kotoba replaces the referee with a hash-pinned program in a TEE whose output arrives on-chain only through a private callback.
 
-Requires Node 22+, pnpm 10, Rust 1.95, cargo-near 0.22 and the `wasm32-unknown-unknown` and `wasm32-wasip2` targets. Install and run from this repository:
+## Live on NEAR testnet (Nov 9 2026)
+
+- Factory contract: [`kotoba-edfa2b47.testnet`](https://testnet.nearblocks.io/address/kotoba-edfa2b47.testnet). Deploy tx [GT6mg7jY…](https://testnet.nearblocks.io/txns/GT6mg7jYHgAAe7ETHvpiebABgJU2mLgmBXCWtq4i66ea), init tx [Gz2LyFjq…](https://testnet.nearblocks.io/txns/Gz2LyFjqBaA9svLUoNC5yjQiaAv2AmD8banUnyMCL2QP).
+- Oracle program (WASI P2), stored on FastFS: `https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da…2314.wasm`, SHA-256 `b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314`. Upload txs: [9R7w4vtj…](https://testnet.nearblocks.io/txns/9R7w4vtjxpCsZoc7vuzk2i3iqapiTmSSPfq8UUGkiciF) and [mPZQ85xH…](https://testnet.nearblocks.io/txns/mPZQ85xHx4evsDFGmoXPNeMAeqDKUqLrkR91McCoczS).
+- First direct OutLayer run, before the contract existed: [DSYxhNQq…](https://testnet.nearblocks.io/txns/DSYxhNQquvqFd96X7mod6eTXs28o4sAa45DBx1zx8dqt), request #14913. It counted 40 "inflation" in PDF `2c2683d9…5cd3`, using 789M instructions in 1.8 s and costing 0.00127 NEAR.
+- **A past event, settled end to end.** The January 28, 2026 FOMC press conference (Powell) had two markets. "inflation" at least 40 times resolved **YES (40)**, was challenged and re-run (**40** again), went Final and paid out. "recession" at least once resolved **NO (0)**, was finalized after its challenge window and paid out. All three OutLayer runs have TDX attestations that pass every check below.
+- **An upcoming event, live.** The scheduler read the official FOMC calendar and opened four markets for the **December 9, 2026** press conference: recession, inflation, tariffs and employment. They close at 19:25 UTC, five minutes before the 2:30 p.m. ET start. Live odds are on the board.
+
+| Step | Result | Transaction |
+| --- | --- | --- |
+| create player sub-account | ok | [HWU7NPqqP2…](https://testnet.nearblocks.io/txns/HWU7NPqqP2LD62Q2eBVak8zyVmGVvmnXmCT9CrnVMM7S) |
+| create market fomc-2026-01-inflation-40 | ok | [DDJBJq1gKY…](https://testnet.nearblocks.io/txns/DDJBJq1gKYUozj6Pk5oWxPSVb9KHcoL3ztxSHuUGHB75) |
+| create market fomc-2026-01-recession | ok | [9jGxuGNaJm…](https://testnet.nearblocks.io/txns/9jGxuGNaJmq86qxaYNgj1cv9G1VqSFtPszw48RtCdTCk) |
+| buy 25 YES on fomc-2026-01-inflation-40 | ok | [3TwLfxmR2n…](https://testnet.nearblocks.io/txns/3TwLfxmR2nA7NW8pwbQGSjXuZNhUHAEwiUJazFyr6BcK) |
+| buy 10 NO on fomc-2026-01-inflation-40 | ok | [BYChi1bjSA…](https://testnet.nearblocks.io/txns/BYChi1bjSA7Z4ZJDZN4FKVBi3uaTQPZwjBgtDk3YRSyr) |
+| buy 15 NO on fomc-2026-01-recession | ok | [FSAurVubcR…](https://testnet.nearblocks.io/txns/FSAurVubcRt4c6E1qJHyzGPDf6Hn7cSrJFQRC7ttkJqa) |
+| resolve fomc-2026-01-inflation-40 (OutLayer) | rejected on-chain: `ERR_RESOLUTION_TIME` | [3PahtoukKP…](https://testnet.nearblocks.io/txns/3PahtoukKPJJvMMYPHe5YudFvWoEyTKxDKHqDcjiUGqj) |
+| buy 1 YES on fomc-2026-01-inflation-40 | rejected on-chain: `ERR_CLOSED` | [23d3vj4BQa…](https://testnet.nearblocks.io/txns/23d3vj4BQaDJAgdK1jJxWyEvKYn5iPrhMBfvgE5V5h1a) |
+| resolve fomc-2026-01-inflation-40 (OutLayer) | ok · TEE request #14918, attestation verified | [33sMfUjXnh…](https://testnet.nearblocks.io/txns/33sMfUjXnhbPmL3jad6ijjXZwYWYXodeHLH9fTQujAyV) |
+| challenge fomc-2026-01-inflation-40 (OutLayer) | ok · TEE request #14919, attestation verified | [BT5BmcjyhU…](https://testnet.nearblocks.io/txns/BT5BmcjyhUdheNEMqNuwyB294e6oD9uqEa4Rk4rSP15E) |
+| resolve fomc-2026-01-recession (OutLayer) | ok · TEE request #14920, attestation verified | [GiwqWBNzKt…](https://testnet.nearblocks.io/txns/GiwqWBNzKtN96xeRfkhhEJCVdzPHYwZm8znysas2bpGf) |
+| claim fomc-2026-01-inflation-40 as player | ok | [Eoudkc8kzc…](https://testnet.nearblocks.io/txns/Eoudkc8kzcrL9qSydTm41HnfKk52gYJfdMQzMSvKUZFE) |
+| claim fomc-2026-01-inflation-40 as creator | rejected on-chain: `ERR_NO_WINNING_SHARES` | [4HPAvPfnKh…](https://testnet.nearblocks.io/txns/4HPAvPfnKhxyeXVkDgMoj874BhX5L3qtXyNvTDujgrRf) |
+| claim fomc-2026-01-inflation-40 as player | rejected on-chain: `ERR_NO_WINNING_SHARES` | [HLzDkSrJnz…](https://testnet.nearblocks.io/txns/HLzDkSrJnzhdF7RThgrFk66Wdn7wPt3kN7NGjtb7KT3x) |
+| attack: forged on_result for fomc-2026-01-recession | rejected on-chain: `private` | [4b14MmNgrg…](https://testnet.nearblocks.io/txns/4b14MmNgrgiyATcGQfHPVPc5Cepd8VwDc4v54FxNh43X) |
+| buy 12 YES on fomc-2026-12-inflation | ok | [A2PVdgjQ7C…](https://testnet.nearblocks.io/txns/A2PVdgjQ7C9vHK6oFoUVT8jUSPavoZs5DcVCf58cqzBf) |
+| buy 8 NO on fomc-2026-12-recession | ok | [6N7AaiWfms…](https://testnet.nearblocks.io/txns/6N7AaiWfmsDBvoR9HB975TSf1RTHUnPjP33diW66fQ8M) |
+| buy 5 YES on fomc-2026-12-tariffs | ok | [HsV3W2JqLm…](https://testnet.nearblocks.io/txns/HsV3W2JqLmX3uvM1zCausZWRX84cAXP7s5nMHi8ZuMwM) |
+| finalize fomc-2026-01-recession | ok | [61M2LbzkmK…](https://testnet.nearblocks.io/txns/61M2LbzkmKjzi8wShPC5K8HPSePWtetp493FofZG3YG2) |
+| claim fomc-2026-01-recession as player | ok | [EX1z8F8LDv…](https://testnet.nearblocks.io/txns/EX1z8F8LDvGYSFAiD92FrvoGzArD56UGVezfR5p9TBGf) |
+| scheduler opens fomc-2026-12-recession from the Fed calendar | ok | [GibRyZH1ti…](https://testnet.nearblocks.io/txns/GibRyZH1ti95gVLpTdXU7wyM6ZysaBhdJYf5XxciLdC) |
+| scheduler opens fomc-2026-12-inflation from the Fed calendar | ok | [BeihjRnbfz…](https://testnet.nearblocks.io/txns/BeihjRnbfzAzVjox7TPEv5jxdLE1o7ngg45MVLf2SfKq) |
+| scheduler opens fomc-2026-12-tariffs from the Fed calendar | ok | [8XwUG72GJQ…](https://testnet.nearblocks.io/txns/8XwUG72GJQhaa5kTSQ2aQB2zToHBFKfE8ocHxeJ7JcTh) |
+| scheduler opens fomc-2026-12-employment from the Fed calendar | ok | [AUBv3NUYGK…](https://testnet.nearblocks.io/txns/AUBv3NUYGKMHh6TvvfF5yLH6XzFibe8p65DxsXFajuat) |
+
+Raw records: [deployments/real-run.json](deployments/real-run.json) (every tx with its exact OutLayer input, output, log and attestation check), [deployments/testnet-2026-11-09.json](deployments/testnet-2026-11-09.json), [deployments/oracle-fastfs.json](deployments/oracle-fastfs.json), [deployments/scheduler-2026-11-09.json](deployments/scheduler-2026-11-09.json).
+
+## How settlement is verified
+
+1. **Origin.** `resolve` and `challenge` call `request_execution` on `outlayer.testnet` with a `WasmUrl` source pinned by SHA-256. OutLayer pauses with NEAR yield/resume, runs the job and resumes. Its return value becomes the promise result read by our `#[private] on_result` callback. A direct call to `on_result` is rejected on-chain ([4b14MmNg…](https://testnet.nearblocks.io/txns/4b14MmNgrgiyATcGQfHPVPc5Cepd8VwDc4v54FxNh43X)). The callback also requires the returned `source_url` and `code_hash` to match the market and the pinned program. A failed run returns `null`, which refunds the bond and leaves the market open.
+2. **Attestation**, from OutLayer's [WORKER_ATTESTATION.md](https://github.com/out-layer/outlayer/blob/main/WORKER_ATTESTATION.md). Each run publishes a TDX quote at `https://testnet-api.outlayer.ai/attestations/by-tx/<tx>`. `packages/sdk/src/attestation.mjs` checks six things:
+   - the executed WASM hash equals the pin;
+   - `sha256(input)` equals `input_hash`, using the exact input from the tx receipt;
+   - `sha256(output)` equals `output_hash`, using the exact output the contract received;
+   - the quote's `report_data` equals SHA-256 over the task fields;
+   - the five TDX measurements are approved on `worker.outlayer.testnet` (`is_measurements_approved`);
+   - the quote's Intel signature chain verifies with Phala's `dcap-qvl`. TCB status: `UpToDate`.
+
+   Run it yourself: `node packages/sdk/scripts/verify-attestation.mjs deployments/outlayer-direct-DSYxhNQquvqFd96X7mod6eTXs28o4sAa45DBx1zx8dqt.json`. The resolution page re-runs the first five checks in your browser.
+3. **The transcript.** `packages/web/public/archive-20260128.txt` is the oracle's own `lopdf` extraction of PDF `2c2683d9…5cd3`. The page checks its hash, highlights every whole-word hit and compares the browser count with the attested count (40 = 40).
+
+## Do X, see Y
 
 ```sh
 pnpm install
-pnpm test
-pnpm build
-pnpm dev
+pnpm dev                       # http://127.0.0.1:5198
 ```
+- `/`: the landing page with live contract figures (markets, open, settled, shares, free balance, verified TEE runs) and the recorded transactions.
+- `/app`: the Dec 9 FOMC countdown and four live markets with LMSR odds. **Trade** opens the bet sheet with a live `quote` from the contract. **Connect** signs in with MyNearWallet (testnet), and **Buy** sends a real `buy` transaction.
+- `/market/fomc-2026-01-inflation-40`: the verdict (40 hits, YES), the transcript and program hashes, both OutLayer runs with the in-browser seal checks, and the transcript with all 40 hits marked and a hit-by-hit navigator.
+- `/creators`: markets grouped by creator, and a composer that opens a new Fed-sourced market from your wallet (subsidy b·ln2, 1% creator fee).
 
-Open the Vite URL. You will see `Setup required: VITE_NEAR_TESTNET_CONTRACT` until a deployment is configured. This is the expected state, not a sample market. `pnpm test` builds both WASM files and runs contract unit tests, signed transactions on a real near-workspaces sandbox, a live fetch of the official Fed PDF and calendar, SDK tests and MCP tests. [TESTING.md](TESTING.md) records the counts.
-
-To inspect the official calendar plan without signing anything:
-
+CLI, against the live deployment:
 ```sh
-node packages/sdk/scripts/scheduler.mjs
-```
-
-It currently plans four word markets for the December 9, 2026 FOMC press conference: `recession`, `inflation`, `tariffs`, and `employment`, threshold 1 each. It closes them five minutes before the scheduled 2:30 p.m. Eastern conference. The scheduler deduplicates by querying contract state when run with `--send`; no schedule execution has yet occurred on testnet.
-
-## What is implemented
-
-| Component | What a reviewer can verify |
-| --- | --- |
-| `packages/contract` | Rust near-sdk contract with seeded LMSR quotes, native NEAR escrow, YES/NO shares, NEP-245 views/transfers/transfer-call, a 1% trade fee paid to the creator, close time, private OutLayer callback, one bonded challenge, and burn-on-claim payout. Sandbox tests send signed transactions and demonstrate rejection of forged callback and other attacks. |
-| `packages/oracle` | Rust WASI P2 program that fetches only official Fed press conference PDFs over HTTPS, hashes the PDF, extracts text with `lopdf`, and counts case-insensitive whole words/phrases. A real January 2026 PDF is pinned as a fixture. |
-| `packages/sdk` | LMSR math, official source fetch, live Fed calendar parser, live OutLayer testnet cost view, and a read-only 1Click `dry: true` quote method gated on a funded mainnet account. |
-| `packages/web` | Responsive landing page and market dashboard. Live odds and the position preview quote come from the testnet contract RPC. It shows explicit setup, empty and error states and a hash-checked archive word heatmap. Browser bets require the missing email/relayer layer. |
-| `packages/mcp` | Read-only MCP tools `kotoba_list_markets` and `kotoba_get_market`, backed by live testnet RPC. Without `NEAR_TESTNET_CONTRACT`, they return a setup error. |
-
-### Counting rule
-
-All occurrences in the **full official press conference PDF** count, including reporters' questions. `lopdf` extraction collapses whitespace, then matching ignores ASCII case and requires non-alphanumeric boundaries around the word or phrase. The January 28, 2026 PDF SHA-256 is `2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3`. The oracle counts **40** occurrences of `inflation` and **0** of `recession`; Poppler extraction gives a different inflation count, so the extractor is part of the pinned code. Source: [Federal Reserve PDF](https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf). Research: [docs/RESEARCH.md](docs/RESEARCH.md).
-
-Verify the PDF hash against the live official source with:
-
-```sh
+node packages/sdk/scripts/scheduler.mjs                         # plan markets from the official Fed calendar (dry)
+node packages/sdk/scripts/verify-attestation.mjs deployments/outlayer-direct-*.json
 node packages/sdk/scripts/verify-transcript.mjs https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf 2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3
+NEAR_TESTNET_CONTRACT=kotoba-edfa2b47.testnet node packages/mcp/src/main.mjs   # MCP: list/get markets, verify a resolution tx
 ```
+Reproduce the whole run on a fresh account with `packages/sdk/scripts/upload-oracle.mjs`, `deploy-testnet.mjs` and `real-run.mjs` (see its header for subcommands). Keys come from gitignored `.near-credentials/` or `.env` only.
 
-### NEAR features
+## Components
 
-- **NEP-245** represents each market's YES/NO share classes and supports balance, supply, direct and callback transfers. Payout burns winning shares.
-- **OutLayer TEE** is the intended transcript oracle. The contract calls `outlayer.testnet` using a hash-pinned WASI source, and only its private callback accepts output. A testnet execution and independent attestation check remain blocked.
-- **NEAR Intents 1Click** is exposed only as a dry quote preview in the SDK. It cannot fund a testnet market from mainnet, and there is no swap execution path.
-- **Named subaccounts, function-call keys, NEP-366 meta transactions, NEP-141 collateral and email sign-in** are not implemented. Current escrow is within the factory account in native testnet NEAR.
+| Package | What it is |
+| --- | --- |
+| `packages/contract` | Rust near-sdk 5.30 factory. Seeded LMSR (`b`, subsidy ceil(b·ln2)×0.001 NEAR), native-NEAR escrow, NEP-245 YES/NO shares (`mt_transfer`, `mt_transfer_call`, batch, views), a 1% creator fee paid on each buy, close time and resolution deadline, OutLayer resolve, one bonded challenge re-run, finalize after the challenge window (15 min on this testnet deployment), burn-on-claim payout, and `claim_void` (half a unit per share if nothing settles by the deadline). |
+| `packages/oracle` | Rust WASI P2 program run by OutLayer. It fetches only `https://www.federalreserve.gov/mediacenter/files/FOMCpresconfYYYYMMDD.pdf`, hashes it, extracts the text with `lopdf`, collapses whitespace and counts case-insensitive whole-word matches. Reporters' questions count. |
+| `packages/sdk` | LMSR maths, the Fed calendar parser, the official PDF fetcher, the attestation verifier, a 1Click dry-quote helper (gated on a funded mainnet account), and the deploy, upload, run and scheduler scripts. |
+| `packages/mcp` | MCP stdio server with `kotoba_list_markets`, `kotoba_get_market` and `kotoba_verify_resolution` (reads a resolve tx from chain and verifies its attestation). |
+| `packages/web` | Vite + React app: landing, board, bet sheet, resolution page and creators. Reads come from NEAR RPC and OutLayer's API, with nothing mocked. Writes go through wallet-selector and MyNearWallet. |
 
-Any testnet account can create a Fed-source market by paying the LMSR subsidy. The contract quote includes a 1% fee that is sent to that creator on each buy. Custom creator transcript URLs are still pending.
+## NEAR features used, and why
 
-## Deployment and evidence
+- **OutLayer TEE + yield/resume:** a verifiable off-chain read of a public document that a contract cannot fetch itself.
+- **FastFS:** the program bytes live on NEAR at a hash-named URL, so the code that settles a market cannot change after deploy.
+- **NEP-245 multi-token:** two share classes per market in one contract, transferable with callbacks.
+- **Named sub-accounts:** the demo player is `player.kotoba-edfa2b47.testnet`. Per-market escrow sub-accounts are *not* built: escrow sits in the factory.
+- **NEAR Intents 1Click:** dry quote helper only. Without a funded mainnet account it returns "Setup required".
 
-| Network | Contract / artifact | Action | Transaction / independent check | Status |
-| --- | --- | --- | --- | --- |
-| Local near-workspaces sandbox | `kotoba-contract` WASM | Create market, buy, transfer and attack calls | Reproduced by `pnpm test`; sandbox is ephemeral | PASS |
-| NEAR testnet | No deployment | Account creation via official helper | Helper returned HTTP 429 on 2026-11-09; no transaction exists | BLOCKED |
-| OutLayer testnet | WASI P2 artifact SHA-256 `b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314` built locally | Upload and execute official PDF | Live cost view passed; no execution ID or attestation exists | BLOCKED |
-| NEAR mainnet Intents | No transaction | 1Click quote is dry only | `NEAR_MAINNET_ACCOUNT` not configured | BLOCKED |
+## Limits, stated plainly
 
-No explorer transaction links are claimed because no public-chain transaction has succeeded. The exact dependencies are in [BLOCKED.md](BLOCKED.md). This repository has no remote; Nick publishes it, not the build agent.
+- Sources are Fed press conference PDFs only. White House briefings and earnings calls have no reliable free transcript feed (see [docs/RESEARCH.md](docs/RESEARCH.md)). Podcast and creator transcript URLs are future work.
+- The contract trusts the OutLayer promise result, not a quote it verifies on-chain. The TDX quote is verified off-chain, by the SDK, the MCP tool and the browser.
+- Email sign-in, NEP-366 gasless bets and NEP-141 collateral are not built. Bets use a NEAR testnet wallet and native testnet NEAR. See [BLOCKED.md](BLOCKED.md).
+- Shares are small: 1 share = 0.001 NEAR payout, because the testnet budget is about 4 NEAR.
 
-## Demo commands
+## Tests
 
-```sh
-pnpm install && pnpm test && pnpm build
-node packages/sdk/scripts/scheduler.mjs
-pnpm dev
-```
-
-For the MCP read surface after deployment: `NEAR_TESTNET_CONTRACT=<real-account>.testnet node packages/mcp/src/main.mjs`.
+`pnpm test` runs 33 tests: oracle 3, contract unit 5, near-workspaces sandbox 1, SDK 17 (4 against the live deployment and OutLayer's API) and MCP 2 (1 live). See [TESTING.md](TESTING.md).
 
 ## Team and other projects
 
 Lead: <TBD by Nick>
 
-Other project by this lead: <TBD by Nick>. NEAR HACKATHON Q-015 permits at most two independent projects per person; Nick must fill the actual disclosure before submission.
+Other project by this lead: <TBD by Nick>. NEAR HACKATHON Q-015 permits at most two projects per person, and each must disclose the other.
 
 ## Inspiration and license
 
-Inspired by [Mentioned](https://colosseum.com/arena/projects/explore/mentioned) and [Memetic Machines](https://colosseum.com/arena/projects/explore/memetic-machines-war-machine), both named in [Colosseum's Frontier 2026 top-25 announcement](https://blog.colosseum.com/announcing-the-winners-of-the-solana-frontier-hackathon/). No source code was reused. MIT, Copyright (c) 2026 Nivesh Gajengi.
+Inspired by [Mentioned](https://colosseum.com/arena/projects/explore/mentioned) and [Memetic Machines](https://colosseum.com/arena/projects/explore/memetic-machines-war-machine), both in [Colosseum's Frontier 2026 top 25](https://blog.colosseum.com/announcing-the-winners-of-the-solana-frontier-hackathon/). No code was reused. MIT, Copyright (c) 2026 Nivesh Gajengi.

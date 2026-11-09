@@ -1,26 +1,45 @@
-# Verification run — 2026-11-09
+# Verification — 2026-11-09
 
-Command: `pnpm test` from the repository root. Result: **23 passed, 0 failed, 0 skipped**. The command builds both WASM artifacts first, then runs:
+`pnpm test` from the repository root: **33 passed, 0 failed, 0 skipped**. It builds both WASM files first.
 
-| Suite | Real tests | What ran |
+| Suite | Tests | What ran |
 | --- | ---: | --- |
-| Oracle Rust | 3 | Whole-word rule, official URL allowlist, pinned real Fed PDF extraction and hash (40 `inflation`, 0 `recession`). |
-| Contract Rust unit | 5 | LMSR prices sum to 1, complete-set cost, monotonicity, no risk-free complete set across imbalanced purchases, and finite prices at extreme share imbalance. |
-| Contract near-workspaces sandbox | 1 | One integrated test using signed transactions against a real local nearcore sandbox. It created a market, bought shares, verified the creator received a trade fee, transferred NEP-245 shares, refunded a failed transfer-call, and rejected an oracle-incompatible URL, a phrase with double spaces, unauthorized transfer, underfunded buy, direct private callback, premature claim, early resolution, challenge before provisional result, and late buy. |
-| SDK Node | 13 | Pricing, phrase rules, fixture hashes, live official Fed PDF fetch, live official Fed calendar parse, live OutLayer testnet compute-cost view, source-swap hash change, and setup guards. |
-| MCP Node | 1 | Started a real MCP stdio server, listed tools and verified the explicit setup error. |
+| Oracle (Rust) | 3 | The whole-word rule, the official URL allowlist, and the pinned real Fed PDF (hash `2c2683d9…5cd3`: 40 `inflation`, 0 `recession`). |
+| Contract unit (Rust) | 5 | LMSR prices sum to 1, complete-set cost, monotonic cost, no risk-free complete set, finite extreme prices. |
+| Contract sandbox (near-workspaces, real local nearcore) | 1 | Signed transactions against the real contract WASM. It covers market creation, a buy with the creator fee, NEP-245 transfer and transfer-call refund, and void-market refund at half a unit (once). It also rejects a bad source URL, a double-spaced phrase, unauthorized transfer, an underfunded buy, a direct call to the private callback, a premature claim, early resolution, a challenge before any result, a late buy, a void claim before the deadline, a double void claim, and resolution after the deadline. |
+| SDK (Node) | 17 | Pricing, the phrase rule, fixture hashes, a live official PDF fetch and calendar parse, and a live OutLayer cost view. **Live deployment tests:** the recorded resolution re-verifies (all six attestation checks, Intel chain via dcap-qvl); a tampered output (`count` 39) fails the output-hash check; a changed program hash changes the task hash; the deployed contract holds the settled Jan 28 markets (Final, 40, transcript hash, program hash; recession 0). |
+| MCP (Node) | 2 | A real stdio server: the tool list and setup error with no contract, then `kotoba_list_markets` and `kotoba_verify_resolution` against the live testnet resolve tx (count 40, verification ok). |
 
-No chain or external service response was replaced in a test. The sandbox test deploys and calls the actual contract WASM. Its chain is ephemeral, so these transaction hashes cannot be independently queried after the test process exits; no public testnet hash is claimed.
+No chain or external API is mocked. Live tests read NEAR testnet (FastNEAR, with the official RPC as fallback) and `testnet-api.outlayer.ai`.
 
-Browser build command: `pnpm --filter @kotoba/web build`. Chrome verification command: run `pnpm --filter @kotoba/web exec vite preview --host 127.0.0.1 --port 4173` in one terminal, then `node scripts/check-web.mjs`. Built app results:
+## Public testnet run (attack and edge cases on the real chain)
 
-| Width | Root | Uncaught page errors | Horizontal overflow |
-| ---: | --- | ---: | --- |
-| 1440px | Nonempty | 0 | None |
-| 375px | Nonempty | 0 | None |
+All of these are in [deployments/real-run.json](deployments/real-run.json) with explorer links. The README has the table.
 
-The browser check also loaded the pinned archive text. The market sheet contains a live RPC quote preview when a deployed contract has an open market; no real market existed for that browser path in this run. The server and Chrome process were stopped after verification.
+| Case | Expected | Observed |
+| --- | --- | --- |
+| Resolve before close | reject | `ERR_RESOLUTION_TIME` ([3Pahtouk…](https://testnet.nearblocks.io/txns/3PahtoukKPJJvMMYPHe5YudFvWoEyTKxDKHqDcjiUGqj)) |
+| Bet after close | reject | `ERR_CLOSED` ([23d3vj4B…](https://testnet.nearblocks.io/txns/23d3vj4BQaDJAgdK1jJxWyEvKYn5iPrhMBfvgE5V5h1a)) |
+| Resolve via OutLayer | count 40 and attestation verified | request #14918, all checks pass |
+| Challenge re-run | same code re-runs; resolver keeps the bond | request #14919, count 40, Final |
+| Winning claim | pays 25 × 0.001 NEAR | ok ([Eoudkc8k…](https://testnet.nearblocks.io/txns/Eoudkc8kzcrL9qSydTm41HnfKk52gYJfdMQzMSvKUZFE)) |
+| Double claim | reject | `ERR_NO_WINNING_SHARES` ([HLzDkSrJ…](https://testnet.nearblocks.io/txns/HLzDkSrJnzhdF7RThgrFk66Wdn7wPt3kN7NGjtb7KT3x)) |
+| Losing side claims | reject | `ERR_NO_WINNING_SHARES` ([4HPAvPfn…](https://testnet.nearblocks.io/txns/4HPAvPfnKhxyeXVkDgMoj874BhX5L3qtXyNvTDujgrRf)) |
+| Forged resolver call (`on_result` directly) | reject | `Method on_result is private` ([4b14MmNg…](https://testnet.nearblocks.io/txns/4b14MmNgrgiyATcGQfHPVPc5Cepd8VwDc4v54FxNh43X)) |
+| Finalize after the 15-minute window, then claim NO | pays | ok ([61M2Lbzk…](https://testnet.nearblocks.io/txns/61M2LbzkmKjzi8wShPC5K8HPSePWtetp493FofZG3YG2), [EX1z8F8L…](https://testnet.nearblocks.io/txns/EX1z8F8LDvGYSFAiD92FrvoGzArD56UGVezfR5p9TBGf)) |
 
-The independent source check `node packages/sdk/scripts/verify-transcript.mjs https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf 2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3` fetched the official PDF live and confirmed the expected hash. It is a manual check in addition to the 23 test cases above.
+The transcript-swap case: the challenge rule compares `count` and `transcript_sha256` between the two runs and pays the challenger if either changed. The live challenge got the same PDF hash and count, so the resolver kept the bond. A real swap would need the Fed to republish the PDF, which we cannot cause; the sandbox and SDK cover the hash comparison.
 
-**Not verified:** public testnet deployment, OutLayer upload/execution/attestation, challenge rerun via OutLayer, a winning payout and double-claim rejection on a live chain, email sign-in, 1Click quote with a funded mainnet account, and a live market result heatmap. These are recorded in [BLOCKED.md](BLOCKED.md). The official testnet account helper returned HTTP 429, so there is no testnet transaction or explorer link.
+## Browser QA
+
+We ran `vite build`, then `vite preview` on port 5198, and drove headless Chrome (playwright-core, channel `chrome`).
+
+| Route | 1440×900 | 390×844 |
+| --- | --- | --- |
+| `/` | no overflow, 0 page errors | no overflow, 0 page errors |
+| `/app` | no overflow, 0 page errors | no overflow, 0 page errors |
+| `/app` with the bet sheet open | live contract quote shown (0.0061 NEAR for 10 YES) | bottom sheet, same quote |
+| `/market/fomc-2026-01-inflation-40` | 5 of 5 in-browser seal checks pass on both runs; browser count 40 = attested 40 | same |
+| `/creators` | no overflow, 0 page errors | no overflow, 0 page errors |
+
+During QA, FastNEAR returned HTTP 429 without CORS headers, so the web app now falls back to `rpc.testnet.near.org`. The preview server was stopped afterwards.
