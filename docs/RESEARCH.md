@@ -6,6 +6,8 @@ OutLayer runs WASM in Intel TDX and supports a NEAR testnet `outlayer.testnet` c
 
 The on-chain interface uses a `Promise` to `outlayer.testnet` followed by a `#[private]` callback. OutLayer describes this as yield/resume in its overview, although its published Rust example uses a promise callback. The contract should enforce that callback is self-invoked, is currently pending, and receives exactly one successful promise result. A direct caller cannot manufacture a promise result. A hash-pinned WASM is essential: a URL alone could serve a different program later. A separate offline verification of the TDX attestation is still needed for a full proof, using [OutLayer's independent verifier](https://app.outlayer.ai/docs/trust-verification).
 
+A real `estimate_execution_cost` view on `outlayer.testnet` returned `7001000000000000000000` yoctoNEAR (0.007001 NEAR) on 2026-11-09 for 10 billion maximum instructions, 256 MB, 60 seconds, and 200 input bytes. This is a live quote for the stated limits, not an execution or a guaranteed final charge. The SDK test repeats the query.
+
 ## Transcript sources
 
 | Source | Finding | Decision |
