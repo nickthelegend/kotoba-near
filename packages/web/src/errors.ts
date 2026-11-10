@@ -92,7 +92,7 @@ const CONTRACT: Record<string, Omit<Explained, 'kind' | 'code' | 'tx' | 'retry'>
   ERR_SUBSIDY: { kind: 'subsidy', title: 'Subsidy too small', detail: 'Opening a market seeds b·ln2 × 0.001 NEAR so the AMM always has a price.', next: 'Attach the subsidy shown.' },
 };
 
-const near = (s: string) => Number(s).toFixed(4).replace(/\.?0+$/, '');
+const near = (s: string) => { const n = Number(s); return n.toLocaleString('en-US', { maximumFractionDigits: n >= 100 ? 0 : n >= 1 ? 2 : n >= 0.01 ? 3 : 4 }); };
 
 /** The one place every error turns into words. */
 export function explain(e: unknown): Explained {
@@ -116,7 +116,7 @@ export function explain(e: unknown): Explained {
 
   // Balance problems, from the RPC (InvalidTxError) or the wallet.
   const bal = message.match(/does not have enough balance ([\d.]+) for operation costing ([\d.]+)/);
-  if (type === 'NotEnoughBalance' || bal) return out({ kind: 'insufficient_balance', title: 'Not enough testnet NEAR', detail: bal ? `This account holds ${near(bal[1])} NEAR, but the transaction needs ${near(bal[2])} NEAR up front (deposit plus prepaid gas; unused gas comes back).` : 'The account cannot cover the deposit plus prepaid gas.', next: 'Lower the amount, or top up the account from a testnet faucet.', code: 'NotEnoughBalance', tx: undefined });
+  if (type === 'NotEnoughBalance' || bal) return out({ kind: 'insufficient_balance', title: bal ? `Not enough NEAR: you have ${near(bal[1])}, this needs ${near(bal[2])}` : 'Not enough NEAR', detail: bal ? `This account holds ${near(bal[1])} NEAR, but the transaction needs ${near(bal[2])} NEAR up front (deposit plus prepaid gas; unused gas comes back).` : 'The account cannot cover the deposit plus prepaid gas.', next: 'Lower the amount or top up from a testnet faucet.', code: 'NotEnoughBalance', tx: undefined });
   if (type === 'LackBalanceForState' || /LackBalanceForState|wouldn't have enough balance to cover storage/.test(message)) return out({ kind: 'storage_balance', title: 'Balance is locked for storage', detail: 'NEAR keeps part of every balance locked to pay for the account’s storage, so it cannot be spent.', next: 'Top up the account, then try again.', code: 'LackBalanceForState' });
   if (type === 'NotEnoughAllowance' || /NotEnoughAllowance|does not have enough allowance/i.test(message)) return out({ kind: 'access_key_allowance', title: 'The app’s signing key ran out of allowance', detail: 'MyNearWallet gave this site a key with a small gas allowance, and it is used up.', next: 'Sign out and connect again to get a fresh key.', code: 'NotEnoughAllowance' });
   if (/InvalidNonce|Expired|nonce/i.test(type + message)) return out({ kind: 'nonce', title: 'The transaction went stale', detail: 'Another transaction from this account landed first, or the block reference expired.', next: 'Send it again.', code: type || 'InvalidNonce', retry: true });
@@ -134,7 +134,12 @@ export function explain(e: unknown): Explained {
     return out({ kind: 'unknown_account', title: 'Account not found on NEAR testnet', detail: `${id || 'This account'} does not exist on testnet yet.`, next: 'Create a free testnet account in MyNearWallet, then connect it.', code: 'UNKNOWN_ACCOUNT' });
   }
   if (cause === 'UNKNOWN_TRANSACTION' || /Transaction \S+ doesn't exist/.test(message)) return out({ kind: 'tx_not_found', title: 'The network has not seen this transaction yet', detail: 'It was just submitted; RPC nodes can take a few seconds to index it.', next: 'Keep this page open; it re-checks automatically.', code: 'UNKNOWN_TRANSACTION', retry: true });
-  if (/^TX_TIMEOUT/.test(message)) return out({ kind: 'tx_timeout', title: 'Still waiting for confirmation', detail: 'The transaction was sent but no result came back in time. It may still land.', next: 'Open it in NearBlocks before sending it again.', retry: false });
+  if (/Request timeout on the free plan|"code":\s*30\b|TIMEOUT_ERROR/.test(message) || cause === 'TIMEOUT_ERROR') {
+    const sent = err?.context?.transactionHash;
+    if (sent) return out({ kind: 'tx_timeout', title: 'The RPC timed out, but your transaction may have landed', detail: 'The node stopped waiting before the result came back. On Nov 10 a buy that timed out like this did land.', next: 'Check it on NearBlocks before sending it again.', code: 'RPC timeout', tx: sent });
+    return out({ kind: 'rpc_down', title: 'The NEAR RPC timed out', detail: 'The public node took too long to answer.', next: 'Try again in a few seconds.', code: 'RPC timeout', retry: true });
+  }
+  if (/^TX_TIMEOUT/.test(message)) return out({ kind: 'tx_timeout', title: 'Still waiting for confirmation', detail: 'The transaction was sent but no result came back in time. It may still land.', next: 'Check it on NearBlocks before sending it again.', tx: message.match(/no result for (\w+)/)?.[1], retry: false });
   if (err?.status === 429 || /\b429\b|rate.?limit|TOO_MANY_REQUESTS/i.test(message)) return out({ kind: 'rate_limited', title: 'The NEAR RPC is rate-limiting us', detail: 'Public testnet RPC nodes cap requests per IP. Both endpoints answered “too many requests”.', next: 'Wait a few seconds and retry.', code: 'HTTP 429', retry: true });
   if (/OutLayer attestation API HTTP 404/.test(message)) return out({ kind: 'attestation_pending', title: 'The TEE attestation is not published yet', detail: 'OutLayer posts the attestation for an execution after it finishes. This one is not available yet.', next: 'Retry in a minute.', code: 'HTTP 404', retry: true });
   if (/Failed to fetch|fetch failed|NetworkError|Load failed|unreachable|HTTP 5\d\d/i.test(message)) return out({ kind: 'rpc_down', title: 'Cannot reach NEAR testnet', detail: 'Neither RPC endpoint answered. Your connection may be offline, or the public nodes are down.', next: 'Check your connection and retry.', code: message.match(/HTTP \d{3}/)?.[0], retry: true });

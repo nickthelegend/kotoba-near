@@ -247,11 +247,32 @@
           "transactionHash": "DrdvWaj51Jf6iErg4ehBXFRgo8b9qv4vvEW8uQpUMtMQ"
         }
       }
+    },
+    "fastnear_429": {
+      "http": 429,
+      "body": {
+        "jsonrpc": "2.0",
+        "error": {
+          "code": -429,
+          "message": "Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com"
+        },
+        "id": "1"
+      }
+    },
+    "drpc_broadcast_timeout": {
+      "thrown": {
+        "name": "ProviderError",
+        "message": "{\"id\":126,\"jsonrpc\":\"2.0\",\"error\":{\"message\":\"Request timeout on the free plan, please upgrade to paid plan\",\"code\":30}}",
+        "context": {
+          "transactionHash": "BmR8kmNWwbKtdCtiF4UpcP4VkUtnnRrNTgLPUhcBdYTW"
+        }
+      },
+      "landed": "BmR8kmNWwbKtdCtiF4UpcP4VkUtnnRrNTgLPUhcBdYTW is FINAL on testnet (mt_mint): the RPC timed out but the buy landed."
     }
   },
   "notes": {
     "call_*_not_enough_balance": "InvalidTxError: the RPC rejected the transaction before it landed, so the context hash never appears on chain and no fee was charged.",
     "call_challenge_not_enough_balance": "Attached 0.105 NEAR to challenge a Final market; the 30 Tgas prepaid gas put the cost (0.1359 NEAR) above the 0.1228 NEAR balance, so it failed as NotEnoughBalance before reaching the contract.",
-    "rate_limit": "No 429 was observed on Nov 10 06:01 UTC (80-request bursts to FastNEAR and dRPC all returned 200), so no 429 body is in this file."
+    "rate_limit": "Nov 10 ~06:40 UTC, after several QA runs: FastNEAR answered HTTP 429 with the JSON -429 body in fastnear_429 (in Chrome it arrives without CORS headers, so fetch fails with \"Failed to fetch\"). Earlier 80-request bursts at 06:01 UTC all returned 200."
   }
 }

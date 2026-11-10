@@ -53,9 +53,9 @@ test('NotEnoughBalance (InvalidTxError) shows both amounts and no explorer link'
     const x = explain(cases[k].thrown);
     assert.equal(x.kind, 'insufficient_balance');
     assert.equal(x.tx, undefined, 'the rejected tx never landed, so no NearBlocks link');
-    assert.match(x.detail, /holds 0\.1228 NEAR/);
+    assert.match(x.title, /you have 0\.123, this needs/);
   }
-  assert.match(explain(cases.call_buy_not_enough_balance.thrown).detail, /needs 50\.0309 NEAR/);
+  assert.match(explain(cases.call_buy_not_enough_balance.thrown).title, /needs 50\.03$/);
 });
 
 test('mainnet account looked up on testnet is a network mismatch; unknown testnet account is not', () => {
@@ -84,7 +84,16 @@ test('wallet popup errors, using the strings in the installed MyNearWallet modul
   }
 });
 
-test('rate limits and outages (constructed: no 429 was observed while capturing)', () => {
+test('real FastNEAR 429 body and dRPC free-plan broadcast timeout', () => {
+  const r = explain(rpcErrorFrom(cases.fastnear_429.body, cases.fastnear_429.http)!);
+  assert.equal(r.kind, 'rate_limited'); assert.equal(r.retry, true);
+  const t = explain(cases.drpc_broadcast_timeout.thrown);
+  assert.equal(t.kind, 'tx_timeout');
+  assert.equal(t.tx, 'BmR8kmNWwbKtdCtiF4UpcP4VkUtnnRrNTgLPUhcBdYTW', 'the hash is kept so the app follows it (it did land)');
+  assert.equal(explain(new Error('Request timeout on the free plan, please upgrade to paid plan')).kind, 'rpc_down');
+});
+
+test('rate limits and outages (constructed shapes)', () => {
   assert.equal(explain(rpcErrorFrom(null, 429)!).kind, 'rate_limited');
   assert.equal(explain(rpcErrorFrom({ jsonrpc: '2.0', error: { code: -429, message: 'Too many requests' } })!).kind, 'rate_limited');
   assert.equal(explain(new TypeError('Failed to fetch')).kind, 'rpc_down');
