@@ -31,6 +31,9 @@ export function useMedia(query: string) {
 
 export { useMarkets, useBalance } from './store';
 
+/** True while the component is mounted: lets a transaction skip its error toast when the error is shown inline. */
+export function useMounted() { const r = useMemo(() => ({ current: true }), []); useEffect(() => { r.current = true; return () => { r.current = false; }; }, [r]); return r; }
+
 const paths: Record<string, string> = {
   arrow: 'M5 12h14M13 6l6 6-6 6',
   arrowUp: 'M7 17L17 7M9 7h8v8',
@@ -140,7 +143,7 @@ export function Problem({ x, onRetry, compact, className }: { x: Explained; onRe
   const act = onRetry && x.retry ? <button className="problem-act" onClick={onRetry}>Try again</button>
     : x.tx ? <a className="problem-act" href={txUrl(x.tx)} target="_blank" rel="noreferrer">View transaction</a> : null;
   return <div className={`problem ${compact ? 'problem-compact' : ''} ${className ?? ''}`} role="alert" title={x.detail}>
-    <p><b>{x.title}.</b> {x.next}{x.code && <small className="problem-code"> {x.code.startsWith('ERR_') ? `Contract: ${x.code}` : x.code}</small>}</p>
+    <p><b>{x.title}.</b> {x.next}{x.code && /^ERR_|^Method /.test(x.code) && <small className="problem-code"> Contract: {x.code}</small>}</p>
     {act}
   </div>;
 }

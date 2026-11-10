@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
-import { Countdown, Icon, Link, Problem, SplitBar, useNow } from './ui';
+import { Countdown, Icon, Link, Problem, SplitBar, useMounted, useNow } from './ui';
 import { UNIT_NEAR, fmtDate, isOpen, near, pct, quote, short, txUrl, yesPrice, type KEvent, type Market } from './lib';
 import { explain, quantityError, upfrontYocto, type Explained } from './errors';
 import { pending, useBalance, useMarkets, type LiveMarket } from './store';
@@ -48,6 +48,7 @@ export function BetSheet({ m: picked, side, wallet, onClose }: { m: Market; side
   const [quoteProblem, setQuoteProblem] = useState<Explained | null>(null);
   const [moved, setMoved] = useState<{ from: bigint; to: bigint } | null>(null);
   const [stage, setStage] = useState<TxStage | null>(null);
+  const mounted = useMounted();
   const busy = stage?.step === 'checking' || stage?.step === 'signing' || stage?.step === 'pending';
 
   // Quote on every change (debounced), then re-quote with each market poll so the price stays live.
@@ -76,13 +77,13 @@ export function BetSheet({ m: picked, side, wallet, onClose }: { m: Market; side
     const key = `${m.id}:${Date.now()}`;
     await runTx(wallet, {
       method: 'buy', args: { id: m.id, yes, quantity: qty }, depositYocto: withSlippage(fresh), tgas: BUY_TGAS,
-      label: `Buy ${qty} ${yes ? 'YES' : 'NO'} · “${m.phrase}”`,
+      label: `Buy ${qty.toLocaleString('en-US')} ${yes ? 'YES' : 'NO'} · “${m.phrase}”`,
       optimistic: {
         apply: () => pending.add({ key, id: m.id, yes, qty, account: wallet.account, stage: 'signing' }),
         submitted: (tx) => pending.update(key, { stage: 'pending', tx }),
         rollback: () => pending.remove(key), confirm: () => pending.remove(key),
       },
-      onStage: setStage,
+      onStage: setStage, inline: () => mounted.current,
     });
   }
 
@@ -99,7 +100,7 @@ export function BetSheet({ m: picked, side, wallet, onClose }: { m: Market; side
     <h2 className="sheet-q">Will they say <q>{m.phrase}</q>{m.threshold > 1 ? ` at least ${m.threshold} times` : ''}?</h2>
     {done ? <div className="sheet-done" role="status">
       <span className="done-mark"><Icon name="check" size={22} /></span>
-      <div><b>Bought {qty} {yes ? 'YES' : 'NO'}</b><span>Pays {near(qty * UNIT_NEAR)} if {yes ? 'YES' : 'NO'} wins.</span>
+      <div><b>Bought {qty.toLocaleString('en-US')} {yes ? 'YES' : 'NO'}</b><span>Pays {near(qty * UNIT_NEAR)} if {yes ? 'YES' : 'NO'} wins.</span>
         {stage?.tx && <a href={txUrl(stage.tx)} target="_blank" rel="noreferrer" className="mono">{short(stage.tx, 8, 6)} on NearBlocks <Icon name="external" size={12} /></a>}</div>
     </div> : <>
       <div className="pick" role="radiogroup" aria-label="Side">
@@ -133,7 +134,7 @@ export function BetSheet({ m: picked, side, wallet, onClose }: { m: Market; side
       : !wallet.account
         ? <button className="btn btn-coral btn-block" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting || !!reason}>{wallet.connecting ? 'Waiting for MyNearWallet…' : 'Connect a NEAR testnet wallet'}</button>
         : <button className="btn btn-coral btn-block" disabled={!!reason || busy || !!moved} onClick={() => place()}>
-            {stage?.step === 'checking' ? 'Checking balance and price…' : stage?.step === 'signing' ? 'Approve in MyNearWallet…' : stage?.step === 'pending' ? 'Waiting for NEAR testnet…' : `Buy ${qty || ''} ${yes ? 'YES' : 'NO'}${cost !== null ? ` · ${near(cost)}` : ''}`}
+            {stage?.step === 'checking' ? 'Checking balance and price…' : stage?.step === 'signing' ? 'Approve in MyNearWallet…' : stage?.step === 'pending' ? 'Waiting for NEAR testnet…' : `Buy ${qty ? qty.toLocaleString('en-US') : ''} ${yes ? 'YES' : 'NO'}${cost !== null ? ` · ${near(cost)}` : ''}`}
           </button>}
     {reason && !done && <p className="why" role="status"><Icon name="clock" size={14} />{reason}</p>}
     {stage?.step === 'pending' && stage.tx && <p className="sheet-note">Sent. <a href={txUrl(stage.tx)} target="_blank" rel="noreferrer">View on NearBlocks</a></p>}

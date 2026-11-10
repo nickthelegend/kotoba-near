@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Boundary, Copy, Countdown, Icon, Link, Problem, SplitBar, State, useMarkets, useNow } from './ui';
+import { Boundary, Copy, Countdown, Icon, Link, Problem, SplitBar, State, useMarkets, useMounted, useNow } from './ui';
 import { DEPLOYMENT, PINNED_PDF_SHA, PINNED_TEXT_SHA, UNIT_NEAR, batchBalance, near, eventDate, fmtDate, outcome, runsFor, sha256Hex, short, splitHits, txUrl, pct, yesPrice, type Market, type Step } from './lib';
 import { explain, type Explained } from './errors';
 import { CHAIN_CHANGED, refreshMarkets } from './store';
@@ -84,6 +84,7 @@ function SettleBox({ m, wallet, now }: { m: Market; wallet: Wallet; now: number 
   const [held, setHeld] = useState<{ yes: number; no: number } | null>(null);
   const [stage, setStage] = useState<TxStage | null>(null);
   const [epoch, setEpoch] = useState(0);
+  const mounted = useMounted();
   useEffect(() => { const on = () => setEpoch((n) => n + 1); addEventListener(CHAIN_CHANGED, on); return () => removeEventListener(CHAIN_CHANGED, on); }, []);
   useEffect(() => {
     setHeld(null);
@@ -93,7 +94,7 @@ function SettleBox({ m, wallet, now }: { m: Market; wallet: Wallet; now: number 
     return () => { live = false; };
   }, [wallet.account, m.id, m.status, epoch]);
   const busy = stage?.step === 'checking' || stage?.step === 'signing' || stage?.step === 'pending';
-  const go = (method: string, deposit: bigint, tgas: number, label: string) => runTx(wallet, { method, args: { id: m.id }, depositYocto: deposit, tgas, label: `${label} · “${m.phrase}”`, onStage: setStage });
+  const go = (method: string, deposit: bigint, tgas: number, label: string) => runTx(wallet, { method, args: { id: m.id }, depositYocto: deposit, tgas, label: `${label} · “${m.phrase}”`, onStage: setStage, inline: () => mounted.current });
   const res = outcome(m);
   const closeMs = m.close_ns / 1e6, deadlineMs = m.deadline_ns / 1e6, windowMs = (m.challenge_until_ns ?? 0) / 1e6;
   let step: ReactNode = null, act: ReactNode = null;

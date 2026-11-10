@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Boundary, Icon, Link, Problem, State, useBalance, useMarkets, useNow } from './ui';
+import { Boundary, Icon, Link, Problem, State, useBalance, useMarkets, useMounted, useNow } from './ui';
 import { accountUrl, eventDate, fmtDate, near, outcome, subsidy, type Market } from './lib';
 import { upfrontYocto } from './errors';
 import { refreshMarkets } from './store';
@@ -14,6 +14,7 @@ function Composer({ wallet, markets }: { wallet: Wallet; markets: Market[] | nul
   const [rawThreshold, setThreshold] = useState('1');
   const [rawB, setB] = useState('100');
   const [stage, setStage] = useState<TxStage | null>(null);
+  const mounted = useMounted();
   const { yocto: spendable } = useBalance(wallet.account);
   const day = date.replaceAll('-', '');
   const threshold = /^\d+$/.test(rawThreshold) ? Number(rawThreshold) : NaN;
@@ -39,7 +40,7 @@ function Composer({ wallet, markets }: { wallet: Wallet; markets: Market[] | nul
   const busy = stage?.step === 'checking' || stage?.step === 'signing' || stage?.step === 'pending';
   async function create() {
     await runTx(wallet, {
-      method: 'create_market', label: `Open “${p}” on ${date}`, tgas: CREATE_TGAS, depositYocto: seedYocto, onStage: setStage,
+      method: 'create_market', label: `Open “${p}” on ${date}`, tgas: CREATE_TGAS, depositYocto: seedYocto, onStage: setStage, inline: () => mounted.current,
       args: { id, event: `FOMC press conference · ${date}`, source_url: `https://www.federalreserve.gov/mediacenter/files/FOMCpresconf${day}.pdf`, phrase: p, threshold, close_ns: closeMs * 1e6, deadline_ns: (closeMs + 7 * 86_400_000) * 1e6, b },
     });
   }

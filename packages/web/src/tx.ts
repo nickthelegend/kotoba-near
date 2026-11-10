@@ -12,6 +12,8 @@ export type TxRequest = {
   /** Applied before the wallet opens and undone if anything fails. */
   optimistic?: { apply: () => void; rollback: () => void; confirm: () => void; submitted?: (hash: string) => void };
   onStage?: (stage: TxStage) => void;
+  /** Returns true while the caller shows the outcome itself; then a failure needs no toast. */
+  inline?: () => boolean;
 };
 export type TxStage = { step: 'checking' | 'signing' | 'pending' | 'confirmed' | 'failed'; tx?: string; problem?: Explained };
 export type TxResult = { ok: true; tx: string | null } | { ok: false; problem: Explained };
@@ -81,7 +83,8 @@ export async function runTx(wallet: Wallet, r: TxRequest): Promise<TxResult> {
     r.optimistic?.rollback();
     if (!problem.tx && hash && problem.kind !== 'user_rejected') problem.tx = hash;
     stage({ step: 'failed', tx: problem.tx, problem });
-    toast.update(id, { tone: 'error', title: problem.title, body: `${r.label} · ${problem.next}`, tx: problem.tx });
+    if (r.inline?.()) toast.dismiss(id);
+    else toast.update(id, { tone: 'error', title: problem.title, body: `${r.label} · ${problem.next}`, tx: problem.tx });
     refreshBalance(wallet.account);
     return { ok: false, problem };
   }

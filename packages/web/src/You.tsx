@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from './Head';
-import { Icon, Link, Problem, State, useMarkets, useNow } from './ui';
+import { Icon, Link, Problem, State, useMarkets, useMounted, useNow } from './ui';
 import { UNIT_NEAR, accountUrl, batchBalance, isOpen, near, outcome, txUrl, type Market } from './lib';
 import { explain, type Explained } from './errors';
 import { CHAIN_CHANGED, refreshMarkets, usePending } from './store';
@@ -32,6 +32,7 @@ export default function You({ wallet, desktop }: { wallet: Wallet; desktop: bool
   const [busy, setBusy] = useState('');
   const [failed, setFailed] = useState<{ id: string; x: Explained } | null>(null);
   const [epoch, setEpoch] = useState(0);
+  const mounted = useMounted();
   const ids = markets?.map((m) => m.id).join(',') ?? '';
   useEffect(() => { const on = () => setEpoch((n) => n + 1); addEventListener(CHAIN_CHANGED, on); return () => removeEventListener(CHAIN_CHANGED, on); }, []);
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function You({ wallet, desktop }: { wallet: Wallet; desktop: bool
   }, [wallet.account, ids, epoch]); // eslint-disable-line react-hooks/exhaustive-deps
   async function claim(m: Market, method: 'claim' | 'claim_void', amount: number) {
     setBusy(m.id); setFailed(null);
-    const r = await runTx(wallet, { method, args: { id: m.id }, depositYocto: 0n, tgas: 30, label: `${method === 'claim' ? 'Claim' : 'Refund'} ${near(amount)} · “${m.phrase}”` });
+    const r = await runTx(wallet, { method, args: { id: m.id }, depositYocto: 0n, tgas: 30, label: `${method === 'claim' ? 'Claim' : 'Refund'} ${near(amount)} · “${m.phrase}”`, inline: () => mounted.current });
     if (!r.ok) setFailed({ id: m.id, x: r.problem });
     setBusy('');
   }
@@ -59,7 +60,7 @@ export default function You({ wallet, desktop }: { wallet: Wallet; desktop: bool
       <p>{wallet.account ? <>Signed in as <a href={accountUrl(wallet.account)} target="_blank" rel="noreferrer" className="mono">{wallet.account}</a>. Share balances below are read live from the contract.</> : 'Connect a NEAR testnet wallet to see your YES and NO shares and claim winnings.'}</p>
     </header>
     {!wallet.account ? <State kind="setup" title="No wallet connected" action={<button className="pill-coral" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting}>{wallet.connecting ? 'Waiting for MyNearWallet…' : 'Connect with MyNearWallet'}</button>}>Kotoba runs on NEAR testnet. A testnet account is free at testnet.mynearwallet.com.</State>
-      : wallet.network ? <Problem x={wallet.network} />
+      : wallet.network ? null
       : problem && !markets ? <Problem x={problem} onRetry={() => refreshMarkets()} />
       : posProblem ? <Problem x={posProblem} onRetry={() => setEpoch((n) => n + 1)} />
       : !positions ? <ul className="position-list" aria-busy="true">{[0, 1, 2].map((i) => <li key={i} className="position skeleton-row" />)}</ul>

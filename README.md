@@ -65,6 +65,9 @@ pnpm dev                       # http://127.0.0.1:5198
 - `/app`: the Dec 9 FOMC countdown and four live markets with LMSR odds. **Trade** opens the bet sheet with a live `quote` from the contract. **Connect** signs in with MyNearWallet (testnet), and **Buy** sends a real `buy` transaction.
 - `/market/fomc-2026-01-inflation-40`: the verdict (40 hits, YES), the transcript and program hashes, both OutLayer runs with the in-browser seal checks, and the transcript with all 40 hits marked and a hit-by-hit navigator.
 - `/creators`: markets grouped by creator, and a composer that opens a new Fed-sourced market from your wallet (subsidy b·ln2, 1% creator fee).
+- `/you`: your YES/NO shares (one NEP-245 batch read), with Claim on final markets and Refund on void ones.
+
+Every write goes through one path (`packages/web/src/tx.ts`): it checks the wallet, the network (a `.near` account is refused) and the spendable balance against deposit + prepaid gas, applies the bet optimistically, waits for the wallet, follows the hash until NEAR executes it, then refreshes, or rolls back and shows the contract's own panic (for example `ERR_CLOSED`) with a next step. Odds poll every 10 s. The buy attaches the quote + 2% and the contract refunds the rest; a bigger move stops with "Price moved". Error shapes come from real testnet failures (`packages/web/test/fixtures/testnet-errors.json`).
 
 CLI, against the live deployment:
 ```sh
@@ -99,10 +102,11 @@ Reproduce the whole run on a fresh account with `packages/sdk/scripts/upload-ora
 - The contract trusts the OutLayer promise result, not a quote it verifies on-chain. The TDX quote is verified off-chain, by the SDK, the MCP tool and the browser.
 - Email sign-in, NEP-366 gasless bets and NEP-141 collateral are not built. Bets use a NEAR testnet wallet and native testnet NEAR. See [BLOCKED.md](BLOCKED.md).
 - Shares are small: 1 share = 0.001 NEAR payout, because the testnet budget is about 4 NEAR.
+- There is no sell: the contract has `buy` only, so shares are held to settlement (or sent with NEP-245 `mt_transfer`).
 
 ## Tests
 
-`pnpm test` runs 33 tests: oracle 3, contract unit 5, near-workspaces sandbox 1, SDK 17 (4 against the live deployment and OutLayer's API) and MCP 2 (1 live). See [TESTING.md](TESTING.md).
+`pnpm test` runs 47 tests: oracle 3, contract unit 5, near-workspaces sandbox 1, SDK 17 (4 against the live deployment and OutLayer's API), MCP 2 (1 live) and web 14 (error mapping on error shapes captured from testnet). See [TESTING.md](TESTING.md).
 
 ## Team and other projects
 
