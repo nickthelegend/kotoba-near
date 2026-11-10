@@ -24,7 +24,7 @@ export default function Head({ wallet, desktop, onRefresh, refreshing, at, now }
     </div>
     <div className="web-bal">
       <div><p className="lbl">{wallet.account ? 'Your NEAR testnet balance' : 'Wallet'}</p>{amount}</div>
-      {wallet.account ? <Link to="/you" className="pill-ink">Positions</Link> : <button className="pill-ink" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting}>{wallet.connecting ? 'Waiting for MyNearWallet…' : 'Connect wallet'}</button>}
+      {wallet.account ? <Link to="/you" className="pill-ink">Positions</Link> : <button className="pill-ink" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting}>{wallet.connecting ? 'Waiting for Meteor Wallet…' : 'Connect wallet'}</button>}
     </div>
   </header>;
 

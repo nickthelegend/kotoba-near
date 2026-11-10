@@ -40,7 +40,7 @@ export async function runTx(wallet: Wallet, r: TxRequest): Promise<TxResult> {
   if (pre) { stage({ step: 'failed', problem: pre }); return { ok: false, problem: pre }; }
 
   const deposit = r.depositYocto > 0n;
-  const id = toast.push({ tone: 'pending', title: r.label, body: deposit ? 'Approve it in the MyNearWallet window.' : 'Signing with this site’s MyNearWallet key…' });
+  const id = toast.push({ tone: 'pending', title: r.label, body: deposit ? 'Approve it in the Meteor Wallet window.' : 'Signing with this site’s Meteor Wallet key…' });
   r.optimistic?.apply();
   stage({ step: 'signing' });
   let hash: string | null = null;

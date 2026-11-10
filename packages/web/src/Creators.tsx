@@ -64,8 +64,8 @@ function Composer({ wallet, markets }: { wallet: Wallet; markets: Market[] | nul
     </dl>
     {stage?.step === 'failed' && stage.problem && <Problem x={stage.problem} onRetry={stage.problem.retry ? create : undefined} />}
     {stage?.step === 'confirmed' && <p className="why ok" role="status"><Icon name="check" size={14} />Market opened. <Link to={`/market/${id}`}>Open {id}</Link></p>}
-    {wallet.account ? <button className="btn btn-coral btn-block" disabled={!!reason || busy} onClick={create}>{stage?.step === 'signing' ? 'Approve in MyNearWallet…' : stage?.step === 'pending' ? 'Waiting for NEAR testnet…' : stage?.step === 'checking' ? 'Checking balance…' : `Open market as ${wallet.account}`}</button>
-      : <button className="btn btn-coral btn-block" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting}>{wallet.connecting ? 'Waiting for MyNearWallet…' : 'Connect a NEAR testnet wallet'}</button>}
+    {wallet.account ? <button className="btn btn-coral btn-block" disabled={!!reason || busy} onClick={create}>{stage?.step === 'signing' ? 'Approve in Meteor Wallet…' : stage?.step === 'pending' ? 'Waiting for NEAR testnet…' : stage?.step === 'checking' ? 'Checking balance…' : `Open market as ${wallet.account}`}</button>
+      : <button className="btn btn-coral btn-block" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting}>{wallet.connecting ? 'Waiting for Meteor Wallet…' : 'Connect a NEAR testnet wallet'}</button>}
     {wallet.account && reason && <p className="why" role="status"><Icon name="clock" size={14} />{reason}</p>}
     <p className="sheet-note">Sources are limited to federalreserve.gov press conference PDFs, the only free transcript feed we could verify. Podcast and stream transcripts are not supported yet.</p>
   </div>;

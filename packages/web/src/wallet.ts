@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
-import type { WalletSelector } from '@near-wallet-selector/core';
+import type { InjectedWallet, WalletSelector } from '@near-wallet-selector/core';
 import { CONTRACT, viewAccount } from './lib';
 import { explain, type Explained } from './errors';
 
-const MNW_ORIGIN = 'https://testnet.mynearwallet.com';
+/** Meteor Wallet (testnet) is the wallet: it opens in a pop-up (or its browser extension) and posts the result back to this
+ * page, so there is no redirect route. MyNearWallet was dropped on 2026-11-10: its testnet pop-up now answers
+ * "MyNearWallet can't connect to apps anymore" and sends people to Meteor. */
+export const WALLET = { id: 'meteor-wallet', name: 'Meteor Wallet', url: 'https://wallet.meteorwallet.app' } as const;
 let selectorPromise: Promise<WalletSelector> | null = null;
 // Loaded on demand so the landing page does not pay for the wallet bundle.
-const getSelector = () => (selectorPromise ??= Promise.all([import('@near-wallet-selector/core'), import('@near-wallet-selector/my-near-wallet')])
-  .then(([core, mnw]) => core.setupWalletSelector({ network: 'testnet', modules: [mnw.setupMyNearWallet()] })));
+const getSelector = () => (selectorPromise ??= Promise.all([import('@near-wallet-selector/core'), import('@near-wallet-selector/meteor-wallet')])
+  .then(([core, meteor]) => core.setupWalletSelector({ network: 'testnet', modules: [meteor.setupMeteorWallet()] }))
+  .catch((e) => { selectorPromise = null; throw e; }));
 
 /** The result of a signed call: the transaction hash, and the outcome when the wallet already waited for it. */
 export type Sent = { hash: string | null; outcome: unknown };
@@ -27,7 +31,7 @@ export function useWallet() {
       sync();
       const sub = s.store.observable.subscribe(sync);
       unsub = () => sub.unsubscribe();
-    }).catch((e) => setProblem({ ...explain(e), title: 'The wallet could not load', next: 'Reload the page. If it persists, MyNearWallet may be down.' }));
+    }).catch((e) => setProblem({ ...explain(e), title: 'The wallet could not load', next: 'Reload the page. If it persists, Meteor Wallet may be down.' }));
     return () => unsub?.();
   }, []);
   // Network check: a .near name is mainnet; anything else must exist on testnet.
@@ -41,7 +45,7 @@ export function useWallet() {
   }, [account]);
   async function connect() {
     setProblem(null); setConnecting(true);
-    try { const w = await (await getSelector()).wallet('my-near-wallet'); await (w as unknown as { signIn: (p: { contractId: string; methodNames: string[] }) => Promise<unknown> }).signIn({ contractId: CONTRACT, methodNames: [] }); }
+    try { const w = await (await getSelector()).wallet<InjectedWallet>(WALLET.id); await w.signIn({ contractId: CONTRACT, methodNames: [] }); }
     catch (e) { setProblem(explain(e)); }
     finally { setConnecting(false); }
   }
@@ -49,26 +53,23 @@ export function useWallet() {
     try { const w = await (await getSelector()).wallet(); await w.signOut(); } catch (e) { setProblem(explain(e)); }
     setAccount('');
   }
-  /** Signs one function call. Calls without a deposit are signed by the function-call key MyNearWallet issued at sign-in
-   * (no popup); calls with a deposit open the MyNearWallet popup. The popup's success message carries the hash, which we
-   * keep so the caller can follow the transaction even when the wallet's own status lookup fails. */
+  /** Signs one function call. Calls without a deposit are signed by the function-call key Meteor Wallet issued at sign-in
+   * (no pop-up); calls with a deposit open the Meteor Wallet pop-up for approval. */
   async function callContract(methodName: string, args: object, depositYocto: string, tgas = 30): Promise<Sent> {
-    const w = await (await getSelector()).wallet();
-    let hash: string | null = null;
-    const onMessage = (ev: MessageEvent) => {
-      if (ev.origin === MNW_ORIGIN && ev.data?.status === 'success' && typeof ev.data.transactionHashes === 'string') hash = ev.data.transactionHashes.split(',')[0];
-    };
-    addEventListener('message', onMessage);
+    const [selector, { actionCreators }] = await Promise.all([getSelector(), import('@near-wallet-selector/core')]);
+    const w = await selector.wallet();
     try {
-      const outcome = await w.signAndSendTransaction({ receiverId: CONTRACT, actions: [{ type: 'FunctionCall', params: { methodName, args, gas: String(BigInt(tgas) * 10n ** 12n), deposit: depositYocto } }] });
+      const outcome = await w.signAndSendTransaction({ receiverId: CONTRACT, actions: [actionCreators.functionCall(methodName, args, BigInt(tgas) * 10n ** 12n, BigInt(depositYocto))] });
       const o = outcome as { transaction?: { hash?: string }; transaction_outcome?: { id?: string } } | undefined;
-      return { hash: o?.transaction?.hash ?? o?.transaction_outcome?.id ?? hash, outcome };
+      return { hash: o?.transaction?.hash ?? o?.transaction_outcome?.id ?? null, outcome };
     } catch (e) {
+      // Landed and failed (a contract panic): the error carries the outcome, so follow its hash like any other.
+      const landed = (e as { transaction_outcome?: { id?: string } } | null)?.transaction_outcome?.id;
       // The wallet sent it but its status lookup failed ("Transaction … doesn't exist"): keep following the hash.
       const fromMsg = String((e as Error)?.message ?? '').match(/Transaction (\w{43,44}) doesn't exist/)?.[1];
-      if (hash || fromMsg) return { hash: hash ?? fromMsg!, outcome: null };
+      if (landed || fromMsg) return { hash: (landed ?? fromMsg)!, outcome: null };
       throw e;
-    } finally { removeEventListener('message', onMessage); }
+    }
   }
   return { account, problem, network, ready, connecting, connect, disconnect, callContract, setProblem };
 }

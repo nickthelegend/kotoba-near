@@ -132,14 +132,14 @@ export function BetSheet({ m: picked, side, wallet, onClose }: { m: Market; side
     {failed && <Problem x={failed} onRetry={failed.retry ? () => place() : undefined} />}
     {done ? <div className="sheet-acts"><button className="btn btn-coral btn-block" onClick={() => setStage(null)}>Buy more</button><Link to="/you" className="pill-light">See positions</Link></div>
       : !wallet.account
-        ? <button className="btn btn-coral btn-block" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting || !!reason}>{wallet.connecting ? 'Waiting for MyNearWallet…' : 'Connect a NEAR testnet wallet'}</button>
+        ? <button className="btn btn-coral btn-block" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting || !!reason}>{wallet.connecting ? 'Waiting for Meteor Wallet…' : 'Connect a NEAR testnet wallet'}</button>
         : <button className="btn btn-coral btn-block" disabled={!!reason || busy || !!moved} onClick={() => place()}>
-            {stage?.step === 'checking' ? 'Checking balance and price…' : stage?.step === 'signing' ? 'Approve in MyNearWallet…' : stage?.step === 'pending' ? 'Waiting for NEAR testnet…' : `Buy ${qty ? qty.toLocaleString('en-US') : ''} ${yes ? 'YES' : 'NO'}${cost !== null ? ` · ${near(cost)}` : ''}`}
+            {stage?.step === 'checking' ? 'Checking balance and price…' : stage?.step === 'signing' ? 'Approve in Meteor Wallet…' : stage?.step === 'pending' ? 'Waiting for NEAR testnet…' : `Buy ${qty ? qty.toLocaleString('en-US') : ''} ${yes ? 'YES' : 'NO'}${cost !== null ? ` · ${near(cost)}` : ''}`}
           </button>}
     {reason && !done && <p className="why" role="status"><Icon name="clock" size={14} />{reason}</p>}
     {stage?.step === 'pending' && stage.tx && <p className="sheet-note">Sent. <a href={txUrl(stage.tx)} target="_blank" rel="noreferrer">View on NearBlocks</a></p>}
     {wallet.problem && <Problem x={wallet.problem} compact />}
-    <p className="sheet-note">{wallet.account ? `Signed in MyNearWallet as ${short(wallet.account, 14, 8)}.` : 'Bets are signed in MyNearWallet on NEAR testnet.'} Shares pay out at settlement; there is no early sell.</p>
+    <p className="sheet-note">{wallet.account ? `Signed in Meteor Wallet as ${short(wallet.account, 14, 8)}.` : 'Bets are signed in Meteor Wallet on NEAR testnet.'} Shares pay out at settlement; there is no early sell.</p>
     <Link to={`/market/${m.id}`} className="sheet-link">Market details and source <Icon name="arrow" size={14} /></Link>
   </Sheet>;
 }

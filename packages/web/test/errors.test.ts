@@ -1,14 +1,17 @@
 // Error mapping, driven by error shapes captured from NEAR testnet (test/fixtures/testnet-errors.json,
-// written by scripts/capture-errors.mjs). Wallet strings are read from the installed MyNearWallet module.
+// written by scripts/capture-errors.mjs). Wallet strings are read from the installed Meteor Wallet SDK.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { createRequire } from 'node:module';
 import { explain, panicOf, txFailure, rpcErrorFrom, TxFailed, RpcError, quantityError, upfrontYocto, spendableYocto } from '../src/errors.ts';
 
 const here = import.meta.dirname;
 const { cases } = JSON.parse(readFileSync(resolve(here, 'fixtures/testnet-errors.json'), 'utf8'));
-const mnw = readFileSync(resolve(here, '../node_modules/@near-wallet-selector/my-near-wallet/index.js'), 'utf8');
+// The Meteor SDK sits under the selector's Meteor module; resolve it from there.
+const meteorModule = createRequire(import.meta.url).resolve('@near-wallet-selector/meteor-wallet');
+const meteor = readFileSync(createRequire(meteorModule).resolve('@meteorwallet/sdk'), 'utf8') + readFileSync(meteorModule, 'utf8');
 const fromTx = (k: string) => { const r = cases[k].body.result; return explain(new TxFailed(txFailure(r)!, r.transaction.hash)); };
 
 test('view-call panics: quote with 0 and 100,001 shares, unknown market', () => {
@@ -77,9 +80,9 @@ test('OutLayer has no attestation yet (HTTP 404)', () => {
   assert.equal(x.kind, 'attestation_pending'); assert.equal(x.retry, true);
 });
 
-test('wallet popup errors, using the strings in the installed MyNearWallet module', () => {
-  for (const [s, kind] of [['User closed the window', 'user_rejected'], ['Popup window blocked. Please allow popups for this site.', 'popup_blocked'], ['Wallet not signed in', 'wallet_not_connected']] as const) {
-    assert.ok(mnw.includes(s) || s === 'Wallet not signed in', `${s} is in @near-wallet-selector/my-near-wallet`);
+test('wallet pop-up errors, using the strings in the installed Meteor Wallet SDK and module', () => {
+  for (const [s, kind] of [['User closed the window before completing the action', 'user_rejected'], ['User closed the window', 'user_rejected'], ["User didn't complete the action", 'user_rejected'], ['User cancelled the action', 'user_rejected'], ["Couldn't open popup window to complete wallet action", 'popup_blocked'], ['Wallet not signed in', 'wallet_not_connected']] as const) {
+    assert.ok(meteor.includes(s), `${s} is in @meteorwallet/sdk or @near-wallet-selector/meteor-wallet`);
     assert.equal(explain(new Error(s)).kind, kind);
   }
 });
