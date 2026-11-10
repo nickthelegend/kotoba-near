@@ -62,10 +62,12 @@ pnpm install
 pnpm dev                       # http://127.0.0.1:5198
 ```
 - `/`: the landing page with live contract figures (markets, open, settled, shares, free balance, verified TEE runs) and the recorded transactions.
-- `/app`: the Dec 9 FOMC countdown and four live markets with LMSR odds. **Trade** opens the bet sheet with a live `quote` from the contract. **Connect** signs in with MyNearWallet (testnet), and **Buy** sends a real `buy` transaction.
+- `/app`: the Dec 9 FOMC countdown and four live markets with LMSR odds. **Trade** opens the bet sheet with a live `quote` from the contract. **Connect** signs in with Meteor Wallet (testnet), and **Buy** sends a real `buy` transaction.
 - `/market/fomc-2026-01-inflation-40`: the verdict (40 hits, YES), the transcript and program hashes, both OutLayer runs with the in-browser seal checks, and the transcript with all 40 hits marked and a hit-by-hit navigator.
 - `/creators`: markets grouped by creator, and a composer that opens a new Fed-sourced market from your wallet (subsidy b·ln2, 1% creator fee).
 - `/you`: your YES/NO shares (one NEP-245 batch read), with Claim on final markets and Refund on void ones.
+
+**Connecting a wallet.** Kotoba signs with [Meteor Wallet](https://wallet.meteorwallet.app) on NEAR testnet. You need a `.testnet` account in Meteor (create or import one there; NEAR's guide is [Create an account](https://docs.near.org/getting-started/create-account), and free testnet NEAR comes from [near-faucet.io](https://near-faucet.io)). **Connect** opens Meteor in a pop-up (or its browser extension) at `wallet.meteorwallet.app/connect/testnet/login`, asking for a function-call key on the market contract; the result is posted back to the page, so there is no redirect. Calls with no deposit are then signed by that key without a pop-up; every bet, which attaches NEAR, opens Meteor for approval. If the browser blocks the pop-up, the app says so and asks you to allow pop-ups; closing the window says nothing was sent. MyNearWallet was removed on 2026-11-10: its testnet pop-up now answers "MyNearWallet can't connect to apps anymore" and points to Meteor.
 
 Every write goes through one path (`packages/web/src/tx.ts`): it checks the wallet, the network (a `.near` account is refused) and the spendable balance against deposit + prepaid gas, applies the bet optimistically, waits for the wallet, follows the hash until NEAR executes it, then refreshes, or rolls back and shows the contract's own panic (for example `ERR_CLOSED`) with a next step. Odds poll every 10 s. The buy attaches the quote + 2% and the contract refunds the rest; a bigger move stops with "Price moved". Error shapes come from real testnet failures (`packages/web/test/fixtures/testnet-errors.json`).
 
@@ -86,7 +88,7 @@ Reproduce the whole run on a fresh account with `packages/sdk/scripts/upload-ora
 | `packages/oracle` | Rust WASI P2 program run by OutLayer. It fetches only `https://www.federalreserve.gov/mediacenter/files/FOMCpresconfYYYYMMDD.pdf`, hashes it, extracts the text with `lopdf`, collapses whitespace and counts case-insensitive whole-word matches. Reporters' questions count. |
 | `packages/sdk` | LMSR maths, the Fed calendar parser, the official PDF fetcher, the attestation verifier, a 1Click dry-quote helper (gated on a funded mainnet account), and the deploy, upload, run and scheduler scripts. |
 | `packages/mcp` | MCP stdio server with `kotoba_list_markets`, `kotoba_get_market` and `kotoba_verify_resolution` (reads a resolve tx from chain and verifies its attestation). |
-| `packages/web` | Vite + React app: landing, board, bet sheet, resolution page and creators. Reads come from NEAR RPC and OutLayer's API, with nothing mocked. Writes go through wallet-selector and MyNearWallet. |
+| `packages/web` | Vite + React app: landing, board, bet sheet, resolution page and creators. Reads come from NEAR RPC and OutLayer's API, with nothing mocked. Writes go through NEAR Wallet Selector 10.1.4 and Meteor Wallet. |
 
 ## NEAR features used, and why
 

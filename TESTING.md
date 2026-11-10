@@ -87,3 +87,20 @@ Every route (`/`, `/app`, `/market/…` open and settled, `/you`, `/creators`, `
 Real buys made during this QA by `player.kotoba-edfa2b47.testnet` on `fomc-2026-12-employment` (it went from 0/0 to 22 YES / 15 NO): 20 YES and 2 × 1 YES from runs whose dRPC broadcast timed out but which landed (one hash recorded: [BmR8kmNW…](https://testnet.nearblocks.io/txns/BmR8kmNWwbKtdCtiF4UpcP4VkUtnnRrNTgLPUhcBdYTW); NearBlocks' API was rate-limited, so the other two hashes are not recorded), then 10 NO ([6sxYo71v…](https://testnet.nearblocks.io/txns/6sxYo71veapYZMbpnaGNPcPEzaDTpfnRh6nr9cYbJ64f)) and 5 NO ([5XnoPDce…](https://testnet.nearblocks.io/txns/5XnoPDceYqq1BKZGJVcofL4NXrn7S2LuXjXwbgwmonwB)).
 
 Not exercised in a browser: a signed success through MyNearWallet (needs a human to approve in the wallet), claim and finalize (no market is claimable or past its window right now), and the error boundary (no panel throws on real data).
+
+### Wallet: Meteor Wallet replaces MyNearWallet (2026-11-10)
+
+MyNearWallet's testnet pop-up now refuses every app. Clicking **Connect** on the previous build (`vite preview`, headless Chrome) opened `testnet.mynearwallet.com/login/?…&contract_id=kotoba-edfa2b47.testnet…`, which answered "MyNearWallet can't connect to apps anymore … is being retired and no longer accepts new app connections" and offered "Get Meteor Wallet". The rows above that name MyNearWallet were recorded before this change.
+
+The web app now uses `@near-wallet-selector/core` 10.1.4 with `@near-wallet-selector/meteor-wallet` 10.1.4 (MyNearWallet removed). Meteor's SDK peers on near-api-js 6, and the selector's `@near-js/*` 2.x packages peer on `@near-js/utils` 2, so `pnpm-workspace.yaml` gives the wallet packages their own near-api-js 6.2.5 and `@near-js/utils` 2.5.1; the app's own reads stay on near-api-js 5.0.0.
+
+Checked against `vite build && vite preview` in headless Chrome at 1440×900 and 375×812:
+
+- **Connect** (header pill on `/app`) opens a pop-up at `https://wallet.meteorwallet.app/connect/testnet/login?…`. The request the app posts into it reads `actionType: login`, `network: testnet`, `contract_id: kotoba-edfa2b47.testnet`, `type: ALL_METHODS` with a fresh public key.
+- Closing that pop-up shows "You closed the wallet without approving. Nothing was sent."
+- With pop-ups blocked (`window.open` returning null), it shows "Your browser blocked the wallet window. Allow pop-ups for this site, then try again."
+- No console errors, no horizontal overflow at 375 on `/app` and `/you`. `/you` offers **Connect with Meteor Wallet**.
+- `node --test test/*.test.ts`: 14/14. The wallet-error test now reads the closed-window, cancelled, pop-up-failed and not-signed-in strings from the installed Meteor SDK and module.
+
+Not done: a full Meteor sign-in and approval. Meteor's site sits behind Cloudflare, which shows headless Chrome "Sorry, you have been blocked", and signing in needs a person with a Meteor testnet account.
+
