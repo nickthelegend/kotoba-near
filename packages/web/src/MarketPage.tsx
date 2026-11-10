@@ -1,6 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Copy, Countdown, Icon, Link, SplitBar, State, useNow } from './ui';
-import { DEPLOYMENT, PINNED_PDF_SHA, PINNED_TEXT_SHA, eventDate, fmtDate, getMarket, outcome, runsFor, sha256Hex, short, splitHits, txUrl, pct, yesPrice, type Market, type Step } from './lib';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { Boundary, Copy, Countdown, Icon, Link, Problem, SplitBar, State, useMarkets, useNow } from './ui';
+import { DEPLOYMENT, PINNED_PDF_SHA, PINNED_TEXT_SHA, UNIT_NEAR, batchBalance, near, eventDate, fmtDate, outcome, runsFor, sha256Hex, short, splitHits, txUrl, pct, yesPrice, type Market, type Step } from './lib';
+import { explain, type Explained } from './errors';
+import { CHAIN_CHANGED, refreshMarkets } from './store';
+import { runTx, type TxStage } from './tx';
 import { verifyLive, type LiveVerification } from './verify';
 import { BetSheet } from './Trade';
 import type { Wallet } from './wallet';
@@ -8,8 +11,9 @@ import type { Wallet } from './wallet';
 function RunCard({ run, label }: { run: Step; label: string }) {
   const o = run.outlayer!;
   const [live, setLive] = useState<LiveVerification | null>(null);
-  const [err, setErr] = useState('');
-  useEffect(() => { verifyLive(run.tx, o.input, o.output, DEPLOYMENT.oracle_sha256).then(setLive).catch((e) => setErr(String(e.message || e))); }, [run.tx, o.input, o.output]);
+  const [err, setErr] = useState<Explained | null>(null);
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => { setErr(null); verifyLive(run.tx, o.input, o.output, DEPLOYMENT.oracle_sha256).then(setLive).catch((e) => setErr(explain(e))); }, [run.tx, o.input, o.output, attempt]);
   const res = JSON.parse(o.output) as { count: number };
   const allOk = live?.checks.every((c) => c.ok);
   return <article className="run">
@@ -22,7 +26,7 @@ function RunCard({ run, label }: { run: Step; label: string }) {
       {!live && !err && [0, 1, 2, 3, 4].map((i) => <li key={i} className="pending"><i className="pulse" /><div><b>Re-checking</b><span>fetching the attestation from OutLayer</span></div></li>)}
       <li className={o.attestation.checks.intel_signature_chain ? 'ok' : 'bad'}><Icon name={o.attestation.checks.intel_signature_chain ? 'check' : 'x'} size={16} /><div><b>Intel signature chain</b><span>recorded by <code>verify-attestation.mjs</code> (dcap-qvl): TCB {o.attestation.tcb.status ?? o.attestation.tcb.error}</span></div></li>
     </ul>
-    {err && <p className="sheet-err" role="alert">Live check failed: {err}</p>}
+    {err && <Problem x={err} onRetry={() => setAttempt((n) => n + 1)} compact />}
     <dl className="kv">
       <div><dt>Counted</dt><dd>{res.count}</dd></div>
       <div><dt>Transaction</dt><dd><a href={txUrl(run.tx)} target="_blank" rel="noreferrer" className="mono">{short(run.tx, 8, 6)}</a></dd></div>
@@ -71,15 +75,69 @@ function Transcript({ m }: { m: Market }) {
   </div>;
 }
 
+const BOND_NEAR = 0.12; // 0.1 NEAR bond + 0.02 NEAR for OutLayer (unused is refunded), as in the recorded runs
+const milli = (n: number) => BigInt(Math.round(n * 1000)) * 10n ** 21n;
+const utc = (ms: number) => new Date(ms).toUTCString().replace(':00 GMT', ' UTC');
+
+/** The settlement step this market is on, and the button that moves it forward (anyone may press it). */
+function SettleBox({ m, wallet, now }: { m: Market; wallet: Wallet; now: number }) {
+  const [held, setHeld] = useState<{ yes: number; no: number } | null>(null);
+  const [stage, setStage] = useState<TxStage | null>(null);
+  const [epoch, setEpoch] = useState(0);
+  useEffect(() => { const on = () => setEpoch((n) => n + 1); addEventListener(CHAIN_CHANGED, on); return () => removeEventListener(CHAIN_CHANGED, on); }, []);
+  useEffect(() => {
+    setHeld(null);
+    if (!wallet.account) return;
+    let live = true;
+    batchBalance(wallet.account, [`${m.id}:YES`, `${m.id}:NO`]).then(([y, n]) => live && setHeld({ yes: Number(y), no: Number(n) })).catch(() => live && setHeld(null));
+    return () => { live = false; };
+  }, [wallet.account, m.id, m.status, epoch]);
+  const busy = stage?.step === 'checking' || stage?.step === 'signing' || stage?.step === 'pending';
+  const go = (method: string, deposit: bigint, tgas: number, label: string) => runTx(wallet, { method, args: { id: m.id }, depositYocto: deposit, tgas, label: `${label} · “${m.phrase}”`, onStage: setStage });
+  const res = outcome(m);
+  const closeMs = m.close_ns / 1e6, deadlineMs = m.deadline_ns / 1e6, windowMs = (m.challenge_until_ns ?? 0) / 1e6;
+  let step: ReactNode = null, act: ReactNode = null;
+  const btn = (label: string, onClick: () => void, cls = 'pill-ink') => wallet.account
+    ? <button className={cls} disabled={busy || !!wallet.network} onClick={onClick}>{busy ? (stage?.step === 'signing' ? 'Approve in MyNearWallet…' : stage?.step === 'pending' ? 'Waiting for NEAR…' : 'Checking…') : label}</button>
+    : <button className="pill-light" onClick={wallet.connect} disabled={!wallet.ready}>Connect to {label.toLowerCase().split(' ')[0]}</button>;
+  if (m.pending) step = <><i className="pulse" /> Counting the transcript in the TEE now.</>;
+  else if (m.status === 'Open' && now >= closeMs && now <= deadlineMs) {
+    step = <>Bets are closed. Anyone can resolve it until {utc(deadlineMs)}.</>;
+    act = btn(`Resolve with OutLayer · ${BOND_NEAR} NEAR`, () => go('resolve', milli(BOND_NEAR), 300, 'Resolve'));
+  } else if (m.status === 'Open' && now > deadlineMs) {
+    const n = (held?.yes ?? 0) + (held?.no ?? 0);
+    step = <>No result by the deadline, so every share refunds 0.0005 NEAR.</>;
+    if (n > 0) act = btn(`Refund ${near(n * 0.0005)}`, () => go('claim_void', 0n, 30, 'Refund'), 'pill-coral');
+  } else if (m.status === 'Provisional') {
+    if (now < windowMs) {
+      step = <>Provisional {res}. Challenges close in <Countdown target={windowMs} now={now} compact />.</>;
+      act = btn(`Challenge · ${BOND_NEAR} NEAR bond`, () => go('challenge', milli(BOND_NEAR), 300, 'Challenge'));
+    } else {
+      step = <>Challenges are closed. Finalize to lock in {res}.</>;
+      act = btn('Finalize', () => go('finalize', 0n, 30, 'Finalize'));
+    }
+  } else if (m.status === 'Final') {
+    const win = held ? (res === 'YES' ? held.yes : held.no) : 0;
+    step = <>Settled {res}. Each winning share pays 0.001 NEAR.</>;
+    if (wallet.account && held) act = win > 0 ? btn(`Claim ${near(win * UNIT_NEAR)}`, () => go('claim', 0n, 30, 'Claim'), 'pill-coral') : <span className="why">{held.yes + held.no > 0 ? 'Your shares did not win.' : 'You have no shares here.'}</span>;
+  }
+  if (!step) return null;
+  return <div className="settle">
+    <p className="settle-step">{step}</p>
+    {act}
+    {stage?.step === 'failed' && stage.problem && <Problem x={stage.problem} compact />}
+    {stage?.step === 'confirmed' && <p className="why ok" role="status"><Icon name="check" size={14} />Done.{stage.tx && <> <a href={txUrl(stage.tx)} target="_blank" rel="noreferrer">View transaction</a></>}</p>}
+  </div>;
+}
+
 export default function MarketPage({ id, wallet }: { id: string; wallet: Wallet }) {
-  const [m, setM] = useState<Market | null | undefined>(undefined);
+  const { markets, problem, loading } = useMarkets();
   const [side, setSide] = useState<boolean | null>(null);
-  const [err, setErr] = useState('');
   const now = useNow();
-  useEffect(() => { getMarket(id).then(setM).catch((e) => setErr(String(e.message || e))); }, [id]);
-  if (err) return <div className="page"><State kind="error" title="Could not read this market">{err}</State></div>;
-  if (m === undefined) return <div className="page"><State kind="loading" title="Reading the market from NEAR testnet…" /></div>;
-  if (m === null) return <div className="page"><State kind="empty" title={`No market called ${id}`} action={<Link to="/app" className="btn btn-ghost btn-sm">Back to the board</Link>} /></div>;
+  const m = markets?.find((x) => x.id === id);
+  if (problem && !markets) return <div className="page"><Problem x={problem} onRetry={() => refreshMarkets()} /></div>;
+  if (!markets) return <div className="page"><State kind="loading" title="Reading the market from NEAR testnet…" /></div>;
+  if (!m) return <div className="page"><State kind="empty" title={`No market called ${id}`} action={<Link to="/app" className="btn btn-ghost btn-sm">Back to the board</Link>}>The Kotoba contract has no market with this id.{loading ? ' Re-checking…' : ''}</State></div>;
   const runs = runsFor(m.id);
   const res = outcome(m);
   const open = m.status === 'Open' && m.close_ns / 1e6 > now;
@@ -89,15 +147,15 @@ export default function MarketPage({ id, wallet }: { id: string; wallet: Wallet 
       <div>
         <span className="chip-src"><i className="dot-fed" />{m.event.replace('FOMC press conference', 'Fed press conference')}</span>
         <h1>Will they say <q>{m.phrase}</q>{m.threshold > 1 ? <> at least {m.threshold} times</> : ''}?</h1>
-        <p className="market-meta mono">{m.id} · creator {m.creator} · {m.status}</p>
+        <p className="market-meta mono">{m.id} · creator {m.creator} · {m.pending ? 'Settling' : m.status}</p>
       </div>
       <div className={`verdict ${m.result ? 'verdict-res' : ''}`}>
         {m.result ? <><span className="verdict-n">{m.result.count}</span><span className="verdict-l">hits · needed {m.threshold}</span><span className={`stamp stamp-big stamp-${res!.toLowerCase()}`}>{res}</span></>
           : open ? <><span className="label">Bets close in</span><Countdown target={m.close_ns / 1e6} now={now} /><SplitBar m={m} label={<>“{m.phrase}”</>} /><div className="yn yn-wide"><button className="yn-yes" onClick={() => setSide(true)}><Icon name="arrowUp" size={15} />Yes {pct(yesPrice(m))}</button><button className="yn-no" onClick={() => setSide(false)}><Icon name="arrowDown" size={15} />No {pct(1 - yesPrice(m))}</button></div></>
-          : <span className="label">Closed · awaiting resolution</span>}
+          : <span className="label">{m.pending ? 'Settling in the TEE' : 'Closed · awaiting resolution'}</span>}
+        <SettleBox m={m} wallet={wallet} now={now} />
       </div>
     </header>
-
     {m.result && <section className="hashes">
       <div><span className="label">Transcript SHA-256 (on-chain)</span><code>{m.result.transcript_sha256}</code><Copy value={m.result.transcript_sha256} label="transcript hash" /></div>
       <div><span className="label">Program SHA-256 (pinned at deploy)</span><code>{m.result.code_hash}</code><Copy value={m.result.code_hash} label="program hash" /></div>
@@ -106,10 +164,10 @@ export default function MarketPage({ id, wallet }: { id: string; wallet: Wallet 
 
     {runs.length > 0 && <section className="runs">
       <header className="board-head"><h2>The seal</h2><span className="mono dim">{runs.length === 2 ? 'resolved, then challenged and re-run with the same result' : 'one attested run'}</span></header>
-      <div className="runs-grid">{runs.map((r, i) => <RunCard key={r.tx} run={r} label={r.method === 'challenge' ? 'Challenge re-run' : i === 0 ? 'Resolution' : 'Run'} />)}</div>
+      <div className="runs-grid">{runs.map((r, i) => <Boundary key={r.tx} label="Attestation check"><RunCard run={r} label={r.method === 'challenge' ? 'Challenge re-run' : i === 0 ? 'Resolution' : 'Run'} /></Boundary>)}</div>
     </section>}
 
-    <section className="board-sec"><header className="board-head"><h2>Every counted word</h2></header><Transcript m={m} /></section>
+    <section className="board-sec"><header className="board-head"><h2>Every counted word</h2></header><Boundary label="Transcript"><Transcript m={m} /></Boundary></section>
     {side !== null && <BetSheet m={m} side={side} wallet={wallet} onClose={() => setSide(null)} />}
   </div>;
 }

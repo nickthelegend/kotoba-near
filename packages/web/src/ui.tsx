@@ -1,5 +1,7 @@
-import { useEffect, useMemo, useState, type ReactNode, type MouseEvent } from 'react';
-import { listMarkets, countdown, yesPrice, pct, viewAccount, yoctoToNear, type Market } from './lib';
+import { Component, useEffect, useMemo, useState, type ErrorInfo, type ReactNode, type MouseEvent } from 'react';
+import { countdown, yesPrice, pct, txUrl, short, type Market } from './lib';
+import { explain, type Explained } from './errors';
+import { toast, useToasts } from './store';
 import { stickerSrc, type StickerName } from './art';
 
 export function navigate(path: string) {
@@ -27,29 +29,7 @@ export function useMedia(query: string) {
   return match;
 }
 
-let cache: { at: number; data: Market[] } | null = null;
-export function useMarkets() {
-  const [markets, setMarkets] = useState<Market[] | null>(cache?.data ?? null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const load = () => { setLoading(true); return listMarkets().then((d) => { cache = { at: Date.now(), data: d }; setMarkets(d); setError(''); }).catch((e) => setError(String(e.message || e))).finally(() => setLoading(false)); };
-  useEffect(() => { if (!cache || Date.now() - cache.at > 10_000) load(); const t = setInterval(() => { if (!document.hidden) load(); }, 30_000); return () => clearInterval(t); }, []);
-  return { markets, error, loading, reload: load };
-}
-
-/** Live NEAR testnet balance of an account, in NEAR (null while loading or when no account). */
-export function useBalance(account: string) {
-  const [balance, setBalance] = useState<number | null>(null);
-  const [error, setError] = useState('');
-  useEffect(() => {
-    setBalance(null); setError('');
-    if (!account) return;
-    let live = true;
-    viewAccount(account).then((a) => live && setBalance(yoctoToNear(a.amount))).catch((e) => live && setError(String(e.message || e)));
-    return () => { live = false; };
-  }, [account]);
-  return { balance, error };
-}
+export { useMarkets, useBalance } from './store';
 
 const paths: Record<string, string> = {
   arrow: 'M5 12h14M13 6l6 6-6 6',
@@ -153,4 +133,45 @@ export function State({ kind, title, children, action }: { kind: 'loading' | 'em
     <span className="state-mark" aria-hidden="true">{kind === 'loading' ? <i className="pulse" /> : kind === 'error' ? '!' : kind === 'setup' ? '◇' : '○'}</span>
     <div><h3>{title}</h3>{children && <p>{children}</p>}{action}</div>
   </div>;
+}
+
+/** A mapped error as a product would say it: one sentence, the contract's own code in small print, one next step. */
+export function Problem({ x, onRetry, compact, className }: { x: Explained; onRetry?: () => void; compact?: boolean; className?: string }) {
+  const act = onRetry && x.retry ? <button className="problem-act" onClick={onRetry}>Try again</button>
+    : x.tx ? <a className="problem-act" href={txUrl(x.tx)} target="_blank" rel="noreferrer">View transaction</a> : null;
+  return <div className={`problem ${compact ? 'problem-compact' : ''} ${className ?? ''}`} role="alert" title={x.detail}>
+    <p><b>{x.title}.</b> {x.next}{x.code && <small className="problem-code"> {x.code.startsWith('ERR_') ? `Contract: ${x.code}` : x.code}</small>}</p>
+    {act}
+  </div>;
+}
+
+/** Keeps one failing panel from blanking the page: it shows the real error and a retry in that panel's place. */
+export class Boundary extends Component<{ label: string; children: ReactNode }, { error: unknown; key: number }> {
+  state = { error: null as unknown, key: 0 };
+  static getDerivedStateFromError(error: unknown) { return { error }; }
+  componentDidCatch(error: unknown, info: ErrorInfo) { console.error(`[${this.props.label}]`, error, info.componentStack); }
+  render() {
+    if (!this.state.error) return <div key={this.state.key} style={{ display: 'contents' }}>{this.props.children}</div>;
+    const x = explain(this.state.error);
+    return <State kind="error" title={`${this.props.label} failed to render`} action={<button className="pill-light" onClick={() => this.setState((s) => ({ error: null, key: s.key + 1 }))}>Try again</button>}>{x.detail}</State>;
+  }
+}
+
+/** Transaction toasts: pending (with the NearBlocks link as soon as there is a hash), confirmed, or the mapped failure. */
+export function Toaster() {
+  const list = useToasts();
+  return <div className="toasts" aria-live="polite" aria-relevant="additions text">
+    {list.map((t) => <div key={t.id} className={`toast toast-${t.tone}`} role={t.tone === 'error' ? 'alert' : 'status'}>
+      <span className="toast-mark" aria-hidden="true">{t.tone === 'pending' ? <i className="pulse" /> : <Icon name={t.tone === 'success' ? 'check' : t.tone === 'error' ? 'x' : 'seal'} size={16} />}</span>
+      <div className="toast-body"><b>{t.title}</b>{t.body && <span>{t.body}</span>}{t.tx && <a href={txUrl(t.tx)} target="_blank" rel="noreferrer" className="mono">{short(t.tx, 8, 6)} on NearBlocks <Icon name="external" size={11} /></a>}</div>
+      <button className="icon-btn toast-x" onClick={() => toast.dismiss(t.id)} aria-label="Dismiss"><Icon name="x" size={14} /></button>
+    </div>)}
+  </div>;
+}
+
+/** "Live · 4 s ago" for polled data. */
+export function Freshness({ at, loading, now }: { at: number; loading?: boolean; now: number }) {
+  if (!at) return null;
+  const s = Math.max(0, Math.round((now - at) / 1000));
+  return <span className="fresh"><i className="live-dot" />{loading ? 'Updating' : s < 2 ? 'Live' : `Updated ${s}s ago`}</span>;
 }

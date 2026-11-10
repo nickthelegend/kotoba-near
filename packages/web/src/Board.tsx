@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import Head from './Head';
 import { BetSheet, EventSheet } from './Trade';
-import { Countdown, EventPhoto, Icon, Link, SplitBar, State, useMarkets, useNow } from './ui';
+import { Countdown, EventPhoto, Icon, Link, Problem, SplitBar, State, useMarkets, useNow } from './ui';
+import type { LiveMarket } from './store';
 import { eventSrc } from './art';
 import { eventDate, fmtDate, fmtTimeUTC, groupEvents, isOpen, outcome, pct, shares, yesPrice, type KEvent, type Market } from './lib';
 import type { Wallet } from './wallet';
@@ -76,7 +77,7 @@ function Row({ m, now, onPick }: { m: Market; now: number; onPick: (p: Pick) => 
     <span className="row-time">{fmtTimeUTC(m.close_ns / 1e6)}</span>
     <Link to={`/market/${m.id}`} className="row-main">
       <b>“{m.phrase}”{m.threshold > 1 && <small> ≥ {m.threshold}×</small>}</b>
-      <span>{open ? <><em className={p >= 0.5 ? 'pos' : 'neg'}>{p >= 0.5 ? 'YES' : 'NO'} {pct(p >= 0.5 ? p : 1 - p)}</em> · {shares(m)} shares</> : m.result ? <>said {m.result.count}× · {m.status === 'Final' ? 'final' : 'provisional'}</> : 'closed · awaiting transcript'}</span>
+      <span>{open ? <><em className={p >= 0.5 ? 'pos' : 'neg'}>{p >= 0.5 ? 'YES' : 'NO'} {pct(p >= 0.5 ? p : 1 - p)}</em> · {shares(m)} shares{(m as LiveMarket).pendingQty ? ' · yours pending' : ''}</> : m.pending ? 'settling in the TEE' : m.result ? <>said {m.result.count}× · {m.status === 'Final' ? 'final' : 'provisional'}</> : 'closed · awaiting transcript'}</span>
     </Link>
     {open ? <button className="pill-coral" onClick={() => onPick({ m, yes: p < 0.5 ? false : true })}><i className="rec" />Your call</button>
       : res ? <Link to={`/market/${m.id}`} className={`pill-res res-${res.toLowerCase()}`}>{res}</Link> : <span className="pill-res">Closed</span>}
@@ -125,7 +126,7 @@ export function MarketCard({ m, now, onPick }: { m: Market; now: number; onPick?
       <span className="avs" aria-hidden="true"><i className="av av-fed"><Icon name="mic" size={13} /></i><i className="av av-mark">言</i><i className="av av-seal"><Icon name="seal" size={13} /></i></span>
       <div className="mcard-src">
         <p><b>Fed · {date ? fmtDate(date).replace(/, \d{4}$/, '') : ''}</b> <span>{open ? <>closes in <Countdown target={m.close_ns / 1e6} now={now} compact /></> : res ? 'settled' : 'closed'}</span></p>
-        <small>{shares(m)} shares traded · liquidity b {m.b}</small>
+        <small>{shares(m)} shares traded · liquidity b {m.b}{(m as LiveMarket).pendingQty ? <b className="pend"> · your {(m as LiveMarket).pendingQty} pending</b> : null}{m.pending ? ' · settling in the TEE' : ''}</small>
       </div>
       {open ? <span className={`lean ${p >= 0.5 ? 'lean-yes' : 'lean-no'}`}><Icon name={p >= 0.5 ? 'arrowUp' : 'arrowDown'} size={13} />{p >= 0.5 ? 'YES' : 'NO'} {pct(p >= 0.5 ? p : 1 - p)}</span>
         : res ? <span className={`lean ${res === 'YES' ? 'lean-yes' : 'lean-no'}`}><Icon name="check" size={13} />{res}</span> : <span className="lean">Closed</span>}
@@ -158,15 +159,15 @@ function Web({ markets, now, onPick }: { markets: Market[]; now: number; onPick:
 }
 
 export default function Board({ wallet, desktop }: { wallet: Wallet; desktop: boolean }) {
-  const { markets, error, loading, reload } = useMarkets();
+  const { markets, problem, loading, reload, at } = useMarkets();
   const now = useNow();
   const [pick, setPick] = useState<Pick>(null);
   return <div className={desktop ? 'web-page' : 'ph-page'}>
-    <Head wallet={wallet} desktop={desktop} onRefresh={reload} refreshing={loading} />
-    {error && !markets ? <State kind="error" title="Could not read the contract" action={<button className="pill-light" onClick={reload}>Retry</button>}>{error}</State>
+    <Head wallet={wallet} desktop={desktop} onRefresh={reload} refreshing={loading} at={at} now={now} />
+    {problem && !markets ? <Problem x={problem} onRetry={reload} />
       : !markets ? <div className={desktop ? 'web-grid' : 'carousel'}>{[0, 1, 2, 3].map((i) => <div key={i} className={desktop ? 'mcard skeleton' : 'ev-card skeleton'} />)}</div>
       : desktop ? <Web markets={markets} now={now} onPick={setPick} /> : <Phone markets={markets} now={now} onPick={setPick} />}
-    {error && markets && <p className="stale" role="status">Showing the last read. Refresh failed: {error}</p>}
+    {problem && markets && <p className="stale" role="status">Showing the last read from {new Date(at).toLocaleTimeString()}. {problem.title}: {problem.next} <button className="text-btn" onClick={reload}>Retry</button></p>}
     {pick && <BetSheet m={pick.m} side={pick.yes} wallet={wallet} onClose={() => setPick(null)} />}
   </div>;
 }

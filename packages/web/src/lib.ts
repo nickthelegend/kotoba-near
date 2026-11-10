@@ -1,6 +1,7 @@
 import deployment from '../../../deployments/testnet-2026-11-09.json';
 import run from '../../../deployments/real-run.json';
 import oracle from '../../../deployments/oracle-fastfs.json';
+import { RpcError, rpcErrorFrom, txFailure } from './errors';
 
 export type OracleOutput = { count: number; transcript_sha256: string; source_url: string; code_hash: string; attestation: string };
 export type Status = 'Open' | 'Provisional' | 'Final';
@@ -26,20 +27,40 @@ export const RPC: string = (import.meta.env.VITE_NEAR_TESTNET_RPC as string | un
 // rpc.testnet.near.org is deprecated and answers every call with a -429 body, so it is not in the list.
 const RPCS = [...new Set([RPC, 'https://near-testnet.drpc.org'])];
 let preferred = 0;
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+/** POST to the first RPC that answers. A 429 (HTTP or JSON -429) or a network failure fails over to the next endpoint;
+ * when every endpoint is rate-limited it backs off once (1.5 s) and tries again before giving up with the real error. */
 async function rpcPost(body: unknown): Promise<any> {
   let last: unknown;
-  for (let i = 0; i < RPCS.length; i++) {
-    const k = (preferred + i) % RPCS.length;
-    try {
-      const response = await fetch(RPCS[k], { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
-      if (!response.ok) throw new Error(`NEAR RPC HTTP ${response.status}`);
-      const json = await response.json();
-      if (json?.error?.code === -429) throw new Error(`NEAR RPC rate limited: ${json.error.message}`);
-      preferred = k;
-      return json;
-    } catch (e) { last = e; }
+  for (let round = 0; round < 2; round++) {
+    let limited = 0;
+    for (let i = 0; i < RPCS.length; i++) {
+      const k = (preferred + i) % RPCS.length;
+      try {
+        const response = await fetch(RPCS[k], { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+        const json = response.status === 429 ? null : await response.json().catch(() => null);
+        const limit = rpcErrorFrom(json, response.status);
+        if (limit && limit.status === 429) { limited++; throw limit; }
+        // dRPC's free tier answers {"error":{"code":30,"message":"Request timeout on the free plan…"}}: try the next node.
+        if (json?.error?.code === 30) throw new RpcError(`${json.error.message} (${new URL(RPCS[k]).host})`, { status: response.status });
+        if (!response.ok) throw new RpcError(`NEAR RPC HTTP ${response.status} from ${new URL(RPCS[k]).host}`, { status: response.status });
+        preferred = k;
+        return json;
+      } catch (e) { last = e; }
+    }
+    if (limited === 0 || round === 1) break;
+    await sleep(1500);
   }
-  throw new Error(`NEAR testnet RPC unreachable (${RPCS.map((u) => new URL(u).host).join(', ')}): ${(last as Error)?.message ?? last}`);
+  const reason = (last as Error)?.message ?? String(last);
+  if ((last as RpcError)?.status === 429) throw last;
+  throw new RpcError(`NEAR testnet RPC unreachable (${RPCS.map((u) => new URL(u).host).join(', ')}): ${reason}`, { status: (last as RpcError)?.status });
+}
+/** Like rpcPost, but a JSON-RPC error or a view-call panic is thrown as an RpcError the mapper understands. */
+async function rpc<T>(method: string, params: unknown): Promise<T> {
+  const body = await rpcPost({ jsonrpc: '2.0', id: 'kotoba', method, params });
+  const e = rpcErrorFrom(body);
+  if (e) throw e;
+  return body.result as T;
 }
 export const OUTLAYER_API = 'https://testnet-api.outlayer.ai';
 export const ORACLE = oracle as { url: string; sha256: string; bytes: number; txs: { chunk: number; hash: string; explorer: string }[] };
@@ -55,27 +76,48 @@ export const short = (s: string, a = 6, b = 4) => (s.length > a + b + 1 ? `${s.s
 
 async function call<T>(method_name: string, args: unknown, account_id = CONTRACT): Promise<T> {
   const args_base64 = btoa(JSON.stringify(args));
-  const body = await rpcPost({ jsonrpc: '2.0', id: 'kotoba', method: 'query', params: { request_type: 'call_function', finality: 'final', account_id, method_name, args_base64 } });
-  if (body.error) throw new Error(body.error.data || body.error.message || 'NEAR RPC rejected the request');
-  if (body.result?.error) throw new Error(body.result.error);
-  return JSON.parse(new TextDecoder().decode(new Uint8Array(body.result.result)));
+  const result = await rpc<{ result: number[] }>('query', { request_type: 'call_function', finality: 'final', account_id, method_name, args_base64 });
+  return JSON.parse(new TextDecoder().decode(new Uint8Array(result.result)));
 }
 export const listMarkets = () => call<Market[]>('list_markets', {});
 export const getMarket = (id: string) => call<Market | null>('get_market', { id });
 export const quote = (id: string, yes: boolean, quantity: number) => call<string>('quote', { id, yes, quantity });
 export const balanceOf = (id: string, account: string, yes: boolean) => call<number>('balance_of', { id, account, yes });
+export const batchBalance = (account_id: string, token_ids: string[]) => call<string[]>('mt_batch_balance_of', { account_id, token_ids });
 export const measurementsApproved = (m: Record<string, string>) => call<boolean>('is_measurements_approved', { measurements: m }, 'worker.outlayer.testnet');
 
-export async function viewAccount(account_id: string): Promise<{ amount: string; storage_usage: number }> {
-  const body = await rpcPost({ jsonrpc: '2.0', id: 'kotoba', method: 'query', params: { request_type: 'view_account', finality: 'final', account_id } });
-  if (body.error) throw new Error(body.error.data || body.error.message);
-  return body.result;
+export const viewAccount = (account_id: string) => rpc<{ amount: string; storage_usage: number }>('query', { request_type: 'view_account', finality: 'optimistic', account_id });
+
+/** Final outcome of a transaction: polls the RPC `tx` method until it has executed (or `timeoutMs` passes).
+ * Returns null on success and the failure string (the contract's panic, when there is one) if it failed. */
+export async function waitForTx(hash: string, sender: string, timeoutMs = 90_000): Promise<string | null> {
+  const until = Date.now() + timeoutMs;
+  let last: unknown;
+  while (Date.now() < until) {
+    try {
+      const r = await rpc<{ final_execution_status?: string; status?: unknown }>('tx', { tx_hash: hash, sender_account_id: sender, wait_until: 'EXECUTED_OPTIMISTIC' });
+      if (r.status) return txFailure(r);
+    } catch (e) {
+      last = e;
+      // Not indexed yet, or the node timed out waiting: poll again. Anything else is a real error.
+      const name = (e as RpcError).causeName ?? '';
+      if (!/UNKNOWN_TRANSACTION|TIMEOUT_ERROR/.test(name) && (e as RpcError).status !== 429 && !/unreachable/.test((e as Error).message)) throw e;
+    }
+    await sleep(2000);
+  }
+  throw new Error(`TX_TIMEOUT: no result for ${hash} after ${Math.round(timeoutMs / 1000)} s${last ? ` (last: ${(last as Error).message})` : ''}`);
 }
 
 export function yesPrice(m: Pick<Market, 'yes' | 'no' | 'b'>) { const d = (m.yes - m.no) / m.b; return d >= 0 ? 1 / (1 + Math.exp(-d)) : Math.exp(d) / (1 + Math.exp(d)); }
 export const pct = (p: number) => `${Math.round(p * 100)}%`;
 export const yoctoToNear = (y: string | bigint) => Number(BigInt(y) / 10n ** 18n) / 1e6;
 export const fmtNear = (n: number, digits = 3) => `${n.toFixed(digits)} NEAR`;
+/** Fintech-style NEAR amount: 1,234 · 12.5 · 0.121 · 0.0061 (never more than 4 decimals, trailing zeros dropped). */
+export function near(v: bigint | string | number) {
+  const n = typeof v === 'number' ? v : yoctoToNear(v);
+  const max = n >= 100 ? 0 : n >= 1 ? 2 : n >= 0.01 ? 3 : 4;
+  return `${n.toLocaleString('en-US', { maximumFractionDigits: max, minimumFractionDigits: 0 })} NEAR`;
+}
 export const outcome = (m: Market) => (m.result ? (m.result.count >= m.threshold ? 'YES' : 'NO') : null);
 export const subsidy = (b: number) => Math.ceil(b * Math.LN2) * UNIT_NEAR;
 export const eventDate = (m: Market) => { const d = m.source_url.match(/FOMCpresconf(\d{4})(\d{2})(\d{2})\.pdf$/); return d ? new Date(Date.UTC(+d[1], +d[2] - 1, +d[3])) : null; };

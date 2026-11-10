@@ -5,7 +5,7 @@ import Resolved from './Resolved';
 import You from './You';
 import MarketPage from './MarketPage';
 import Creators from './Creators';
-import { Icon, Link, Mark, useMedia } from './ui';
+import { Boundary, Icon, Link, Mark, Toaster, useMedia } from './ui';
 import { useWallet, type Wallet } from './wallet';
 import { CONTRACT, accountUrl, short } from './lib';
 
@@ -57,20 +57,24 @@ export default function App() {
     document.querySelector('meta[name=theme-color]')?.setAttribute('content', page === 'home' || !desktop ? '#141210' : '#f7efe6');
   }, [page, marketId, desktop]);
 
-  const banner = wallet.error && <p className="banner" role="alert">{wallet.error} <button onClick={() => wallet.setError('')} aria-label="Dismiss"><Icon name="x" size={14} /></button></p>;
-  if (page === 'home') return <div className="site"><a className="skip" href="#main">Skip to content</a>{banner}<Landing /></div>;
+  const issue = wallet.problem ?? wallet.network;
+  const banner = issue && <p className="banner" role="alert"><span><b>{issue.title}.</b> {issue.next}</span> {wallet.problem && <button onClick={() => wallet.setProblem(null)} aria-label="Dismiss"><Icon name="x" size={14} /></button>}{!wallet.problem && wallet.network && <button className="banner-act" onClick={wallet.disconnect}>Sign out</button>}</p>;
+  if (page === 'home') return <div className="site"><a className="skip" href="#main">Skip to content</a>{banner}<Boundary label="This page"><Landing /></Boundary><Toaster /></div>;
 
   return <div className={`app ${desktop ? 'app-web' : 'app-phone'}`}>
     <a className="skip" href="#main">Skip to content</a>
     {desktop && <Sidebar page={page} wallet={wallet} />}
     <main id="main" className="app-main">
       {banner}
-      {page === 'app' && <Board wallet={wallet} desktop={desktop} />}
-      {page === 'resolved' && <Resolved wallet={wallet} desktop={desktop} />}
-      {page === 'you' && <You wallet={wallet} desktop={desktop} />}
-      {page === 'creators' && <Creators wallet={wallet} />}
-      {page === 'market' && <MarketPage id={marketId!} wallet={wallet} />}
+      <Boundary key={page + (marketId ?? '')} label="This page">
+        {page === 'app' && <Board wallet={wallet} desktop={desktop} />}
+        {page === 'resolved' && <Resolved wallet={wallet} desktop={desktop} />}
+        {page === 'you' && <You wallet={wallet} desktop={desktop} />}
+        {page === 'creators' && <Creators wallet={wallet} />}
+        {page === 'market' && <MarketPage id={marketId!} wallet={wallet} />}
+      </Boundary>
     </main>
+    <Toaster />
     {!desktop && <TabBar page={page === 'creators' ? 'you' : page} />}
   </div>;
 }
