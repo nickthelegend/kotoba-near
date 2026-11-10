@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5198",
-    "build": "tsc -b && vite build"
+    "build": "tsc -b && vite build",
+    "test": "node --test test/*.test.ts",
+    "capture-errors": "node scripts/capture-errors.mjs"
   },
   "dependencies": {
     "@near-wallet-selector/core": "^9.5.4",

@@ -1,0 +1,257 @@
+{
+  "captured_at": "2026-11-10T06:00:38.594Z",
+  "contract": "kotoba-edfa2b47.testnet",
+  "rpc": "https://test.rpc.fastnear.com",
+  "cases": {
+    "view_quote_zero": {
+      "http": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "result": {
+          "block_hash": "6yM7cKFc1WhS3EoF2NYxuHHH8zN3dH2S5Ghf1aYxXtbV",
+          "block_height": 277027904,
+          "error": "wasm execution failed with error: HostError(GuestPanic { panic_msg: \"ERR_QUANTITY\" })",
+          "logs": []
+        },
+        "id": "kotoba"
+      }
+    },
+    "view_quote_too_many": {
+      "http": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "result": {
+          "block_hash": "6yM7cKFc1WhS3EoF2NYxuHHH8zN3dH2S5Ghf1aYxXtbV",
+          "block_height": 277027904,
+          "error": "wasm execution failed with error: HostError(GuestPanic { panic_msg: \"ERR_QUANTITY\" })",
+          "logs": []
+        },
+        "id": "kotoba"
+      }
+    },
+    "view_unknown_market": {
+      "http": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "result": {
+          "block_hash": "HnZKvRxmmTbpwceJn8sw3sS1YRbLa2zjBQwPAhRrpx5b",
+          "block_height": 277027905,
+          "error": "wasm execution failed with error: HostError(GuestPanic { panic_msg: \"panicked at src/lib.rs:127:39:\\nERR_UNKNOWN_MARKET\" })",
+          "logs": []
+        },
+        "id": "kotoba"
+      }
+    },
+    "view_account_mainnet_name": {
+      "http": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "error": {
+          "name": "HANDLER_ERROR",
+          "cause": {
+            "info": {
+              "block_hash": "2KEiqB3qkXz79qWNdJCAwvkVWPB7ZzcYGNmkrotdiYbR",
+              "block_height": 277027906,
+              "requested_account_id": "nick.near"
+            },
+            "name": "UNKNOWN_ACCOUNT"
+          },
+          "code": -32000,
+          "message": "Server error",
+          "data": "account nick.near does not exist while viewing"
+        },
+        "id": "kotoba"
+      }
+    },
+    "outlayer_no_attestation": {
+      "http": 404,
+      "body": ""
+    },
+    "tx_err_closed": {
+      "http": 200,
+      "body": {
+        "result": {
+          "status": {
+            "Failure": {
+              "ActionError": {
+                "index": 0,
+                "kind": {
+                  "FunctionCallError": {
+                    "ExecutionError": "Smart contract panicked: ERR_CLOSED"
+                  }
+                }
+              }
+            }
+          },
+          "transaction": {
+            "hash": "23d3vj4BQaDJAgdK1jJxWyEvKYn5iPrhMBfvgE5V5h1a",
+            "signer_id": "player.kotoba-edfa2b47.testnet"
+          }
+        }
+      }
+    },
+    "tx_err_no_winning_shares": {
+      "http": 200,
+      "body": {
+        "result": {
+          "status": {
+            "Failure": {
+              "ActionError": {
+                "index": 0,
+                "kind": {
+                  "FunctionCallError": {
+                    "ExecutionError": "Smart contract panicked: ERR_NO_WINNING_SHARES"
+                  }
+                }
+              }
+            }
+          },
+          "transaction": {
+            "hash": "HLzDkSrJnzhdF7RThgrFk66Wdn7wPt3kN7NGjtb7KT3x",
+            "signer_id": "player.kotoba-edfa2b47.testnet"
+          }
+        }
+      }
+    },
+    "tx_private_method": {
+      "http": 200,
+      "body": {
+        "result": {
+          "status": {
+            "Failure": {
+              "ActionError": {
+                "index": 0,
+                "kind": {
+                  "FunctionCallError": {
+                    "ExecutionError": "Smart contract panicked: Method on_result is private"
+                  }
+                }
+              }
+            }
+          },
+          "transaction": {
+            "hash": "4b14MmNgrgiyATcGQfHPVPc5Cepd8VwDc4v54FxNh43X",
+            "signer_id": "player.kotoba-edfa2b47.testnet"
+          }
+        }
+      }
+    },
+    "tx_err_resolution_time": {
+      "http": 200,
+      "body": {
+        "result": {
+          "status": {
+            "Failure": {
+              "ActionError": {
+                "index": 0,
+                "kind": {
+                  "FunctionCallError": {
+                    "ExecutionError": "Smart contract panicked: ERR_RESOLUTION_TIME"
+                  }
+                }
+              }
+            }
+          },
+          "transaction": {
+            "hash": "3PahtoukKPJJvMMYPHe5YudFvWoEyTKxDKHqDcjiUGqj",
+            "signer_id": "kotoba-edfa2b47.testnet"
+          }
+        }
+      }
+    },
+    "tx_unknown": {
+      "http": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "error": {
+          "name": "HANDLER_ERROR",
+          "cause": {
+            "info": {
+              "requested_transaction_hash": "11111111111111111111111111111111"
+            },
+            "name": "UNKNOWN_TRANSACTION"
+          },
+          "code": -32000,
+          "message": "Server error",
+          "data": "Transaction 11111111111111111111111111111111 doesn't exist"
+        },
+        "id": "kotoba"
+      }
+    },
+    "call_buy_underpaid": {
+      "thrown": {
+        "name": "ServerTransactionError",
+        "type": "ActionError",
+        "message": "{\"index\":0,\"kind\":{\"index\":0,\"kind\":{\"FunctionCallError\":{\"ExecutionError\":\"Smart contract panicked: ERR_DEPOSIT\"}}}}",
+        "transaction_outcome": {
+          "id": "6Usp2PMXDqmjf39DeDAzfVABbUkjjTeFpxCyarZC9BSj"
+        }
+      }
+    },
+    "call_buy_quantity_zero": {
+      "thrown": {
+        "name": "ServerTransactionError",
+        "type": "ActionError",
+        "message": "{\"index\":0,\"kind\":{\"index\":0,\"kind\":{\"FunctionCallError\":{\"ExecutionError\":\"Smart contract panicked: ERR_QUANTITY\"}}}}",
+        "transaction_outcome": {
+          "id": "9P5bTVnxaWwgfQD1qKDEhpYEubzbkw8xC2d6Ey332upW"
+        }
+      }
+    },
+    "call_buy_unknown_market": {
+      "thrown": {
+        "name": "ServerTransactionError",
+        "type": "ActionError",
+        "message": "{\"index\":0,\"kind\":{\"index\":0,\"kind\":{\"FunctionCallError\":{\"ExecutionError\":\"Smart contract panicked: panicked at src/lib.rs:98:48:\\nERR_UNKNOWN_MARKET\"}}}}",
+        "transaction_outcome": {
+          "id": "GPLkM1nNWF4EgJnR6r4PfvfHTL2Rq3SyCnoK3wPJw8N7"
+        }
+      }
+    },
+    "call_claim_not_final": {
+      "thrown": {
+        "name": "ServerTransactionError",
+        "type": "ActionError",
+        "message": "{\"index\":0,\"kind\":{\"index\":0,\"kind\":{\"FunctionCallError\":{\"ExecutionError\":\"Smart contract panicked: ERR_NOT_FINAL\"}}}}",
+        "transaction_outcome": {
+          "id": "674bYFgugaxZQoy7mQjDuuM84Gyc9iGwrKYSgMzB5sFM"
+        }
+      }
+    },
+    "call_buy_closed": {
+      "thrown": {
+        "name": "ServerTransactionError",
+        "type": "ActionError",
+        "message": "{\"index\":0,\"kind\":{\"index\":0,\"kind\":{\"FunctionCallError\":{\"ExecutionError\":\"Smart contract panicked: ERR_CLOSED\"}}}}",
+        "transaction_outcome": {
+          "id": "6Qb3Jy116PtN9s9eTMZqecicViBHaPrkppA3cCVnkrTw"
+        }
+      }
+    },
+    "call_challenge_not_enough_balance": {
+      "thrown": {
+        "name": "ServerError",
+        "type": "NotEnoughBalance",
+        "message": "Sender player.kotoba-edfa2b47.testnet does not have enough balance 0.1228081860316602 for operation costing 0.1359191666351365",
+        "context": {
+          "transactionHash": "APovryva9Jeo7PWUGfHwr9eVxeN2UxwaYr3hcK1KJ1Wp"
+        }
+      }
+    },
+    "call_buy_not_enough_balance": {
+      "thrown": {
+        "name": "ServerError",
+        "type": "NotEnoughBalance",
+        "message": "Sender player.kotoba-edfa2b47.testnet does not have enough balance 0.1228081860316602 for operation costing 50.03091928570833",
+        "context": {
+          "transactionHash": "DrdvWaj51Jf6iErg4ehBXFRgo8b9qv4vvEW8uQpUMtMQ"
+        }
+      }
+    }
+  },
+  "notes": {
+    "call_*_not_enough_balance": "InvalidTxError: the RPC rejected the transaction before it landed, so the context hash never appears on chain and no fee was charged.",
+    "call_challenge_not_enough_balance": "Attached 0.105 NEAR to challenge a Final market; the 30 Tgas prepaid gas put the cost (0.1359 NEAR) above the 0.1228 NEAR balance, so it failed as NotEnoughBalance before reaching the contract.",
+    "rate_limit": "No 429 was observed on Nov 10 06:01 UTC (80-request bursts to FastNEAR and dRPC all returned 200), so no 429 body is in this file."
+  }
+}
