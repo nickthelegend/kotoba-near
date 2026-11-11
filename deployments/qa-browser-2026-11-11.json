@@ -1,0 +1,164 @@
+{
+  "network": "testnet",
+  "contract": "kotoba-edfa2b47.testnet",
+  "account": "player.kotoba-edfa2b47.testnet",
+  "cap_yocto": "300000000000000000000000",
+  "runs": [
+    {
+      "started_at": "2026-11-11T16:53:01.222Z",
+      "status": "failed",
+      "screenshots": "/private/tmp/claude-501/-Volumes-Extreme-SSD-Projects-grokbot/0f121b7c-0081-4ec0-81a9-0ccb4f7f8b48/scratchpad/flow-qa/kotoba/qa-signer",
+      "transactions": [],
+      "cases": [],
+      "before": {
+        "amount": "88884199795948700000000",
+        "storage_usage": 182,
+        "spendable": "87064199795948700000000",
+        "yes_shares": 42
+      },
+      "production": {
+        "forced_flag": "VITE_QA_SIGNER=1",
+        "qa_module_absent": true,
+        "checked_assets": 4
+      },
+      "guards": [
+        "mainnet account refused",
+        "mainnet RPC refused"
+      ],
+      "failed_phase": "1440: before connect",
+      "finished_at": "2026-11-11T16:53:30.571Z",
+      "failure": "QA_BROWSER_FLOW_FAILED"
+    },
+    {
+      "started_at": "2026-11-11T16:54:09.718Z",
+      "status": "failed",
+      "screenshots": "/private/tmp/claude-501/-Volumes-Extreme-SSD-Projects-grokbot/0f121b7c-0081-4ec0-81a9-0ccb4f7f8b48/scratchpad/flow-qa/kotoba/qa-signer",
+      "transactions": [],
+      "cases": [],
+      "before": {
+        "amount": "88884199795948700000000",
+        "storage_usage": 182,
+        "spendable": "87064199795948700000000",
+        "yes_shares": 42
+      },
+      "production": {
+        "forced_flag": "VITE_QA_SIGNER=1",
+        "qa_module_absent": true,
+        "checked_assets": 4
+      },
+      "guards": [
+        "mainnet account refused",
+        "mainnet RPC refused"
+      ],
+      "failed_phase": "1440: quote and invalid input",
+      "finished_at": "2026-11-11T16:54:23.715Z",
+      "failure": "QA_BROWSER_FLOW_FAILED"
+    },
+    {
+      "started_at": "2026-11-11T16:55:34.028Z",
+      "status": "pass",
+      "screenshots": "/private/tmp/claude-501/-Volumes-Extreme-SSD-Projects-grokbot/0f121b7c-0081-4ec0-81a9-0ccb4f7f8b48/scratchpad/flow-qa/kotoba/qa-signer",
+      "transactions": [
+        {
+          "hash": "BdRN7SgeCzyMz6fyemKtvqQTQkVxDPqs3V8kKuSCYm6B",
+          "accountId": "player.kotoba-edfa2b47.testnet",
+          "receiverId": "kotoba-edfa2b47.testnet",
+          "methods": [
+            "buy"
+          ],
+          "depositYocto": "1030200000000000000000",
+          "gas": "30000000000000",
+          "stage": "final",
+          "at": "2026-11-11T16:55:54.532Z",
+          "viewport": 1440,
+          "gasBurntYocto": "306843689610000000000"
+        },
+        {
+          "hash": "3LqDsqbSCKpgH5Mg9dE8aGTG8zaiqDYaDHVnGMhcQure",
+          "accountId": "player.kotoba-edfa2b47.testnet",
+          "receiverId": "kotoba-edfa2b47.testnet",
+          "methods": [
+            "buy"
+          ],
+          "depositYocto": "1030200000000000000000",
+          "gas": "30000000000000",
+          "stage": "final",
+          "at": "2026-11-11T16:56:07.571Z",
+          "viewport": 375,
+          "gasBurntYocto": "306843689610000000000"
+        }
+      ],
+      "cases": [
+        {
+          "viewport": 1440,
+          "status": "pass",
+          "hash": "BdRN7SgeCzyMz6fyemKtvqQTQkVxDPqs3V8kKuSCYm6B",
+          "before": {
+            "amount": "88884199795948700000000",
+            "storage_usage": 182,
+            "spendable": "87064199795948700000000",
+            "yes_shares": 42
+          },
+          "after": {
+            "amount": "87567356106338700000000",
+            "storage_usage": 182,
+            "spendable": "85747356106338700000000",
+            "yes_shares": 43
+          },
+          "invalid_quantity": "blocked without signing",
+          "insufficient_balance": "blocked without signing",
+          "receipt": "final",
+          "reload_preserved_position": true,
+          "private_key_persisted": false,
+          "page_errors": 0
+        },
+        {
+          "viewport": 375,
+          "status": "pass",
+          "hash": "3LqDsqbSCKpgH5Mg9dE8aGTG8zaiqDYaDHVnGMhcQure",
+          "before": {
+            "amount": "87567356106338700000000",
+            "storage_usage": 182,
+            "spendable": "85747356106338700000000",
+            "yes_shares": 43
+          },
+          "after": {
+            "amount": "86250512416728700000000",
+            "storage_usage": 182,
+            "spendable": "84430512416728700000000",
+            "yes_shares": 44
+          },
+          "invalid_quantity": "blocked without signing",
+          "insufficient_balance": "blocked without signing",
+          "receipt": "final",
+          "reload_preserved_position": true,
+          "private_key_persisted": false,
+          "page_errors": 0
+        }
+      ],
+      "before": {
+        "amount": "88884199795948700000000",
+        "storage_usage": 182,
+        "spendable": "87064199795948700000000",
+        "yes_shares": 42
+      },
+      "production": {
+        "forced_flag": "VITE_QA_SIGNER=1",
+        "qa_module_absent": true,
+        "checked_assets": 4
+      },
+      "guards": [
+        "mainnet account refused",
+        "mainnet RPC refused"
+      ],
+      "after": {
+        "amount": "86250512416728700000000",
+        "storage_usage": 182,
+        "spendable": "84430512416728700000000",
+        "yes_shares": 44
+      },
+      "spent_yocto": "2633687379220000000000",
+      "finished_at": "2026-11-11T16:56:17.514Z"
+    }
+  ]
+}
