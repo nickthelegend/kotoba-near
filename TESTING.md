@@ -128,5 +128,29 @@ This command spends testnet NEAR. It does not mock RPCs. The current daily evide
 
 The credential stays in Node/page memory and the wallet's in-memory key store. The runner disables inherited Playwright debug logging and does not create traces, HAR, video, storage-state files or credential copies. Only public transaction fields are persisted, before broadcast, in `deployments/qa-browser-<UTC-date>.json`. Screenshots go to `/private/tmp/claude-501/-Volumes-Extreme-SSD-Projects-grokbot/0f121b7c-0081-4ec0-81a9-0ccb4f7f8b48/scratchpad/flow-qa/kotoba/qa-signer/`.
 
-November 11 result: both viewports PASS, 42 → 44 YES across two real buys; total balance decrease **0.00263368737922 testnet NEAR**. Web build and all **14 web tests** also pass. The latest origin-guard hardening was checked with matching-localhost and rejected external/blank-origin cases without sending further transactions. A human Meteor sign-in and approval remains manual; this run does not claim new browser coverage of creation, settlement, challenge or claims.
+Initial November 11 result: both viewports PASS, 42 → 44 YES across two real buys; total balance decrease **0.00263368737922 testnet NEAR**. Web build and all **14 web tests** also pass. The latest origin-guard hardening was checked with matching-localhost and rejected external/blank-origin cases without sending further transactions. A human Meteor sign-in and approval remains manual; this run does not claim new browser coverage of creation, settlement, challenge or claims.
 
+## Full production walkthrough (2026-11-11)
+
+The read-only screen audit is `pnpm test:flow` (`node scripts/full-flow-qa.mjs`; `scripts/check-web.mjs` delegates to it). It uses installed Google Chrome and the same shared `withChromeLock` as the signing test. It exercises landing, board, all six market details, resolved, You and creators at 1440×900 and 375×812, plus filters, phone schedule/event sheets, quotes, transcript navigation/hash copy, Meteor's real popup URL/request, cancellation/blocking, public-account restored sessions, validation, empty states, simulated outages and retry recovery. It records screenshots and per-step console errors, page errors, failed requests, HTTP errors, overflow and bad-text checks in the scratchpad's `flow-qa/kotoba/full-flow/audit.json`.
+
+Check `sysctl vm.swapusage` before building; below 500 MB free swap, wait two minutes and check again. Check the chosen port with `lsof`; if 5591 is occupied, choose another free port in 5300–5999 and use that URL in both terminals.
+
+```sh
+lsof -nP -iTCP:5591 -sTCP:LISTEN
+pnpm --filter @kotoba/web build
+pnpm --filter @kotoba/web exec vite preview --host 127.0.0.1 --port 5591 --strictPort
+```
+
+In a second terminal:
+
+```sh
+KOTOBA_WEB=http://127.0.0.1:5591 pnpm test:flow
+```
+
+Stop the preview with Ctrl-C when finished. The audit closes its own browser. It blocks write RPC methods and never loads a funded account's credential. To restore production position screens, it uses a fresh unregistered test key in an ephemeral browser context with a public account id; this is a read-only fixture, not a Meteor login or an authorized account signer. Only the explicitly named outage tests intercept service responses. Use `pnpm test:e2e` separately for actual browser signatures and final receipts, within the testnet spending cap.
+
+The walkthrough found an upstream `console.log(accessKey)` in Meteor SDK 1.0.24's sign-in method. `patches/@meteorwallet__sdk@1.0.24.patch`, registered in the workspace manifest and lockfile, removes it from the source and both published JavaScript entry points. The fix changes no UI or wallet protocol. Production build and the 14 web tests passed after the patch; the screen audit also checks for key debug objects without saving their contents. See [FLOW-QA.md](FLOW-QA.md) for the final results and external-service limits.
+
+
+The later full-flow rerun after the Meteor logging fix also passed at both widths: 44 → 46 YES, spending another 0.00263368737922 testnet NEAR. Exact hashes and limits are in [FLOW-QA.md](FLOW-QA.md).
