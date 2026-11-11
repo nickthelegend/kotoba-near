@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Boundary, Copy, Countdown, Icon, Link, Problem, SplitBar, State, useMarkets, useMounted, useNow } from './ui';
+import { Boundary, Copy, Countdown, Icon, Link, Obj, Problem, SplitBar, State, useMarkets, useMounted, useNow } from './ui';
 import { DEPLOYMENT, PINNED_PDF_SHA, PINNED_TEXT_SHA, UNIT_NEAR, batchBalance, near, eventDate, fmtDate, outcome, runsFor, sha256Hex, short, splitHits, txUrl, pct, yesPrice, type Market, type Step } from './lib';
 import { explain, type Explained } from './errors';
 import { CHAIN_CHANGED, refreshMarkets } from './store';
@@ -57,8 +57,8 @@ function Transcript({ m }: { m: Market }) {
     marks.forEach((el, k) => el.classList.toggle('cur', k === n));
     marks[n].scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
-  if (!m.result) return <State kind="empty" title="Transcript not published yet">The Fed posts the press conference PDF after the event. The market can be resolved from its close until the deadline. <a href={m.source_url} target="_blank" rel="noreferrer">Expected source URL</a></State>;
-  if (!pinned) return <State kind="setup" title="Transcript text not pinned in this app">Open the official PDF and compare its SHA-256 to <code>{short(m.result.transcript_sha256, 12, 8)}</code>.</State>;
+  if (!m.result) return <State kind="empty" art="transcript" title="Transcript not published yet">The Fed posts the press conference PDF after the event. The market can be resolved from its close until the deadline. <a href={m.source_url} target="_blank" rel="noreferrer">Expected source URL</a></State>;
+  if (!pinned) return <State kind="setup" art="magnifier" title="Transcript text not pinned in this app">Open the official PDF and compare its SHA-256 to <code>{short(m.result.transcript_sha256, 12, 8)}</code>.</State>;
   if (err) return <State kind="error" title="Could not load the transcript text">{err}</State>;
   if (!text) return <State kind="loading" title="Loading the official transcript text…" />;
   return <div className="transcript">
@@ -84,6 +84,7 @@ function SettleBox({ m, wallet, now }: { m: Market; wallet: Wallet; now: number 
   const [held, setHeld] = useState<{ yes: number; no: number } | null>(null);
   const [stage, setStage] = useState<TxStage | null>(null);
   const [epoch, setEpoch] = useState(0);
+  const [method, setMethod] = useState('');
   const mounted = useMounted();
   useEffect(() => { const on = () => setEpoch((n) => n + 1); addEventListener(CHAIN_CHANGED, on); return () => removeEventListener(CHAIN_CHANGED, on); }, []);
   useEffect(() => {
@@ -94,7 +95,10 @@ function SettleBox({ m, wallet, now }: { m: Market; wallet: Wallet; now: number 
     return () => { live = false; };
   }, [wallet.account, m.id, m.status, epoch]);
   const busy = stage?.step === 'checking' || stage?.step === 'signing' || stage?.step === 'pending';
-  const go = (method: string, deposit: bigint, tgas: number, label: string) => runTx(wallet, { method, args: { id: m.id }, depositYocto: deposit, tgas, label: `${label} · “${m.phrase}”`, onStage: setStage, inline: () => mounted.current });
+  const go = (method: string, deposit: bigint, tgas: number, label: string) => {
+    setMethod(method);
+    return runTx(wallet, { method, args: { id: m.id }, depositYocto: deposit, tgas, label: `${label} · “${m.phrase}”`, onStage: setStage, inline: () => mounted.current });
+  };
   const res = outcome(m);
   const closeMs = m.close_ns / 1e6, deadlineMs = m.deadline_ns / 1e6, windowMs = (m.challenge_until_ns ?? 0) / 1e6;
   let step: ReactNode = null, act: ReactNode = null;
@@ -127,7 +131,9 @@ function SettleBox({ m, wallet, now }: { m: Market; wallet: Wallet; now: number 
     <p className="settle-step">{step}</p>
     {act}
     {stage?.step === 'failed' && stage.problem && <Problem x={stage.problem} compact />}
-    {stage?.step === 'confirmed' && <p className="why ok" role="status"><Icon name="check" size={14} />Done.{stage.tx && <> <a href={txUrl(stage.tx)} target="_blank" rel="noreferrer">View transaction</a></>}</p>}
+    {stage?.step === 'confirmed' && (method === 'claim'
+      ? <div className="claimed" role="status"><Obj name="trophy" size={64} /><p><b>Winnings claimed.</b>{stage.tx && <> <a href={txUrl(stage.tx)} target="_blank" rel="noreferrer">View transaction</a></>}</p></div>
+      : <p className="why ok" role="status"><Icon name="check" size={14} />Done.{stage.tx && <> <a href={txUrl(stage.tx)} target="_blank" rel="noreferrer">View transaction</a></>}</p>)}
   </div>;
 }
 
@@ -138,7 +144,7 @@ export default function MarketPage({ id, wallet }: { id: string; wallet: Wallet 
   const m = markets?.find((x) => x.id === id);
   if (problem && !markets) return <div className="page"><Problem x={problem} onRetry={() => refreshMarkets()} /></div>;
   if (!markets) return <div className="page"><State kind="loading" title="Reading the market from NEAR testnet…" /></div>;
-  if (!m) return <div className="page"><State kind="empty" title={`No market called ${id}`} action={<Link to="/app" className="btn btn-ghost btn-sm">Back to the board</Link>}>The Kotoba contract has no market with this id.{loading ? ' Re-checking…' : ''}</State></div>;
+  if (!m) return <div className="page"><State kind="empty" art="quiet" title={`No market called ${id}`} action={<Link to="/app" className="btn btn-ghost btn-sm">Back to the board</Link>}>The Kotoba contract has no market with this id.{loading ? ' Re-checking…' : ''}</State></div>;
   const runs = runsFor(m.id);
   const res = outcome(m);
   const open = m.status === 'Open' && m.close_ns / 1e6 > now;
@@ -151,9 +157,9 @@ export default function MarketPage({ id, wallet }: { id: string; wallet: Wallet 
         <p className="market-meta mono">{m.id} · creator {m.creator} · {m.pending ? 'Settling' : m.status}</p>
       </div>
       <div className={`verdict ${m.result ? 'verdict-res' : ''}`}>
-        {m.result ? <><span className="verdict-n">{m.result.count}</span><span className="verdict-l">hits · needed {m.threshold}</span><span className={`stamp stamp-big stamp-${res!.toLowerCase()}`}>{res}</span></>
+        {m.result ? <><div className="verdict-top"><Obj name={res === 'YES' ? 'yes' : 'no'} size={80} className="verdict-obj" alt={`${res} token`} /><span className="verdict-n">{m.result.count}</span></div><span className="verdict-l">hits · needed {m.threshold}</span><span className={`stamp stamp-big stamp-${res!.toLowerCase()}`}>{res}</span></>
           : open ? <><span className="label">Bets close in</span><Countdown target={m.close_ns / 1e6} now={now} /><SplitBar m={m} label={<>“{m.phrase}”</>} /><div className="yn yn-wide"><button className="yn-yes" onClick={() => setSide(true)}><Icon name="arrowUp" size={15} />Yes {pct(yesPrice(m))}</button><button className="yn-no" onClick={() => setSide(false)}><Icon name="arrowDown" size={15} />No {pct(1 - yesPrice(m))}</button></div></>
-          : <span className="label">{m.pending ? 'Settling in the TEE' : 'Closed · awaiting resolution'}</span>}
+          : <><Obj name={m.pending ? 'abacus' : now > m.deadline_ns / 1e6 ? 'warning' : 'stopwatch'} size={80} className="verdict-obj" /><span className="label">{m.pending ? 'Settling in the TEE' : 'Closed · awaiting resolution'}</span></>}
         <SettleBox m={m} wallet={wallet} now={now} />
       </div>
     </header>
@@ -164,7 +170,7 @@ export default function MarketPage({ id, wallet }: { id: string; wallet: Wallet 
     </section>}
 
     {runs.length > 0 && <section className="runs">
-      <header className="board-head"><h2>The seal</h2><span className="mono dim">{runs.length === 2 ? 'resolved, then challenged and re-run with the same result' : 'one attested run'}</span></header>
+      <header className="board-head"><h2 className="h-obj"><Obj name="seal" size={44} still />The seal</h2><span className="mono dim">{runs.length === 2 ? 'resolved, then challenged and re-run with the same result' : 'one attested run'}</span></header>
       <div className="runs-grid">{runs.map((r, i) => <Boundary key={r.tx} label="Attestation check"><RunCard run={r} label={r.method === 'challenge' ? 'Challenge re-run' : i === 0 ? 'Resolution' : 'Run'} /></Boundary>)}</div>
     </section>}
 

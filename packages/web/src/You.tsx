@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from './Head';
-import { Icon, Link, Problem, State, useMarkets, useMounted, useNow } from './ui';
+import { Icon, Link, Obj, Problem, State, useMarkets, useMounted, useNow } from './ui';
 import { UNIT_NEAR, accountUrl, batchBalance, isOpen, near, outcome, txUrl, type Market } from './lib';
 import { explain, type Explained } from './errors';
 import { CHAIN_CHANGED, refreshMarkets, usePending } from './store';
@@ -59,12 +59,12 @@ export default function You({ wallet, desktop }: { wallet: Wallet; desktop: bool
       <h1>You</h1>
       <p>{wallet.account ? <>Signed in as <a href={accountUrl(wallet.account)} target="_blank" rel="noreferrer" className="mono">{wallet.account}</a>. Share balances below are read live from the contract.</> : 'Connect a NEAR testnet wallet to see your YES and NO shares and claim winnings.'}</p>
     </header>
-    {!wallet.account ? <State kind="setup" title="No wallet connected" action={<button className="pill-coral" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting}>{wallet.connecting ? `Waiting for ${WALLET.name}…` : 'Connect with Meteor Wallet'}</button>}>Kotoba runs on NEAR testnet. A testnet account is free in Meteor Wallet (wallet.meteorwallet.app).</State>
+    {!wallet.account ? <State kind="setup" art="wallet" title="No wallet connected" action={<button className="pill-coral" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting}>{wallet.connecting ? `Waiting for ${WALLET.name}…` : 'Connect with Meteor Wallet'}</button>}>Kotoba runs on NEAR testnet. A testnet account is free in Meteor Wallet (wallet.meteorwallet.app).</State>
       : wallet.network ? null
       : problem && !markets ? <Problem x={problem} onRetry={() => refreshMarkets()} />
       : posProblem ? <Problem x={posProblem} onRetry={() => setEpoch((n) => n + 1)} />
       : !positions ? <ul className="position-list" aria-busy="true">{[0, 1, 2].map((i) => <li key={i} className="position skeleton-row" />)}</ul>
-      : positions.length === 0 && mine.length === 0 ? <State kind="empty" title="No shares yet" action={<Link to="/app" className="pill-coral">Open the board</Link>}>Pick a word on the board and make your call.</State>
+      : positions.length === 0 && mine.length === 0 ? <State kind="empty" art="bubble" title="No shares yet" action={<Link to="/app" className="pill-coral">Open the board</Link>}>Pick a word on the board and make your call.</State>
       : <ul className="position-list">
         {mine.map((p) => { const m = live(p.id); return <li key={p.key} className="position position-pending">
           <div className="position-main"><Link to={`/market/${p.id}`}><b>“{m?.phrase ?? p.id}”</b></Link><span>{p.stage === 'signing' ? 'Waiting for your approval' : 'Confirming on NEAR'}</span></div>
@@ -77,7 +77,7 @@ export default function You({ wallet, desktop }: { wallet: Wallet; desktop: bool
             <div className="position-main"><Link to={`/market/${m.id}`}><b>“{m.phrase}”</b></Link><span>{m.event.replace('FOMC press conference', 'Fed')}{'note' in a && a.note ? ` · ${a.note}` : ''}</span></div>
             <div className="position-sides">{yes > 0 && <span className="yn-chip yes">{yes} YES</span>}{no > 0 && <span className="yn-chip no">{no} NO</span>}</div>
             <div className="position-act">{'claim' in a && a.claim
-              ? <button className="pill-coral" disabled={busy === m.id} onClick={() => claim(m, a.claim, a.amount)}>{busy === m.id ? 'Claiming…' : a.label}</button>
+              ? <span className="claim-row">{a.claim === 'claim' && <Obj name="trophy" size={40} still />}<button className="pill-coral" disabled={busy === m.id} onClick={() => claim(m, a.claim, a.amount)}>{busy === m.id ? 'Claiming…' : a.label}</button></span>
               : <span className="lbl">{a.label}</span>}</div>
             {failed?.id === m.id && <div className="position-err"><Problem x={failed.x} onRetry={'claim' in a && a.claim ? () => claim(m, a.claim, a.amount) : undefined} compact /></div>}
           </li>;

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Boundary, Icon, Link, Problem, State, useBalance, useMarkets, useMounted, useNow } from './ui';
+import { Boundary, Icon, Link, Obj, Problem, State, useBalance, useMarkets, useMounted, useNow } from './ui';
 import { accountUrl, eventDate, fmtDate, near, outcome, subsidy, type Market } from './lib';
 import { upfrontYocto } from './errors';
 import { refreshMarkets } from './store';
@@ -79,15 +79,18 @@ export default function Creators({ wallet }: { wallet: Wallet }) {
     return [...map.entries()].sort((a, b) => b[1].length - a[1].length);
   }, [markets]);
   return <div className="page creators">
-    <header className="page-head">
-            <h1>Open the market.<br /><span className="dim">Keep 1% of every trade.</span></h1>
-      <p className="lead">Anyone can open a word market on a Fed press conference by seeding the LMSR subsidy. Creators earn a 1% fee on every buy, paid to their account the moment the trade lands.</p>
+    <header className="page-head page-head-art">
+      <div>
+        <h1>Open the market.<br /><span className="dim">Keep 1% of every trade.</span></h1>
+        <p className="lead">Anyone can open a word market on a Fed press conference by seeding the LMSR subsidy. Creators earn a 1% fee on every buy, paid to their account the moment the trade lands.</p>
+      </div>
+      <Obj name="mic" size={168} className="head-obj" />
     </header>
     <div className="creators-grid">
       <section>
         {problem && !markets ? <Problem x={problem} onRetry={() => refreshMarkets()} />
           : !markets ? <State kind="loading" title="Reading creators from the contract…" />
-          : byCreator.length === 0 ? <State kind="empty" title="No creator markets yet" />
+          : byCreator.length === 0 ? <State kind="empty" art="quiet" title="No creator markets yet" />
           : byCreator.map(([creator, list]) => <article key={creator} className="creator">
             <header><span className="avatar" aria-hidden="true">{creator[0].toUpperCase()}</span><div><a href={accountUrl(creator)} target="_blank" rel="noreferrer" className="mono">{creator}</a><span className="dim">{list.length} markets · {list.reduce((n, m) => n + m.yes + m.no, 0)} shares traded</span></div></header>
             <ul>{list.map((m) => <li key={m.id}><Link to={`/market/${m.id}`}><q>{m.phrase}</q>{m.threshold > 1 && <span className="dim"> ≥{m.threshold}</span>}<span className="dim"> · FOMC {eventDate(m) ? fmtDate(eventDate(m)!) : ''}</span></Link><span className={`chip chip-${(outcome(m) ?? m.status).toLowerCase()}`}>{outcome(m) ?? m.status}</span></li>)}</ul>

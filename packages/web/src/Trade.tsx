@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
-import { Countdown, Icon, Link, Problem, SplitBar, useMounted, useNow } from './ui';
+import { Countdown, Icon, Link, Obj, Problem, SplitBar, useMounted, useNow } from './ui';
 import { UNIT_NEAR, fmtDate, isOpen, near, pct, quote, short, txUrl, yesPrice, type KEvent, type Market } from './lib';
 import { explain, quantityError, upfrontYocto, type Explained } from './errors';
 import { pending, useBalance, useMarkets, type LiveMarket } from './store';
@@ -99,7 +99,7 @@ export function BetSheet({ m: picked, side, wallet, onClose }: { m: Market; side
     </header>
     <h2 className="sheet-q">Will they say <q>{m.phrase}</q>{m.threshold > 1 ? ` at least ${m.threshold} times` : ''}?</h2>
     {done ? <div className="sheet-done" role="status">
-      <span className="done-mark"><Icon name="check" size={22} /></span>
+      <Obj name={yes ? 'yes' : 'no'} size={64} className="done-obj" alt={`${yes ? 'YES' : 'NO'} token`} />
       <div><b>Bought {qty.toLocaleString('en-US')} {yes ? 'YES' : 'NO'}</b><span>Pays {near(qty * UNIT_NEAR)} if {yes ? 'YES' : 'NO'} wins.</span>
         {stage?.tx && <a href={txUrl(stage.tx)} target="_blank" rel="noreferrer" className="mono">{short(stage.tx, 8, 6)} on NearBlocks <Icon name="external" size={12} /></a>}</div>
     </div> : <>

@@ -109,7 +109,7 @@ function Phone({ markets, now, onPick }: { markets: Market[]; now: number; onPic
       <span className="chip chip-static"><i className="dot-fed" />Central banks</span>
     </div>
     {list.length ? <ul className="rows">{list.map((m) => <Row key={m.id} m={m} now={now} onPick={onPick} />)}</ul>
-      : <State kind="empty" title={day !== null ? `Nothing scheduled on ${longDay(day)}` : 'No markets here'} action={next?.date ? <button className="pill-light" onClick={() => { setStart(weekStart(next.date!.getTime())); setDay(next.date!.getTime()); }}>Jump to {longDay(next.date.getTime())}</button> : undefined}>Markets open when the scheduler reads the official FOMC calendar.</State>}
+      : <State kind="empty" art="quiet" title={day !== null ? `Nothing scheduled on ${longDay(day)}` : 'No markets here'} action={next?.date ? <button className="pill-light" onClick={() => { setStart(weekStart(next.date!.getTime())); setDay(next.date!.getTime()); }}>Jump to {longDay(next.date.getTime())}</button> : undefined}>Markets open when the scheduler reads the official FOMC calendar.</State>}
     {sheet && <EventSheet ev={sheet} onClose={() => setSheet(null)} onPick={(m, yes) => { setSheet(null); onPick({ m, yes }); }} />}
   </>;
 }
@@ -154,7 +154,7 @@ function Web({ markets, now, onPick }: { markets: Market[]; now: number; onPick:
       {next && <span className="web-next"><i className="live-dot" />Next close · Fed {fmtDate(eventDate(next) ?? new Date(next.close_ns / 1e6))} · <Countdown target={next.close_ns / 1e6} now={now} compact /></span>}
     </div>
     {list.length ? <div className="web-grid">{list.map((m) => <MarketCard key={m.id} m={m} now={now} onPick={onPick} />)}</div>
-      : <State kind="empty" title={tab === 'open' ? 'No market is taking bets' : 'Nothing here yet'}>The scheduler opens the standard word markets for each FOMC date on the Fed calendar.</State>}
+      : <State kind="empty" art="quiet" title={tab === 'open' ? 'No market is taking bets' : 'Nothing here yet'}>The scheduler opens the standard word markets for each FOMC date on the Fed calendar.</State>}
   </>;
 }
 

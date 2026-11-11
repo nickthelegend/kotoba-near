@@ -17,7 +17,7 @@ export default function Resolved({ wallet, desktop }: { wallet: Wallet; desktop:
     </header>
     {problem && !markets ? <Problem x={problem} onRetry={reload} />
       : !markets ? <div className={desktop ? 'web-grid' : 'stack'} aria-busy="true">{[0, 1].map((i) => <div key={i} className="mcard skeleton" />)}</div>
-      : done.length === 0 ? <State kind="empty" title="Nothing has settled yet">Markets resolve after the official transcript is published.</State>
+      : done.length === 0 ? <State kind="empty" art="gavel" title="Nothing has settled yet">Markets resolve after the official transcript is published.</State>
       : <div className={desktop ? 'web-grid' : 'stack'}>{done.map((m) => <MarketCard key={m.id} m={m} now={now} />)}</div>}
   </div>;
 }

@@ -131,9 +131,34 @@ export function Sticker({ name, className, seed = 1 }: { name: StickerName; clas
   </div>;
 }
 
-export function State({ kind, title, children, action }: { kind: 'loading' | 'empty' | 'error' | 'setup'; title: string; children?: ReactNode; action?: ReactNode }) {
-  return <div className={`state state-${kind}`} role={kind === 'error' ? 'alert' : 'status'}>
-    <span className="state-mark" aria-hidden="true">{kind === 'loading' ? <i className="pulse" /> : kind === 'error' ? '!' : kind === 'setup' ? '◇' : '○'}</span>
+/* The 3D enamel kit (docs/ART-3D.md): one glossy object per spot, fixed size so nothing shifts, a slow float that
+   prefers-reduced-motion turns off. */
+const OBJ_ALT = {
+  mic: 'Coral enamel broadcast microphone with a smiling face',
+  bubble: 'Coral enamel speech bubble holding a cream word tile with a smiling face',
+  transcript: 'Cream transcript page between two coral rolls, one line highlighted',
+  abacus: 'Coral enamel abacus with cream beads, mid-count',
+  yes: 'Green enamel YES token with an up arrow',
+  no: 'Coral enamel NO token with a down arrow',
+  cube: 'Coral enamel enclave cube with a cream seal on its side',
+  gavel: 'Coral enamel gavel resting on its sound block',
+  magnifier: 'Coral magnifier enlarging one highlighted line on a page',
+  trophy: 'Coral enamel trophy cup with a cream rim',
+  quiet: 'Sleeping coral enamel microphone',
+  warning: 'Coral enamel warning triangle',
+  seal: 'Coral enamel seal rosette with a check mark',
+  stopwatch: 'Coral enamel stopwatch with a cream dial',
+  wallet: 'Coral enamel wallet with a smiling face',
+} as const;
+export type ObjName = keyof typeof OBJ_ALT;
+export function Obj({ name, size, className, still, alt }: { name: ObjName; size: number; className?: string; still?: boolean; alt?: string }) {
+  return <img className={`obj ${still ? '' : 'obj-float'} ${className ?? ''}`} src={`/art/3d/kotoba-3d-${name}.webp`} width={size} height={size} alt={alt ?? OBJ_ALT[name]} loading="lazy" decoding="async" draggable={false} />;
+}
+
+export function State({ kind, title, children, action, art }: { kind: 'loading' | 'empty' | 'error' | 'setup'; title: string; children?: ReactNode; action?: ReactNode; art?: ObjName }) {
+  const obj = art ?? (kind === 'error' ? 'warning' : undefined);
+  return <div className={`state state-${kind} ${obj ? 'state-art' : ''}`} role={kind === 'error' ? 'alert' : 'status'}>
+    {obj ? <Obj name={obj} size={88} className="state-obj" /> : <span className="state-mark" aria-hidden="true">{kind === 'loading' ? <i className="pulse" /> : kind === 'error' ? '!' : kind === 'setup' ? '◇' : '○'}</span>}
     <div><h3>{title}</h3>{children && <p>{children}</p>}{action}</div>
   </div>;
 }
