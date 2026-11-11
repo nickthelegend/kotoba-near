@@ -156,6 +156,10 @@ Lead: <TBD by Nick>
 
 MIT. See [LICENSE](LICENSE), Copyright (c) 2026 Nivesh Gajengi.
 
+## Art
+
+3D art generated with ChatGPT: a vintage-enamelware object kit in Kotoba's coral and cream, described in [docs/ART-3D.md](docs/ART-3D.md).
+
 ## Inspiration and license
 
 Inspired by [Mentioned](https://colosseum.com/arena/projects/explore/mentioned) and [Memetic Machines](https://colosseum.com/arena/projects/explore/memetic-machines-war-machine), both in [Colosseum's Frontier 2026 top 25](https://blog.colosseum.com/announcing-the-winners-of-the-solana-frontier-hackathon/). No code was reused. MIT, Copyright (c) 2026 Nivesh Gajengi.
