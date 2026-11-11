@@ -104,3 +104,29 @@ Checked against `vite build && vite preview` in headless Chrome at 1440×900 and
 
 Not done: a full Meteor sign-in and approval. Meteor's site sits behind Cloudflare, which shows headless Chrome "Sorry, you have been blocked", and signing in needs a person with a Meteor testnet account.
 
+## QA signer browser e2e (2026-11-11)
+
+The app's connect → buy → final receipt → You → reload path now passes with real testnet signatures at 1440×900 and 375×812. This is a separate two-viewport integration run, not an addition to the 42 unit/integration tests counted above. [FLOW-QA.md](FLOW-QA.md) records the scope, screenshots, transaction links and remaining manual Meteor approval check.
+
+Prerequisites: Node with `import.meta.dirname` support, pnpm, installed Google Chrome (Playwright channel `chrome`), macOS `sysctl` and `lsof`, the shared Chrome lock module at the path below, and the existing funded demo player's `.near-credentials/player.json` in this repo. Do not copy or print that file. Its account must be `player.kotoba-edfa2b47.testnet`.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm test:e2e
+```
+
+`scripts/qa-browser.mjs` performs these checks and actions:
+
+1. Read the real testnet balance, one-share quote and market state before loading the credential. Stop with `LOW TESTNET BALANCE` if two buys plus conservative prepaid gas reserves cannot be funded. Do not fund or debit another project.
+2. Check free swap before the production build and Chrome launch. Below 500 MB, wait two minutes and check again.
+3. Build with `VITE_QA_SIGNER=1` and grep every production asset for QA module names and injection markers; fail if any remains. The wallet also requires Vite's `DEV` flag, so production builds omit it even when the QA flag is set.
+4. Under `withChromeLock`, launch Chrome, capture the production UI, then start a separate QA dev server. The shared module is `/private/tmp/claude-501/-Volumes-Extreme-SSD-Projects-grokbot/0f121b7c-0081-4ec0-81a9-0ccb4f7f8b48/scratchpad/chrome-lock.mjs`. Servers select free ports starting at 5583/5584, never above 5999. The runner closes its browser and server process groups on exit.
+5. Reject a mainnet account and RPC. For each viewport, load the existing key in Node and inject it with `page.addInitScript`, restricted to the local app origin. Connect through the app, check decimal and unfunded-order errors without signing, then buy exactly one YES share on `fomc-2026-12-employment`.
+6. Wait for `FINAL`, independently verify the on-chain transaction, check the app's receipt/hash and updated position, and reload You to confirm persistence. Assert zero page errors, no wallet popups, no horizontal document overflow and no key in localStorage or sessionStorage.
+
+This command spends testnet NEAR. It does not mock RPCs. The current daily evidence file reserves deposit plus conservative gas for every signed hash, including uncertain broadcasts, and refuses another buy if cumulative reservations would exceed 0.3 NEAR. The signer separately caps its session at 0.3 NEAR, allows only named `.testnet` accounts, approved testnet RPC URLs and function calls to this deployment's contract. It signs once and follows the known hash after a broadcast timeout.
+
+The credential stays in Node/page memory and the wallet's in-memory key store. The runner disables inherited Playwright debug logging and does not create traces, HAR, video, storage-state files or credential copies. Only public transaction fields are persisted, before broadcast, in `deployments/qa-browser-<UTC-date>.json`. Screenshots go to `/private/tmp/claude-501/-Volumes-Extreme-SSD-Projects-grokbot/0f121b7c-0081-4ec0-81a9-0ccb4f7f8b48/scratchpad/flow-qa/kotoba/qa-signer/`.
+
+November 11 result: both viewports PASS, 42 → 44 YES across two real buys; total balance decrease **0.00263368737922 testnet NEAR**. Web build and all **14 web tests** also pass. The latest origin-guard hardening was checked with matching-localhost and rejected external/blank-origin cases without sending further transactions. A human Meteor sign-in and approval remains manual; this run does not claim new browser coverage of creation, settlement, challenge or claims.
+
