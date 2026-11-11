@@ -24,6 +24,9 @@ const date = new Date().toISOString().slice(0, 10);
 const evidencePath = resolve(root, `deployments/qa-browser-${date}.json`);
 const shots = '/private/tmp/claude-501/-Volumes-Extreme-SSD-Projects-grokbot/0f121b7c-0081-4ec0-81a9-0ccb4f7f8b48/scratchpad/flow-qa/kotoba/qa-signer';
 const wait = ms => new Promise(r => setTimeout(r, ms));
+function injectStartup({ config, origin }) {
+  if (location.origin === origin) window.__KOTOBA_QA_SIGNER__ = config;
+}
 let phase = 'preflight', browser, server, heartbeat;
 let evidence;
 try { evidence = JSON.parse(await readFile(evidencePath, 'utf8')); }
@@ -133,8 +136,8 @@ async function flow(base, credentials, width) {
       if (existing) Object.assign(existing, publicEvent); else run.transactions.push({ ...publicEvent, viewport: width });
       events.push({ hash: event.hash, stage: event.stage }); await persist();
     });
-    await context.addInitScript(config => { window.__KOTOBA_QA_SIGNER__ = config; }, { accountId: credentials.account_id, secretKey: credentials.secret_key, rpcUrl });
-    page = await context.newPage(); const errors = []; page.on('pageerror', () => errors.push('pageerror'));
+    page = await context.newPage();
+    await page.addInitScript(injectStartup, { origin: new URL(base).origin, config: { accountId: credentials.account_id, secretKey: credentials.secret_key, rpcUrl } }); const errors = []; page.on('pageerror', () => errors.push('pageerror'));
     page.on('popup', () => errors.push('unexpected wallet popup'));
     await load(page, base); await assertLayout(page);
     await page.getByRole('button', { name: /^Connect(?: wallet)?$/ }).click();
