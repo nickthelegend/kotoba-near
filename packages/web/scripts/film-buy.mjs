@@ -62,7 +62,7 @@ try {
   await writeFile(output, JSON.stringify(evidence, null, 2), { flag: 'wx' });
   console.log(`Sending capped buy. Max deposit: ${near(deposit)} NEAR`);
   // Broadcast exactly once; on timeout, poll this known hash instead of signing again.
-  try { await rpc('broadcast_tx_async', [Buffer.from(signed.encode()).toString('base64')]); } catch { console.log('Following the signed transaction hash...'); }
+  try { await rpc('send_tx', { signed_tx_base64: Buffer.from(signed.encode()).toString('base64'), wait_until: 'NONE' }); } catch { console.log('Following the signed transaction hash...'); }
   let outcome;
   for (let i = 0; i < 60; i++) {
     try { outcome = await rpc('tx', { tx_hash: tx, sender_account_id: playerId, wait_until: 'FINAL' }); if (outcome.status) break; } catch {}
