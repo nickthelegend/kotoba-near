@@ -2,11 +2,11 @@
 
 The testnet deployment, the OutLayer TEE runs, attestation verification, the challenge re-run, payouts and the live Dec 9 markets are **done**. See the README. What remains:
 
-1. **Email sign-in and gasless bets (NEP-366 meta transactions).** Not built. Unblocking needs an email identity provider (`EMAIL_AUTH_CLIENT_ID` and its secret) and a funded testnet relayer key (`RELAYER_TESTNET_PRIVATE_KEY`) with an allowlist. Until then, bets are signed with a NEAR testnet wallet (MyNearWallet via wallet-selector).
+1. **Email sign-in and gasless bets (NEP-366 meta transactions).** Not built. Unblocking needs an email identity provider (`EMAIL_AUTH_CLIENT_ID` and its secret) and a funded testnet relayer key (`RELAYER_TESTNET_PRIVATE_KEY`) with an allowlist. Until then, bets are signed with a NEAR testnet wallet (Meteor Wallet via wallet-selector; full sign-in and approval still need human verification).
 2. **Bets from any chain via 1Click.** The SDK has a `dry: true` quote helper only. It needs a funded `NEAR_MAINNET_ACCOUNT` in a gitignored `.env` (`ONECLICK_JWT` is optional). NEAR Intents has no testnet, so a testnet market cannot be funded from it.
 3. **Test NEP-141 collateral.** Not built. Markets escrow native testnet NEAR.
 4. **Per-market escrow sub-accounts** (`<id>.kotoba-….testnet`). Not built. Escrow sits in the factory account. Only the demo player is a sub-account.
 5. **Creator transcript sources** (podcasts, streams). Not built. The oracle allowlists federalreserve.gov press conference PDFs only. Creators can open Fed markets and earn the 1% fee.
 6. **On-chain quote verification.** The contract trusts the OutLayer promise result, whose origin is enforced by the private callback. The TDX quote is verified off-chain (SDK, MCP and browser), not inside the contract.
-7. **Testnet NEAR budget.** The account helper returned HTTP 429. The deployer was funded with 4 NEAR from Hako's seller demo account, which is the shared cap per project. About 0.6 NEAR remains free; contract storage holds 3.14 NEAR.
-8. **Submission evidence.** There is no demo video, public repo or X post yet. Nick publishes the repo, records the video and fills [HACKATHON_SUBMISSION_FORM.md](HACKATHON_SUBMISSION_FORM.md). Nothing has been submitted.
+7. **Testnet NEAR budget.** The account helper returned HTTP 429. The deployer was funded with 4 NEAR from Hako's seller demo account, which is the shared cap per project. The November 9 report recorded about 0.6 NEAR free and 3.14 NEAR in contract storage; these are historical figures, not a current balance.
+8. **Submission evidence.** No completed demo video was found under `/Volumes/Extreme SSD/Projects/grokbot/videos/kotoba-near/` during submission-pack preparation. Public repo and X post URLs remain TBD. Nick publishes the repo, records the video and fills [HACKATHON_SUBMISSION_FORM.md](HACKATHON_SUBMISSION_FORM.md). Nothing has been submitted.

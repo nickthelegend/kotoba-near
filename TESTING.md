@@ -1,6 +1,6 @@
 # Verification — 2026-11-09
 
-`pnpm test` from the repository root: **47 tests** (33 from Nov 9 plus 14 web error-mapping tests added Nov 10). It builds both WASM files first. `pnpm --filter @kotoba/web test` alone: **14 passed, 0 failed** (Nov 10).
+`pnpm test` from the repository root builds both WASM files first. The current source defines **42 tests** (28 in the November 9 suites plus 14 web error-mapping tests added November 10). Earlier totals of 33 and 47 were arithmetic errors; the suite counts below are unchanged. These are recorded verification results; the full suite was not rerun for the docs-only submission pack. `pnpm --filter @kotoba/web test` alone: **14 passed, 0 failed** (Nov 10).
 
 | Suite | Tests | What ran |
 | --- | ---: | --- |
@@ -29,7 +29,7 @@ All of these are in [deployments/real-run.json](deployments/real-run.json) with 
 | Forged resolver call (`on_result` directly) | reject | `Method on_result is private` ([4b14MmNg…](https://testnet.nearblocks.io/txns/4b14MmNgrgiyATcGQfHPVPc5Cepd8VwDc4v54FxNh43X)) |
 | Finalize after the 15-minute window, then claim NO | pays | ok ([61M2Lbzk…](https://testnet.nearblocks.io/txns/61M2LbzkmKjzi8wShPC5K8HPSePWtetp493FofZG3YG2), [EX1z8F8L…](https://testnet.nearblocks.io/txns/EX1z8F8LDvGYSFAiD92FrvoGzArD56UGVezfR5p9TBGf)) |
 
-The transcript-swap case: the challenge rule compares `count` and `transcript_sha256` between the two runs and pays the challenger if either changed. The live challenge got the same PDF hash and count, so the resolver kept the bond. A real swap would need the Fed to republish the PDF, which we cannot cause; the sandbox and SDK cover the hash comparison.
+The transcript-swap case: the challenge rule compares `count` and `transcript_sha256` between the two runs and pays the challenger if either changed. The live challenge got the same PDF hash and count, so the resolver kept the bond. A real swap would need the Fed to republish the PDF, which we cannot cause. The SDK tests show that changed PDF bytes change the hash. The contract compares the previous and new count and hash; the sandbox does not exercise a changed-transcript callback.
 
 ## Browser QA
 

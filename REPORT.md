@@ -1,6 +1,6 @@
 # Kotoba build report — 2026-11-09 (Claude pass)
 
-**Status: live on NEAR testnet.** One past FOMC press conference was settled end to end through real OutLayer TEE executions, and every attestation verifies. Four live markets are open for the Dec 9, 2026 FOMC press conference. The premium UI is built and QA'd.
+**Status: live on NEAR testnet.** One past FOMC press conference was settled end to end through real OutLayer TEE executions, and every attestation verifies. Four live markets are open for the Dec 9, 2026 FOMC press conference. See TESTING.md for the later UI rebuild and Meteor Wallet QA; full Meteor sign-in and approval still need human verification.
 
 - **Contract fixes.**
   - The challenge window is now set at init. It is at least 10 minutes; this testnet deployment uses 15.
@@ -15,13 +15,12 @@
 - **Attestation verifier.** It covers the program hash, input hash, output hash, `report_data` against the task hash, approved measurements on `worker.outlayer.testnet`, and the Intel chain via dcap-qvl (UpToDate). It is available in the SDK, as the MCP tool `kotoba_verify_resolution`, and in the browser (the first five checks).
 - **Live markets.** The scheduler opened recession, inflation, tariffs and employment for Dec 9 2026 from the official Fed calendar. Bets have been placed on three of them.
 - **Web.**
-  - Look: a night press room with cream transcript paper and signal red, in Urbanist and Space Mono.
-  - Art: Nick's art is used full-bleed with faded edges.
+  - The later November 9 rebuild uses the news-markets layout described in TESTING.md.
   - Pages:
     - landing with live figures and the tx ledger;
-    - board with countdown, odds and the bet sheet (live `quote`, MyNearWallet `buy`);
+    - board with countdown, odds and the bet sheet (live `quote`, Meteor Wallet `buy`; replaced MyNearWallet on November 10);
     - resolution page with hashes, both seals re-checked in the browser, and the transcript with 40 marked hits plus a navigator;
     - creators page with a market composer.
-- **Tests.** 33 pass: 3 oracle, 5 contract unit, 1 sandbox, 17 SDK, 2 MCP. Five of them hit the live deployment and OutLayer's API.
+- **Tests.** The November 9 suites contain 28 tests: 3 oracle, 5 contract unit, 1 sandbox, 17 SDK, 2 MCP. The earlier total of 33 was an arithmetic error; November 10 added 14 web tests, bringing the source inventory to 42. See TESTING.md for recorded results. Five of them hit the live deployment and OutLayer's API.
 
 What is still blocked: [BLOCKED.md](BLOCKED.md). This covers email/NEP-366, 1Click (it needs `NEAR_MAINNET_ACCOUNT`), NEP-141 collateral, per-market sub-accounts, creator transcript sources, and the submission video and post.
