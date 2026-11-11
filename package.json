@@ -6,5 +6,8 @@
     "test": "(cd packages/oracle && cargo build --target wasm32-wasip2 --release && cargo test) && (cd packages/contract && cargo near build non-reproducible-wasm && cargo test) && pnpm --filter @kotoba/sdk test && pnpm --filter @kotoba/mcp test && pnpm --filter @kotoba/web test",
     "build": "(cd packages/oracle && cargo build --target wasm32-wasip2 --release) && (cd packages/contract && cargo near build non-reproducible-wasm) && pnpm --filter @kotoba/web build",
     "dev": "pnpm --filter @kotoba/web dev"
+  },
+  "devDependencies": {
+    "playwright-core": "1.63.0"
   }
 }

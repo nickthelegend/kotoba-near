@@ -6,11 +6,22 @@ import { explain, type Explained } from './errors';
 /** Meteor Wallet (testnet) is the wallet: it opens in a pop-up (or its browser extension) and posts the result back to this
  * page, so there is no redirect route. MyNearWallet was dropped on 2026-11-10: its testnet pop-up now answers
  * "MyNearWallet can't connect to apps anymore" and sends people to Meteor. */
-export const WALLET = { id: 'meteor-wallet', name: 'Meteor Wallet', url: 'https://wallet.meteorwallet.app' } as const;
+// A production build always removes the QA branch, even if the flag is accidentally set.
+const QA_ENABLED = import.meta.env.DEV && import.meta.env.VITE_QA_SIGNER === '1';
+export const WALLET = QA_ENABLED
+  ? { id: 'qa-signer', name: 'QA signer', url: '' } as const
+  : { id: 'meteor-wallet', name: 'Meteor Wallet', url: 'https://wallet.meteorwallet.app' } as const;
 let selectorPromise: Promise<WalletSelector> | null = null;
-// Loaded on demand so the landing page does not pay for the wallet bundle.
-const getSelector = () => (selectorPromise ??= Promise.all([import('@near-wallet-selector/core'), import('@near-wallet-selector/meteor-wallet')])
-  .then(([core, meteor]) => core.setupWalletSelector({ network: 'testnet', modules: [meteor.setupMeteorWallet()] }))
+// The QA module is imported only by flagged development servers, never by production builds.
+const getSelector = () => (selectorPromise ??= import('@near-wallet-selector/core')
+  .then(async (core) => {
+    if (QA_ENABLED) {
+      const { setupQaSigner } = await import('./qa-signer');
+      return core.setupWalletSelector({ network: 'testnet', modules: [setupQaSigner()] });
+    }
+    const { setupMeteorWallet } = await import('@near-wallet-selector/meteor-wallet');
+    return core.setupWalletSelector({ network: 'testnet', modules: [setupMeteorWallet()] });
+  })
   .catch((e) => { selectorPromise = null; throw e; }));
 
 /** The result of a signed call: the transaction hash, and the outcome when the wallet already waited for it. */

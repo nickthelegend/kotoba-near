@@ -1,6 +1,6 @@
 import { Freshness, Icon, Link, useBalance, Wordmark } from './ui';
 import { short } from './lib';
-import type { Wallet } from './wallet';
+import { WALLET, type Wallet } from './wallet';
 
 /** Balance header: the connected account's live NEAR testnet balance, or a Connect pill. */
 export default function Head({ wallet, desktop, onRefresh, refreshing, at, now }: { wallet: Wallet; desktop: boolean; onRefresh?: () => void; refreshing?: boolean; at?: number; now?: number }) {
@@ -24,7 +24,7 @@ export default function Head({ wallet, desktop, onRefresh, refreshing, at, now }
     </div>
     <div className="web-bal">
       <div><p className="lbl">{wallet.account ? 'Your NEAR testnet balance' : 'Wallet'}</p>{amount}</div>
-      {wallet.account ? <Link to="/you" className="pill-ink">Positions</Link> : <button className="pill-ink" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting}>{wallet.connecting ? 'Waiting for Meteor Wallet…' : 'Connect wallet'}</button>}
+      {wallet.account ? <Link to="/you" className="pill-ink">Positions</Link> : <button className="pill-ink" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting}>{wallet.connecting ? `Waiting for ${WALLET.name}…` : 'Connect wallet'}</button>}
     </div>
   </header>;
 

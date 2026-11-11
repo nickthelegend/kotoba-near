@@ -3,7 +3,7 @@
 import { txUrl, viewAccount, waitForTx } from './lib';
 import { TxFailed, explain, spendableYocto, txFailure, upfrontYocto, type Explained } from './errors';
 import { CHAIN_CHANGED, refreshBalance, refreshMarkets, toast } from './store';
-import type { Wallet } from './wallet';
+import { WALLET, type Wallet } from './wallet';
 
 export type TxRequest = {
   method: string; args: Record<string, unknown>; depositYocto: bigint; tgas: number;
@@ -40,7 +40,7 @@ export async function runTx(wallet: Wallet, r: TxRequest): Promise<TxResult> {
   if (pre) { stage({ step: 'failed', problem: pre }); return { ok: false, problem: pre }; }
 
   const deposit = r.depositYocto > 0n;
-  const id = toast.push({ tone: 'pending', title: r.label, body: deposit ? 'Approve it in the Meteor Wallet window.' : 'Signing with this site’s Meteor Wallet key…' });
+  const id = toast.push({ tone: 'pending', title: r.label, body: deposit ? `Approve it in the ${WALLET.name} window.` : `Signing with this site’s ${WALLET.name} key…` });
   r.optimistic?.apply();
   stage({ step: 'signing' });
   let hash: string | null = null;

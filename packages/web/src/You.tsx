@@ -5,7 +5,7 @@ import { UNIT_NEAR, accountUrl, batchBalance, isOpen, near, outcome, txUrl, type
 import { explain, type Explained } from './errors';
 import { CHAIN_CHANGED, refreshMarkets, usePending } from './store';
 import { runTx } from './tx';
-import type { Wallet } from './wallet';
+import { WALLET, type Wallet } from './wallet';
 
 type Position = { m: Market; yes: number; no: number };
 
@@ -59,7 +59,7 @@ export default function You({ wallet, desktop }: { wallet: Wallet; desktop: bool
       <h1>You</h1>
       <p>{wallet.account ? <>Signed in as <a href={accountUrl(wallet.account)} target="_blank" rel="noreferrer" className="mono">{wallet.account}</a>. Share balances below are read live from the contract.</> : 'Connect a NEAR testnet wallet to see your YES and NO shares and claim winnings.'}</p>
     </header>
-    {!wallet.account ? <State kind="setup" title="No wallet connected" action={<button className="pill-coral" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting}>{wallet.connecting ? 'Waiting for Meteor Wallet…' : 'Connect with Meteor Wallet'}</button>}>Kotoba runs on NEAR testnet. A testnet account is free in Meteor Wallet (wallet.meteorwallet.app).</State>
+    {!wallet.account ? <State kind="setup" title="No wallet connected" action={<button className="pill-coral" onClick={wallet.connect} disabled={!wallet.ready || wallet.connecting}>{wallet.connecting ? `Waiting for ${WALLET.name}…` : 'Connect with Meteor Wallet'}</button>}>Kotoba runs on NEAR testnet. A testnet account is free in Meteor Wallet (wallet.meteorwallet.app).</State>
       : wallet.network ? null
       : problem && !markets ? <Problem x={problem} onRetry={() => refreshMarkets()} />
       : posProblem ? <Problem x={posProblem} onRetry={() => setEpoch((n) => n + 1)} />

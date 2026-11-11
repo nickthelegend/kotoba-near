@@ -6,7 +6,7 @@ import { CHAIN_CHANGED, refreshMarkets } from './store';
 import { runTx, type TxStage } from './tx';
 import { verifyLive, type LiveVerification } from './verify';
 import { BetSheet } from './Trade';
-import type { Wallet } from './wallet';
+import { WALLET, type Wallet } from './wallet';
 
 function RunCard({ run, label }: { run: Step; label: string }) {
   const o = run.outlayer!;
@@ -99,7 +99,7 @@ function SettleBox({ m, wallet, now }: { m: Market; wallet: Wallet; now: number 
   const closeMs = m.close_ns / 1e6, deadlineMs = m.deadline_ns / 1e6, windowMs = (m.challenge_until_ns ?? 0) / 1e6;
   let step: ReactNode = null, act: ReactNode = null;
   const btn = (label: string, onClick: () => void, cls = 'pill-ink') => wallet.account
-    ? <button className={cls} disabled={busy || !!wallet.network} onClick={onClick}>{busy ? (stage?.step === 'signing' ? 'Approve in Meteor Wallet…' : stage?.step === 'pending' ? 'Waiting for NEAR…' : 'Checking…') : label}</button>
+    ? <button className={cls} disabled={busy || !!wallet.network} onClick={onClick}>{busy ? (stage?.step === 'signing' ? `Approve in ${WALLET.name}…` : stage?.step === 'pending' ? 'Waiting for NEAR…' : 'Checking…') : label}</button>
     : <button className="pill-light" onClick={wallet.connect} disabled={!wallet.ready}>Connect to {label.toLowerCase().split(' ')[0]}</button>;
   if (m.pending) step = <><i className="pulse" /> Counting the transcript in the TEE now.</>;
   else if (m.status === 'Open' && now >= closeMs && now <= deadlineMs) {
