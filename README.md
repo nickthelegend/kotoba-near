@@ -12,7 +12,7 @@ Use Node.js and pnpm 10.29.2 (the version in `package.json`). No hosted app URL 
 2. Open `http://127.0.0.1:5198/app` - see the December 9 FOMC markets and live YES/NO odds. Open a market's bet sheet - see a quote from the contract.
 3. Open `http://127.0.0.1:5198/market/fomc-2026-01-inflation-40` - see the recorded YES result, 40 highlighted hits, and the resolve and challenge runs. The page rechecks five attestation properties; the Intel signature-chain result is recorded separately.
 4. Open `http://127.0.0.1:5198/resolved` - see the two settled January markets. Open `http://127.0.0.1:5198/creators` - see markets grouped by creator and the Fed-market composer.
-5. For a testnet buy, click **Connect** with a funded Meteor `.testnet` account, choose YES or NO and approve in Meteor - see the transaction status and then your shares at `http://127.0.0.1:5198/you`. Full Meteor sign-in and approval still need human verification; the recorded successful buys used signed SDK transactions. See [TESTING.md](TESTING.md).
+5. For a testnet buy, click **Connect** with a funded Meteor `.testnet` account, choose YES or NO and approve in Meteor - see the transaction status and then your shares at `http://127.0.0.1:5198/you`. Human Meteor sign-in and approval remain a manual check. The browser buy, final receipt and updated position pass with the development-only QA signer on real testnet. See [FLOW-QA.md](FLOW-QA.md) and [TESTING.md](TESTING.md).
 
 Reads need NEAR RPC and OutLayer's API. If a service is unavailable, the app shows an error with a retry action. The local-only demo needs a video in Nick's X post; the draft is in [HACKATHON_SUBMISSION_FORM.md](HACKATHON_SUBMISSION_FORM.md).
 
