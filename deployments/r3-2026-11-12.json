@@ -1,0 +1,152 @@
+{
+  "at": "2026-11-12T09:17:18.191Z",
+  "contract": "kotoba-edfa2b47.testnet",
+  "cap_yocto": "300000000000000000000000",
+  "initial": {
+    "amount": "3884057445739721000000000",
+    "storage_usage": 316355,
+    "spendable_yocto": "720507445739721000000000"
+  },
+  "transactions": [
+    {
+      "method": "create_market",
+      "id": "fomc-2026-09-inflation-replay",
+      "hash": "5LT6xu9vD2Q1HSqdtom2MB7CEJPjV1EHD1UyExmDR5EP",
+      "status": "final",
+      "gas_burnt_yocto": "207956687889800000000"
+    },
+    {
+      "method": "resolve",
+      "id": "fomc-2026-09-inflation-replay",
+      "hash": "DkNvuJDwv9M2aPucpJWs3cgVwCMo8AsaUki8f2foNdkG",
+      "status": "final",
+      "deposit_yocto": "120000000000000000000000",
+      "gas": "300000000000000",
+      "gas_burnt_yocto": "1178022212830500000000",
+      "at": "2026-11-12T09:17:38.229Z"
+    },
+    {
+      "method": "finalize",
+      "id": "fomc-2026-09-inflation-replay",
+      "hash": "3sTUggZz8DWrqBjQQ3wmUqrKypSqn7GDC9QvrhEMip5c",
+      "status": "final",
+      "deposit_yocto": "0",
+      "gas": "30000000000000",
+      "gas_burnt_yocto": "256131367942400000000",
+      "at": "2026-11-12T09:38:13.530Z"
+    },
+    {
+      "method": "create_market",
+      "id": "fomc-2026-10-employment-replay",
+      "hash": "6LXBmLJBjLoyiFQF8hdWBumfBLDziHu13ftnzGYuHXo7",
+      "status": "final",
+      "gas_burnt_yocto": "213341962145800000000"
+    }
+  ],
+  "reserved_original_before": {
+    "id": "fomc-2026-10-inflation-replay",
+    "event": "FOMC press conference · 2026-10-28 · replay demo",
+    "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf",
+    "phrase": "inflation",
+    "threshold": 1,
+    "close_ns": 1794466435989000000,
+    "deadline_ns": 1795651200000000000,
+    "b": 100,
+    "yes": 0,
+    "no": 0,
+    "burned_yes": 0,
+    "burned_no": 0,
+    "creator": "kotoba-edfa2b47.testnet",
+    "status": "Open",
+    "result": null,
+    "challenge_until_ns": null,
+    "pending": false,
+    "resolver": null,
+    "challenger": null
+  },
+  "after": {
+    "amount": "3880966943208912500000000",
+    "storage_usage": 317153,
+    "spendable": "709436943208912500000000"
+  },
+  "cumulative_net_spend_yocto": "3090502530808500000000",
+  "reserved_original_after": {
+    "id": "fomc-2026-10-inflation-replay",
+    "event": "FOMC press conference · 2026-10-28 · replay demo",
+    "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf",
+    "phrase": "inflation",
+    "threshold": 1,
+    "close_ns": 1794466435989000000,
+    "deadline_ns": 1795651200000000000,
+    "b": 100,
+    "yes": 0,
+    "no": 0,
+    "burned_yes": 0,
+    "burned_no": 0,
+    "creator": "kotoba-edfa2b47.testnet",
+    "status": "Open",
+    "result": null,
+    "challenge_until_ns": null,
+    "pending": false,
+    "resolver": null,
+    "challenger": null
+  },
+  "additional_storage_locked_yocto": "7980000000000000000000",
+  "attempts": [
+    {
+      "method": "finalize",
+      "status": "first browser wait timed out before any signed hash was recorded; market remained Provisional",
+      "transaction_sent": false
+    }
+  ],
+  "new_subsidies_allocated_yocto": "140000000000000000000000",
+  "second_judge_after": {
+    "id": "fomc-2026-10-employment-replay",
+    "event": "FOMC press conference · 2026-10-28 · replay demo",
+    "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf",
+    "phrase": "employment",
+    "threshold": 1,
+    "close_ns": 1794476408188000000,
+    "deadline_ns": 1795651200000000000,
+    "b": 100,
+    "yes": 0,
+    "no": 0,
+    "burned_yes": 0,
+    "burned_no": 0,
+    "creator": "kotoba-edfa2b47.testnet",
+    "status": "Open",
+    "result": null,
+    "challenge_until_ns": null,
+    "pending": false,
+    "resolver": null,
+    "challenger": null
+  },
+  "proof_market_after": {
+    "id": "fomc-2026-09-inflation-replay",
+    "event": "FOMC press conference · 2026-09-16 · replay demo",
+    "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260916.pdf",
+    "phrase": "inflation",
+    "threshold": 1,
+    "close_ns": 1794474974204000000,
+    "deadline_ns": 1795651200000000000,
+    "b": 100,
+    "yes": 0,
+    "no": 0,
+    "burned_yes": 0,
+    "burned_no": 0,
+    "creator": "kotoba-edfa2b47.testnet",
+    "status": "Final",
+    "result": {
+      "count": 22,
+      "transcript_sha256": "aa308d25613c429101f2b2ac540d5d3b38a1448cf30ebf61b6f15acd74ae927c",
+      "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260916.pdf",
+      "code_hash": "b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314",
+      "attestation": ""
+    },
+    "challenge_until_ns": 1794475955399929000,
+    "pending": false,
+    "resolver": null,
+    "challenger": null
+  },
+  "completed_at": "2026-11-12T09:41:30.988Z"
+}
