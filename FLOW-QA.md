@@ -1,6 +1,34 @@
 # Full-flow QA
 
-## Judge-readiness update — 2026-11-12
+## R3 live-resolution proof — 2026-11-12
+
+**DONE:** fresh live seals, a separate browser-signed proof, a second untouched judge replay and a host-ready static build. No public deploy, push, film change or contract-key change was performed.
+
+| Step | Executed result | Evidence |
+| --- | --- | --- |
+| Dead links | PASS: the prescribed tracked-Markdown grep is empty, excluding the submission worksheet. Old result rows and PASS/FAIL/BLOCKED labels were preserved. | Local capture references are plain filenames. |
+| Discovery | PASS: 2 live tests discover the exact January resolve/challenge hashes through NearBlocks v3 and public receipts; 1 explicit HTTP 429/mainnet rejection test and 14 existing web tests also pass (17/17). Failed lookups never invent a pass. | `packages/web/test/discovery.test.ts` |
+| Existing January pages | PASS at 1440 and 375: same recorded panels, six labelled rows per run and same content/layout. Screenshot differences are limited to text rasterization. | `before-fomc-2026-01-*.png`, `after-fomc-2026-01-*.png` |
+| September proof | PASS: the app's Resolve button used the scoped QA signer. OutLayer returned 22 inflation hits. All six SDK checks pass, including Intel chain / UpToDate. | [Proof record](deployments/judge-path-proof-2026-11-12.json) |
+| New live seal | PASS at 1440 and 375: five browser checks, with Intel labelled check with the SDK and an exact transaction command. Deliberate indexer failure has no green pass; Try again recovers against real services. | `after-fomc-2026-09-inflation-replay-*.png`, `lookup-failure-*.png` |
+| Finalize | PASS through the app after the actual 15-minute window. The receipt returns the 0.1 NEAR bond to the resolver account. A first browser wait timed out before any signed hash was recorded; a fresh attempt succeeded. | Finalize `3sTUggZz8DWrqBjQQ3wmUqrKypSqn7GDC9QvrhEMip5c` |
+| Two judge markets | PASS: both October markets remain Open with no result; the original market's complete fields match its pre-proof snapshot. No R3 write targeted it. Each is one-shot, deadline November 26 00:00 UTC. | [R3 ledger and state reads](deployments/r3-2026-11-12.json) |
+| Production / hosting | PASS: build excludes QA signer even with its flag forced on; hard refresh on `/`, `/app` and the proof detail passes at both widths. Host config has filesystem-first SPA fallback and secret exclusions. No hosting was executed. | `vercel.json`, `.vercelignore`, `after-checks.json` |
+| Full route audit | PASS: 75 production cases at 1440 and 375, covering all nine market details, navigation, wallet popup messages, quotes, positions and error/retry states. All 69 ordinary cases have zero console/page/network/HTTP errors, overflow, raw error text or pending placeholders; all internal links map to known routes. Six deliberate service-failure cases remain labelled expected faults. | `r3/full-flow/audit.json` and per-step PNGs |
+
+Create `5LT6xu9vD2Q1HSqdtom2MB7CEJPjV1EHD1UyExmDR5EP` → Resolve `DkNvuJDwv9M2aPucpJWs3cgVwCMo8AsaUki8f2foNdkG` → Finalize `3sTUggZz8DWrqBjQQ3wmUqrKypSqn7GDC9QvrhEMip5c`. The second judge market creation is `6LXBmLJBjLoyiFQF8hdWBumfBLDziHu13ftnzGYuHXo7`. Total net spend for all four writes: **0.0030905025308085 testnet NEAR**, below 0.05 and 0.3. Additional storage locked: **0.00798 NEAR**. Subsidies of 0.14 NEAR were allocated from the contract's existing pool, not sent externally. Only this repo's deployer credential was loaded, by path in Node; the player and other projects were not funded or debited.
+
+Read-only browser checks: 6 baseline checks and 14 production/live-seal/recovery/hard-refresh checks, with zero page errors and no horizontal overflow. SDK tests: 17/17 pass. The production proof's transaction bytes come from public receipts, not a bundled proof fixture. Rust/oracle/MCP suites were not run in R3; their code is unchanged. Screenshots were captured locally during QA and are not committed.
+
+An initial full audit completed 75 cases with 73 PASS and 2 FAIL: its write-blocking guard also blocked the read-only `EXPERIMENTAL_tx_status` request on the September page. The guard now allows that receipt read while still blocking broadcasts. `first-audit.json` preserves those failures; a later interrupted attempt was incomplete. The final corrected run completed all 75 cases with 0 failures.
+
+The QA signer scopes this run to the September id and resolve/finalize methods. Its spending reservation uses twice the live RPC gas price, while balance preflight separately retains the conservative prepaid-gas allowance. Testnet-only and 0.3 NEAR spending guards remain active. A before/after balance is recorded around every write. The proof was not used to resolve or challenge either judge market.
+
+Remaining manual steps: human Meteor approval, public repo and X post, host deployment and final team/payout disclosures. The contract's full-access authority remains; deleting it is Nick's decision. Intel verification remains off-chain and the browser explicitly sends judges to the SDK for that sixth check.
+
+## Judge-readiness update — 2026-11-12 (historical R2)
+
+The R3 section above supersedes the earlier single-replay and missing-live-panel limitations.
 
 **PASS: 71 production-browser cases and four targeted replay checks at 1440×900 and 375×812.** The replay checks never signed or sent a resolution. The November 11 results below remain historical.
 

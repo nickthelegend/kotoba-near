@@ -10,7 +10,7 @@ Use Node.js and pnpm 10.29.2 (the version in `package.json`). No hosted app URL 
 
 1. From the repository root, run `pnpm install --frozen-lockfile`, then `pnpm dev` - see Vite start at `http://127.0.0.1:5198`. Leave that terminal running.
 2. Open `http://127.0.0.1:5198/app` - see the December 9 FOMC markets and live YES/NO odds. Open a market's bet sheet - see a quote from the contract.
-3. Open `http://127.0.0.1:5198/market/fomc-2026-10-inflation-replay` - see a replay on the published October 28 transcript. Connect a Meteor `.testnet` wallet with at least **0.421 NEAR spendable**, choose **Resolve with OutLayer · 0.12 NEAR** and approve - see the count, verdict and transaction link after execution. This one-shot replay is open for resolution until **November 26, 2026 at 00:00 UTC**. If someone already resolved it, inspect their result instead.
+3. Open `http://127.0.0.1:5198/market/fomc-2026-10-inflation-replay` - see a replay on the published October 28 transcript. Connect a Meteor `.testnet` wallet with at least **0.421 NEAR spendable**, choose **Resolve with OutLayer · 0.12 NEAR** and approve - see the count, verdict and transaction link after execution. Each of the two October replays listed below is one-shot and open for resolution until **November 26, 2026 at 00:00 UTC**. If someone already resolved it, inspect their result instead.
 4. Open `http://127.0.0.1:5198/market/fomc-2026-01-inflation-40` - see the recorded YES result, 40 highlighted hits, and the resolve and challenge runs. The page rechecks five attestation properties; the Intel signature-chain result is recorded separately. The October replay's extracted text is not bundled; its official PDF remains available.
 5. Open `http://127.0.0.1:5198/resolved` - see counted markets, including the two settled January markets. Open `http://127.0.0.1:5198/creators` - see markets grouped by creator and the Fed-market composer.
 6. For a testnet buy, click **Connect** with a funded Meteor `.testnet` account, choose YES or NO and approve in Meteor - see the transaction status and then your shares at `http://127.0.0.1:5198/you`. Human Meteor sign-in and approval remain a manual check. The browser buy, final receipt and updated position pass with the development-only QA signer on real testnet. See [FLOW-QA.md](FLOW-QA.md) and [TESTING.md](TESTING.md).
@@ -68,17 +68,50 @@ These are recorded testnet transactions, copied from [deployments/testnet-2026-1
 
 Raw records: [deployments/real-run.json](deployments/real-run.json) (every tx with its exact OutLayer input, output, log and attestation check), [deployments/testnet-2026-11-09.json](deployments/testnet-2026-11-09.json), [deployments/oracle-fastfs.json](deployments/oracle-fastfs.json), [deployments/scheduler-2026-11-09.json](deployments/scheduler-2026-11-09.json).
 
-### Judge replay (Nov 12)
+### Judge replay
 
-Market `fomc-2026-10-inflation-replay` was created in [BfVTcefEgzCxMWwXN7BDga7D48ZKma6Fs6mMtYmTZEpw](https://testnet.nearblocks.io/txns/BfVTcefEgzCxMWwXN7BDga7D48ZKma6Fs6mMtYmTZEpw). Its [official October 28 PDF](https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf) returned HTTP 200 on November 12; the exact hash and creation outcome are in [deployments/judge-market-2026-11-12.json](deployments/judge-market-2026-11-12.json). Bets closed at November 12, 06:53:55.989 UTC. Anyone can request the pinned TEE count before November 26, 00:00 UTC. We left it unresolved for judges and did not precompute or claim an attested count.
+Two untouched October 28 transcript replays are available. Each is **one-shot**: the first resolver uses that market; another judge can use the other one. Both have closed betting and accept resolution until **November 26, 2026 at 00:00 UTC**. Both were read back Open with no result after the proof run. The original inflation market was not used for any R3 bet, resolve, challenge or finalize.
 
-This replay deliberately separates its October source date from its November demo window. The ordinary December markets still close before their future event. The replay uses the existing contract and Resolve path; no contract redeploy or new wallet is required. A fresh replay's live seal is not added automatically to the app's three recorded attestation panels. Once a judge has a resolve hash and signer account, the SDK can verify its input, output and quote without credentials:
+| Market route | Phrase | Creation transaction |
+| --- | --- | --- |
+| `/market/fomc-2026-10-inflation-replay` | inflation | [BfVTcefEgzCxMWwXN7BDga7D48ZKma6Fs6mMtYmTZEpw](https://testnet.nearblocks.io/txns/BfVTcefEgzCxMWwXN7BDga7D48ZKma6Fs6mMtYmTZEpw) |
+| `/market/fomc-2026-10-employment-replay` | employment | [6LXBmLJBjLoyiFQF8hdWBumfBLDziHu13ftnzGYuHXo7](https://testnet.nearblocks.io/txns/6LXBmLJBjLoyiFQF8hdWBumfBLDziHu13ftnzGYuHXo7) |
+
+Their [official October 28 PDF](https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf) returned HTTP 200; its SHA-256 is recorded in the deployment evidence. These are known-source replays, not forecasts. Their November demo windows deliberately differ from the October source date. Ordinary December markets still close before their future event.
+
+Connect a funded Meteor testnet wallet and choose **Resolve with OutLayer · 0.12 NEAR**. Have at least **0.421 NEAR spendable** for the attachment and prepaid gas. The attachment includes a 0.1 bond and up to 0.02 for execution. Unused gas is returned. After the result, anyone can challenge during the 15-minute window or finalize once it ends. Human Meteor approval remains a manual check.
+
+Fresh provisional and final results discover resolve/challenge transactions through the public NearBlocks v3 API, read the exact bytes from NEAR RPC receipts or the public NearBlocks receipt tree, and run the same five browser checks as the January panels. Failed lookups offer Try again and never show a pass. Intel-chain verification stays in the SDK; each live panel prints its exact command. January's recorded panels are unchanged. The replay PDFs are linked, but their extracted transcript text is not bundled.
+
+**Proven on a separate September replay.** `/market/fomc-2026-09-inflation-replay` resolved through the app's QA signer, counted **22 inflation hits**, passed all six SDK checks, and was finalized after the 15-minute window. The finalize receipts include the bond return. These calls did not consume either judge market.
+
+| Proof step | Transaction |
+| --- | --- |
+| Create | [5LT6xu9vD2Q1HSqdtom2MB7CEJPjV1EHD1UyExmDR5EP](https://testnet.nearblocks.io/txns/5LT6xu9vD2Q1HSqdtom2MB7CEJPjV1EHD1UyExmDR5EP) |
+| Resolve through the app | [DkNvuJDwv9M2aPucpJWs3cgVwCMo8AsaUki8f2foNdkG](https://testnet.nearblocks.io/txns/DkNvuJDwv9M2aPucpJWs3cgVwCMo8AsaUki8f2foNdkG) |
+| Finalize | [3sTUggZz8DWrqBjQQ3wmUqrKypSqn7GDC9QvrhEMip5c](https://testnet.nearblocks.io/txns/3sTUggZz8DWrqBjQQ3wmUqrKypSqn7GDC9QvrhEMip5c) |
+
+Verify the live proof without a wallet or credentials:
 
 ```sh
-node --input-type=module -e 'import { verifyResolutionTx } from "./packages/sdk/src/attestation.mjs"; console.log(JSON.stringify(await verifyResolutionTx(process.argv[1], process.argv[2]), null, 2))' '<resolve-tx-hash>' '<resolver.testnet>'
+node packages/sdk/scripts/verify-attestation.mjs --tx DkNvuJDwv9M2aPucpJWs3cgVwCMo8AsaUki8f2foNdkG --sender kotoba-edfa2b47.testnet
 ```
 
-The 0.12 NEAR attachment includes the 0.1 bond and up to 0.02 for execution. Prepaid gas also needs balance; unused gas is returned. After a result, anyone can challenge during the 15-minute window or finalize once it ends. The app's enabled Resolve button and low-balance refusal were checked at both widths without consuming the replay. Human Meteor approval and a fresh replay resolution remain untested.
+Evidence: [judge-path-proof-2026-11-12.json](deployments/judge-path-proof-2026-11-12.json), [R3 budget and untouched-market reads](deployments/r3-2026-11-12.json), [second creation](deployments/r3-create-second-2026-11-12.json). The complete R3 net spend was **0.0030905025308085 testnet NEAR**. New subsidies of 0.14 NEAR were allocated from the contract's existing pool; they were not external transfers. Additional storage locked was 0.00798 NEAR.
+
+## Host it
+
+This is a static Vite app with public testnet defaults and no server secrets. Build it with `pnpm --filter @kotoba/web build`; the output is `packages/web/dist`. No wallet credential, NEAR private key or API secret is needed for the build or read-only demo. The QA signer is removed from production, including when its development flag is set.
+
+`vercel.json` builds only the web package and serves existing files before falling back to `index.html` for SPA routes. `.vercelignore` excludes credential files, environment files and local state. A production preview was hard-refreshed successfully on `/`, `/app` and a market detail at both widths. See [Vercel's configuration reference](https://vercel.com/docs/project-configuration/vercel-json).
+
+When Nick is ready to publish, the one command from the repository root is:
+
+```sh
+pnpm dlx vercel --prod
+```
+
+Hosting was prepared but not deployed. Keep the eventual hosted app available through judging. Repo publication, the X post and human Meteor approval remain human steps.
 
 ## How settlement is verified
 
@@ -143,7 +176,7 @@ Reproduce the whole run on a fresh account with `packages/sdk/scripts/upload-ora
 
 ## Tests
 
-`pnpm test` builds both WASM files and runs the test suites. The current source defines 42 tests: oracle 3, contract unit 5, near-workspaces sandbox 1, SDK 17 (4 against the live deployment and OutLayer's API), MCP 2 (1 live) and web 14 (error mapping on error shapes captured from testnet). See [TESTING.md](TESTING.md) for recorded results and browser QA limits. The full suite was not rerun for this docs-only submission pack.
+`pnpm test` builds both WASM files and runs the test suites. The current source defines 45 tests: oracle 3, contract unit 5, near-workspaces sandbox 1, SDK 17 (4 against the live deployment and OutLayer's API), MCP 2 (1 live) and web 17 (14 error-mapping tests, 2 live public transaction-discovery tests and 1 explicit failure test). See [TESTING.md](TESTING.md) for recorded results and browser QA limits. The R3 pass ran the web and SDK suites; the unchanged Rust and MCP suites were not rerun.
 
 ## Hackathon disclosures
 

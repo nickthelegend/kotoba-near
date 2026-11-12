@@ -1,6 +1,6 @@
 # Verification — 2026-11-09
 
-`pnpm test` from the repository root builds both WASM files first. The current source defines **42 tests** (28 in the November 9 suites plus 14 web error-mapping tests added November 10). Earlier totals of 33 and 47 were arithmetic errors; the suite counts below are unchanged. These are recorded verification results; the full suite was not rerun for the docs-only submission pack. `pnpm --filter @kotoba/web test` alone: **14 passed, 0 failed** (Nov 10).
+`pnpm test` from the repository root builds both WASM files first. The current source defines **45 tests** (28 in the November 9 suites, 14 web error-mapping tests added November 10, and 2 live discovery tests and 1 failure-injection test added November 12). Earlier totals of 33 and 47 were arithmetic errors; the suite counts below are unchanged. These are recorded verification results; the full suite was not rerun for the docs-only submission pack. `pnpm --filter @kotoba/web test` alone: **14 passed, 0 failed** (Nov 10).
 
 | Suite | Tests | What ran |
 | --- | ---: | --- |
@@ -159,6 +159,8 @@ The later full-flow rerun after the Meteor logging fix also passed at both width
 
 ## Published-transcript judge replay (2026-11-12)
 
+This historical R2 pass predates the second judge market and live-seal panel described in the R3 section below.
+
 `node packages/web/scripts/judge-market.mjs` performs a read-only preflight when no saved transaction exists. Its one-time `--send` path created `fomc-2026-10-inflation-replay` using the existing deployer credential by file path. It reserves 0.121 NEAR (0.07 subsidy plus conservative prepaid gas and allowance), verifies the official PDF, preserves existing markets' share exposure and seeds, records the signed hash before broadcasting, and follows that same hash after a timeout. After creation, rerunning the command only rechecks the saved transaction and market; it does not sign again. Public evidence is [deployments/judge-market-2026-11-12.json](deployments/judge-market-2026-11-12.json).
 
 The replay's source is the published October 28 PDF. Its deliberate demo close is November 12, 06:53:55.989 UTC, and its resolution deadline is November 26, 00:00 UTC. This separation is labelled as a replay in the app and README. It remains uncounted for the first judge to resolve; no new TEE count or attestation is claimed. The first resolver consumes this one-shot open state.
@@ -175,3 +177,28 @@ The targeted check reads the real market, confirms that its deadline covers judg
 The full audit now includes seven market routes and writes to `full-flow`. Both browser scripts use `chrome-lock.mjs`. Check `memory_pressure | tail -1` before builds and browsers; wait while free memory is below 30%. Earlier November 11 evidence paths and results above are historical. The November 12 web build, 14 web tests and 17 SDK tests pass; the contract and oracle were not changed or rebuilt.
 
 Screenshots were captured locally during QA and are not committed.
+
+## R3 live seal and judge path (2026-11-12)
+
+Executed: web 17/17 (14 error-mapping + 2 real discovery tests + 1 explicit failure test), SDK 17/17, six baseline browser checks and fourteen production checks covering seals, failed lookup/retry and SPA hard refresh. The final production route audit passes 75/75 cases at both widths, including all nine market details. All 69 ordinary cases have clean console, page, request and HTTP diagnostics, no overflow/raw error text/loading placeholders, and no unknown internal routes. Six deliberately injected outage cases are labelled expected faults. Its initial 75-case run had two failures because the harness blocked read-only receipt lookup; that allowlist was corrected. An interrupted retry is not counted as a completed run. No Rust, oracle or MCP build/test was run. No public deploy or film change was made.
+
+```sh
+pnpm --filter @kotoba/web test
+pnpm --filter @kotoba/sdk test
+pnpm --filter @kotoba/web build
+node packages/web/scripts/r3-read-checks.mjs
+node packages/sdk/scripts/verify-attestation.mjs deployments/judge-path-proof-2026-11-12.json
+node packages/sdk/scripts/verify-attestation.mjs --tx DkNvuJDwv9M2aPucpJWs3cgVwCMo8AsaUki8f2foNdkG --sender kotoba-edfa2b47.testnet
+```
+
+All six attestation checks pass on the September proof. Its creation, QA-signed Resolve, callback output, Finalize and bond-return receipt are in `judge-path-proof-2026-11-12.json`; every hash, per-write balances, cumulative budget and untouched October reads are in `r3-2026-11-12.json`. These completed deployment records are sealed evidence. Re-running a creator with a completed record is read-only; the proof runner refuses to sign a method already recorded.
+
+Discovery uses the public NearBlocks v3 account history and client-side resolve/challenge filters. It cross-checks signer, receiver and exact market id against public transactions, then extracts the exact OutLayer request and output bytes. If archival RPC is unavailable, the NearBlocks receipt tree supplies the exact emitted request-data log and base64 output; the code follows the actual promise return to the successful factory callback. A transfer receipt alone cannot establish success. Both paths still require independent input/output hash checks against OutLayer. The transaction-mode SDK command was rerun successfully for both the September proof and January inflation resolution, with all six checks and UpToDate Intel collateral. Historical RPC 429/timeouts and a transient indexer 429 were observed; exhausted retries remain an honest retry state. The deployed contract has no transaction-hash view. API failures, incomplete history or missing receipts produce a retry state. No bundled proof record is used to pass the September browser seal. Existing January panels retain their recorded Intel row; new panels give the exact SDK command instead of asserting an Intel-chain check in the browser.
+
+`r3-read-checks.mjs` starts and closes its own production preview. Its `--before` mode requires an explicitly supplied baseline checkout; it is not needed for routine rechecking. It records before/after screenshots at both widths, checks the five live rows and the unverified SDK instruction, deliberately aborts the public lookup, retries it against real services, and hard-refreshes production routes. It also greps every production asset for QA signer markers. That check passed after a build with `VITE_QA_SIGNER=1`. `vercel.json` and `.vercelignore` prepare static hosting without keys or a server backend.
+
+`r3-proof.mjs` performed the real Resolve and Finalize through the app with a QA signer restricted to the September market. Only Node reads the existing deployer file; the page receives the key in memory at its own origin. No credential copies, traces or storage-state exports are made. Public transaction evidence is saved before broadcast; uncertain broadcasts follow the same hash. A first Finalize wait timed out with no signed hash or state change; the retry succeeded after the actual window. Both October markets remained Open with no result.
+
+For the full read-only audit, start `pnpm --filter @kotoba/web exec vite preview --host 127.0.0.1 --port 5596 --strictPort` in one terminal, then run `KOTOBA_WEB=http://127.0.0.1:5596 pnpm test:flow` in another. Check that port is free first, and stop the preview afterward. The final result is `audit.json` (75 cases, 0 failures); `first-audit.json` preserves the earlier two harness failures.
+
+The R3 screenshots are referenced by basename in the QA report: before/after market PNGs, `lookup-failure-1440.png`, `lookup-failure-375.png`, and `after-checks.json`. Screenshots were captured locally during QA and are not committed. All browser launches use the shared orchestration Chrome lock and require at least 30% free system memory. Every server/browser started for this pass is closed after verification. The reserved October market must never be used by automated write tests.
