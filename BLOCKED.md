@@ -15,4 +15,6 @@ R3 verification completed 17 web tests, 17 SDK tests, 14 focused production chec
 7. **Testnet NEAR budget.** Demo balances are limited. Check spendable balance after the storage lock before each write, and keep judge-preparation spending within 0.3 testnet NEAR. Current public balance snapshots and transaction evidence belong in `deployments/`; historical figures are not a funding guarantee for a judge's wallet.
 8. **Submission evidence.** The demo film (attached to the X post) is `kotoba-near-film.mp4`; the smaller upload copy is `kotoba-near-film-share.mp4` in the same directory. Public repo and X post URLs remain TBD. Nick publishes the repo, posts the video, fills [HACKATHON_SUBMISSION_FORM.md](HACKATHON_SUBMISSION_FORM.md) and names the other team project in the README. Nothing has been submitted.
 
+9. **Contract upgrade authority.** The demo contract account keeps a [full-access key](https://docs.near.org/protocol/accounts-contracts/access-keys) to sign its market creations, so the operator can also redeploy its code; deleting the last access key would end operator signing and upgrades, while other accounts could still call the deployed contract. Key deletion remains a human decision and was not performed.
+
 Screenshots were captured locally during QA and are not committed.

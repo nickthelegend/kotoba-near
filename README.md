@@ -21,6 +21,8 @@ Reads need NEAR RPC and OutLayer's API. If a service is unavailable, the app sho
 
 Main contract: [`kotoba-edfa2b47.testnet`](https://testnet.nearblocks.io/address/kotoba-edfa2b47.testnet). It holds market escrow and shares. Resolution calls go to `outlayer.testnet`; attestation checks query `worker.outlayer.testnet`.
 
+The demo contract account keeps a [full-access key](https://docs.near.org/protocol/accounts-contracts/access-keys) to sign its market creations, so the operator can also redeploy its code; deleting the last access key would end operator signing and upgrades, while other accounts could still call the deployed contract.
+
 These are recorded testnet transactions, copied from [deployments/testnet-2026-11-09.json](deployments/testnet-2026-11-09.json) and [deployments/real-run.json](deployments/real-run.json):
 
 | Evidence | Transaction |
