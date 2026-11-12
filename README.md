@@ -10,9 +10,10 @@ Use Node.js and pnpm 10.29.2 (the version in `package.json`). No hosted app URL 
 
 1. From the repository root, run `pnpm install --frozen-lockfile`, then `pnpm dev` - see Vite start at `http://127.0.0.1:5198`. Leave that terminal running.
 2. Open `http://127.0.0.1:5198/app` - see the December 9 FOMC markets and live YES/NO odds. Open a market's bet sheet - see a quote from the contract.
-3. Open `http://127.0.0.1:5198/market/fomc-2026-01-inflation-40` - see the recorded YES result, 40 highlighted hits, and the resolve and challenge runs. The page rechecks five attestation properties; the Intel signature-chain result is recorded separately.
-4. Open `http://127.0.0.1:5198/resolved` - see the two settled January markets. Open `http://127.0.0.1:5198/creators` - see markets grouped by creator and the Fed-market composer.
-5. For a testnet buy, click **Connect** with a funded Meteor `.testnet` account, choose YES or NO and approve in Meteor - see the transaction status and then your shares at `http://127.0.0.1:5198/you`. Human Meteor sign-in and approval remain a manual check. The browser buy, final receipt and updated position pass with the development-only QA signer on real testnet. See [FLOW-QA.md](FLOW-QA.md) and [TESTING.md](TESTING.md).
+3. Open `http://127.0.0.1:5198/market/fomc-2026-10-inflation-replay` - see a replay on the published October 28 transcript. Connect a Meteor `.testnet` wallet with at least **0.421 NEAR spendable**, choose **Resolve with OutLayer · 0.12 NEAR** and approve - see the count, verdict and transaction link after execution. This one-shot replay is open for resolution until **November 26, 2026 at 00:00 UTC**. If someone already resolved it, inspect their result instead.
+4. Open `http://127.0.0.1:5198/market/fomc-2026-01-inflation-40` - see the recorded YES result, 40 highlighted hits, and the resolve and challenge runs. The page rechecks five attestation properties; the Intel signature-chain result is recorded separately. The October replay's extracted text is not bundled; its official PDF remains available.
+5. Open `http://127.0.0.1:5198/resolved` - see counted markets, including the two settled January markets. Open `http://127.0.0.1:5198/creators` - see markets grouped by creator and the Fed-market composer.
+6. For a testnet buy, click **Connect** with a funded Meteor `.testnet` account, choose YES or NO and approve in Meteor - see the transaction status and then your shares at `http://127.0.0.1:5198/you`. Human Meteor sign-in and approval remain a manual check. The browser buy, final receipt and updated position pass with the development-only QA signer on real testnet. See [FLOW-QA.md](FLOW-QA.md) and [TESTING.md](TESTING.md).
 
 Reads need NEAR RPC and OutLayer's API. If a service is unavailable, the app shows an error with a retry action. The local-only demo needs a video in Nick's X post; the draft is in [HACKATHON_SUBMISSION_FORM.md](HACKATHON_SUBMISSION_FORM.md).
 
@@ -66,6 +67,18 @@ These are recorded testnet transactions, copied from [deployments/testnet-2026-1
 | scheduler opens fomc-2026-12-employment from the Fed calendar | ok | [AUBv3NUYGK…](https://testnet.nearblocks.io/txns/AUBv3NUYGKMHh6TvvfF5yLH6XzFibe8p65DxsXFajuat) |
 
 Raw records: [deployments/real-run.json](deployments/real-run.json) (every tx with its exact OutLayer input, output, log and attestation check), [deployments/testnet-2026-11-09.json](deployments/testnet-2026-11-09.json), [deployments/oracle-fastfs.json](deployments/oracle-fastfs.json), [deployments/scheduler-2026-11-09.json](deployments/scheduler-2026-11-09.json).
+
+### Judge replay (Nov 12)
+
+Market `fomc-2026-10-inflation-replay` was created in [BfVTcefEgzCxMWwXN7BDga7D48ZKma6Fs6mMtYmTZEpw](https://testnet.nearblocks.io/txns/BfVTcefEgzCxMWwXN7BDga7D48ZKma6Fs6mMtYmTZEpw). Its [official October 28 PDF](https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf) returned HTTP 200 on November 12; the exact hash and creation outcome are in [deployments/judge-market-2026-11-12.json](deployments/judge-market-2026-11-12.json). Bets closed at November 12, 06:53:55.989 UTC. Anyone can request the pinned TEE count before November 26, 00:00 UTC. We left it unresolved for judges and did not precompute or claim an attested count.
+
+This replay deliberately separates its October source date from its November demo window. The ordinary December markets still close before their future event. The replay uses the existing contract and Resolve path; no contract redeploy or new wallet is required. A fresh replay's live seal is not added automatically to the app's three recorded attestation panels. Once a judge has a resolve hash and signer account, the SDK can verify its input, output and quote without credentials:
+
+```sh
+node --input-type=module -e 'import { verifyResolutionTx } from "./packages/sdk/src/attestation.mjs"; console.log(JSON.stringify(await verifyResolutionTx(process.argv[1], process.argv[2]), null, 2))' '<resolve-tx-hash>' '<resolver.testnet>'
+```
+
+The 0.12 NEAR attachment includes the 0.1 bond and up to 0.02 for execution. Prepaid gas also needs balance; unused gas is returned. After a result, anyone can challenge during the 15-minute window or finalize once it ends. The app's enabled Resolve button and low-balance refusal were checked at both widths without consuming the replay. Human Meteor approval and a fresh replay resolution remain untested.
 
 ## How settlement is verified
 
@@ -138,9 +151,11 @@ Built for NEAR HACKATHON 2026 (Nov 1-14). Submission deadline: November 14, 2026
 
 ### Prior work
 
-Code before November 1, 2026 is treated as baseline for this submission. No pre-November 1 commits appear in this repository's complete local history. The first commit, `feffd1e` (November 9), contains only the MIT license and `.gitignore`. There is no tracked NOTICE file or former project name. The existing inspiration notes name Mentioned and Memetic Machines; they are references, not sibling codebases, and no code was reused from them.
+The current [Q-001](https://nearhackathon.com/HACKATHON.md) counts work from the October 19, 2026 announcement through November 14; earlier code is baseline. No pre-October 19 commits appear in this repository's complete local history. The first commit, `feffd1e` (November 9), contains only the MIT license and `.gitignore`. There is no tracked NOTICE file or former project name. The existing inspiration notes name Mentioned and Memetic Machines; they are references, not sibling codebases, and no code was reused from them.
 
 The November 9-10 commits add the NEAR contract, LMSR pricing, NEP-245 shares, OutLayer transcript program, FastFS upload, deployment and settlement records, scheduler, SDK, MCP tools, web app, tests and Meteor Wallet integration. Only NEAR work built in the hackathon window is presented for judging. Review the implementation since the initial scaffold with `git diff feffd1e..HEAD -- packages deployments scripts docs package.json pnpm-workspace.yaml pnpm-lock.yaml`; inspect dated commits with `git log --reverse --date=iso-strict --format='%h %ad %s'`.
+
+November 11-12 adds the browser QA signer and real browser buys, the published-transcript judge replay, and the local 3D art kit. These are also inside the eligible window.
 
 Libraries include near-sdk, near-workspaces, lopdf, near-api-js, NEAR Wallet Selector, Phala dcap-qvl, the MCP SDK, React and Vite. Dependency versions are recorded in the package manifests and lockfiles. No reused team library or template is identified in the repository.
 

@@ -154,3 +154,20 @@ The walkthrough found an upstream `console.log(accessKey)` in Meteor SDK 1.0.24'
 
 
 The later full-flow rerun after the Meteor logging fix also passed at both widths: 44 → 46 YES, spending another 0.00263368737922 testnet NEAR. Exact hashes and limits are in [FLOW-QA.md](FLOW-QA.md).
+
+## Published-transcript judge replay (2026-11-12)
+
+`node packages/web/scripts/judge-market.mjs` performs a read-only preflight when no saved transaction exists. Its one-time `--send` path created `fomc-2026-10-inflation-replay` using the existing deployer credential by file path. It reserves 0.121 NEAR (0.07 subsidy plus conservative prepaid gas and allowance), verifies the official PDF, preserves existing markets' share exposure and seeds, records the signed hash before broadcasting, and follows that same hash after a timeout. After creation, rerunning the command only rechecks the saved transaction and market; it does not sign again. Public evidence is [deployments/judge-market-2026-11-12.json](deployments/judge-market-2026-11-12.json).
+
+The replay's source is the published October 28 PDF. Its deliberate demo close is November 12, 06:53:55.989 UTC, and its resolution deadline is November 26, 00:00 UTC. This separation is labelled as a replay in the app and README. It remains uncounted for the first judge to resolve; no new TEE count or attestation is claimed. The first resolver consumes this one-shot open state.
+
+After building and starting a production preview on a free port in 5300–5999, run:
+
+```sh
+KOTOBA_WEB=http://127.0.0.1:5592 node packages/web/scripts/check-judge-market.mjs
+KOTOBA_WEB=http://127.0.0.1:5592 pnpm test:flow
+```
+
+The targeted check reads the real market, confirms that its deadline covers judging, and checks the enabled Resolve button with a restored public deployer session. A restored low-balance player session clicks Resolve and gets the real balance-preflight error before any signing. Both viewports use a fresh unregistered fixture key; no funded key is loaded and all write RPCs are blocked. No resolution is sent. Screenshots and `resolve-checks.json` are under `/Volumes/Extreme SSD/Projects/grokbot/orchestration/shots/kotoba/judging-r2/`. Before/after UI captures are in its `before/` and `after/` folders. The existing design, fonts, colours and art are unchanged.
+
+The full audit now includes seven market routes and writes to `/Volumes/Extreme SSD/Projects/grokbot/orchestration/shots/kotoba/full-flow/`. Both browser scripts use `/Volumes/Extreme SSD/Projects/grokbot/orchestration/chrome-lock.mjs`. Check `memory_pressure | tail -1` before builds and browsers; wait while free memory is below 30%. Earlier November 11 evidence paths and results above are historical. The November 12 web build, 14 web tests and 17 SDK tests pass; the contract and oracle were not changed or rebuilt.

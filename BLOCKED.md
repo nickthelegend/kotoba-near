@@ -2,6 +2,8 @@
 
 The testnet deployment, the OutLayer TEE runs, attestation verification, the challenge re-run, payouts and the live Dec 9 markets are **done**. See the README. What remains:
 
+The October 28 transcript replay was also created on November 12. Its Resolve path is available until November 26, 00:00 UTC; it was deliberately left uncounted for judges. See [creation evidence](deployments/judge-market-2026-11-12.json) and the README's judge replay instructions. It is one-shot: after the first resolution, later visitors inspect that result and can finalize after the challenge window. A funded resolver needs at least 0.421 testnet NEAR spendable for the attachment and prepaid gas. This does not close the manual Meteor-approval check.
+
 1. **Email sign-in and gasless bets (NEP-366 meta transactions).** Not built. Unblocking needs an email identity provider (`EMAIL_AUTH_CLIENT_ID` and its secret) and a funded testnet relayer key (`RELAYER_TESTNET_PRIVATE_KEY`) with an allowlist. Until then, bets are signed with a NEAR testnet wallet (Meteor Wallet via wallet-selector; full sign-in and approval still need human verification).
 2. **Bets from any chain via 1Click.** The SDK has a `dry: true` quote helper only. It needs a funded `NEAR_MAINNET_ACCOUNT` in a gitignored `.env` (`ONECLICK_JWT` is optional). NEAR Intents has no testnet, so a testnet market cannot be funded from it.
 3. **Test NEP-141 collateral.** Not built. Markets escrow native testnet NEAR.

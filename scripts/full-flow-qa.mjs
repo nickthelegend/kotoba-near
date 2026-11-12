@@ -3,15 +3,15 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { utimesSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { withChromeLock, LOCK } from '/private/tmp/claude-501/-Volumes-Extreme-SSD-Projects-grokbot/0f121b7c-0081-4ec0-81a9-0ccb4f7f8b48/scratchpad/chrome-lock.mjs';
+import { withChromeLock, LOCK } from '/Volumes/Extreme SSD/Projects/grokbot/orchestration/chrome-lock.mjs';
 delete process.env.DEBUG;
 delete process.env.PWDEBUG;
 const { chromium } = await import('playwright-core');
 const base = process.env.KOTOBA_WEB || 'http://127.0.0.1:5591';
 assert.ok(new URL(base).hostname === '127.0.0.1' && +new URL(base).port >= 5300 && +new URL(base).port <= 5999);
-const out = '/private/tmp/claude-501/-Volumes-Extreme-SSD-Projects-grokbot/0f121b7c-0081-4ec0-81a9-0ccb4f7f8b48/scratchpad/flow-qa/kotoba/full-flow';
+const out = '/Volumes/Extreme SSD/Projects/grokbot/orchestration/shots/kotoba/full-flow';
 const contract = 'kotoba-edfa2b47.testnet', player = `player.${contract}`, market = '/market/fomc-2026-12-employment';
-const ids = ['fomc-2026-12-employment', 'fomc-2026-12-inflation', 'fomc-2026-12-recession', 'fomc-2026-12-tariffs', 'fomc-2026-01-inflation-40', 'fomc-2026-01-recession'];
+const ids = ['fomc-2026-12-employment', 'fomc-2026-12-inflation', 'fomc-2026-12-recession', 'fomc-2026-12-tariffs', 'fomc-2026-01-inflation-40', 'fomc-2026-01-recession', 'fomc-2026-10-inflation-replay'];
 const rpcPattern = /https:\/\/(test\.rpc\.fastnear\.com|near-testnet\.drpc\.org)\/?$/;
 // Meteor's restored-session reader requires a signer even for reads. This fresh,
 // unregistered key authorizes no on-chain account and is never printed or copied to a file.
@@ -83,7 +83,7 @@ await withChromeLock(async () => {
         report.cases.push(row); await persist(); console.log(`${row.status}: ${width} ${name}${row.error ? ' — ' + row.error : ''}`);
       }
       await fresh();
-      await step('landing', async () => { await goto('/', '.l-stats'); await page.waitForFunction(() => document.querySelector('.l-stats dd')?.textContent === '6'); });
+      await step('landing', async () => { await goto('/', '.l-stats'); await page.waitForFunction(minimum => Number(document.querySelector('.l-stats dd')?.textContent) >= minimum, ids.length); });
       await step('understand', async () => {
         if (width === 375) await page.locator('#how').scrollIntoViewIfNeeded(); // The approved phone header hides this link; users scroll.
         else { await page.getByRole('link', { name: 'How it settles', exact: true }).click(); await page.waitForFunction(() => location.hash === '#how' && Math.abs(document.querySelector('#how').getBoundingClientRect().top) < 100); }
@@ -128,6 +128,7 @@ await withChromeLock(async () => {
       for (const id of ids) await step(id, async () => {
         await goto('/market/' + id, '.market-head');
         if (id.includes('2026-01')) { await page.waitForFunction(() => [...document.querySelectorAll('.run .seal')].every(s => s.textContent.includes('Seal verified')), undefined, { timeout: 60000 }); await page.locator('.paper-text').waitFor(); }
+        else if (id.endsWith('-replay')) { await page.getByText('Published transcript · replay demo', { exact: true }).waitFor(); await page.getByRole('button', { name: 'Connect to resolve', exact: true }).waitFor(); }
         else await page.getByText('Transcript not published yet', { exact: true }).waitFor();
       });
       await step('transcript-navigation', async () => {
