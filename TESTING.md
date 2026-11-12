@@ -1,4 +1,30 @@
-# Verification — 2026-11-09
+# Verification
+
+## Full-suite rerun — 2026-11-12 (R4)
+
+The root test command completed with exit code **0**: **45 passed, 0 failed, 0 skipped or ignored**. Both the oracle WASI P2 build and the contract WASM build succeeded. No source fixes were required.
+
+```sh
+CARGO_BUILD_JOBS=1 pnpm test
+```
+
+| Suite | Passed | Failed | Skipped / ignored |
+| --- | ---: | ---: | ---: |
+| Oracle (Rust) | 3 | 0 | 0 |
+| Contract unit (Rust) | 5 | 0 | 0 |
+| Contract sandbox (near-workspaces, real local nearcore) | 1 | 0 | 0 |
+| SDK (Node) | 17 | 0 | 0 |
+| MCP (Node, real stdio server) | 2 | 0 | 0 |
+| Web (node:test) | 17 | 0 | 0 |
+| **Total** | **45** | **0** | **0** |
+
+Contract doc-tests ran with 0 tests and are excluded from the total. The web count includes 14 error-mapping tests, 2 live January transaction-discovery tests and 1 explicit failure-injection test. The SDK and MCP checks read the real testnet deployment and OutLayer attestations; the SDK also verifies the official Fed PDF/calendar and Intel signature chain. No successful chain response or attestation was mocked. Signed contract transactions ran only on the local sandbox; this test run spent **0 public testnet NEAR** and did not write to either judge replay.
+
+Environment: Node v26.5.0, pnpm 10.29.2 and the packages' pinned Rust 1.95.0 toolchain. Cargo used one build job. Free memory exceeded 30%, system disk free space exceeded 5 GB, and no other Cargo process was running at the preflight. The sandbox stopped after the test. The local console log is `full-suite-attempt-1.log`; it is not committed. This command runs unit/integration suites, not a new browser walkthrough; R3 browser results remain recorded below.
+
+## Historical verification — 2026-11-09
+
+The following sections retain earlier verification notes; the R4 table above is the latest complete suite run.
 
 `pnpm test` from the repository root builds both WASM files first. The current source defines **45 tests** (28 in the November 9 suites, 14 web error-mapping tests added November 10, and 2 live discovery tests and 1 failure-injection test added November 12). Earlier totals of 33 and 47 were arithmetic errors; the suite counts below are unchanged. These are recorded verification results; the full suite was not rerun for the docs-only submission pack. `pnpm --filter @kotoba/web test` alone: **14 passed, 0 failed** (Nov 10).
 
