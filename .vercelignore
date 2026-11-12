@@ -1,0 +1,7 @@
+.near-credentials/
+.env
+.env.*
+**/.env
+**/.env.*
+.loom/
+**/target/
