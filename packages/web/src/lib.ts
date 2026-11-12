@@ -1,6 +1,7 @@
 import deployment from '../../../deployments/testnet-2026-11-09.json';
 import run from '../../../deployments/real-run.json';
 import oracle from '../../../deployments/oracle-fastfs.json';
+import judgeDemo from '../../../deployments/judge-market-2026-11-12.json';
 import { RpcError, rpcErrorFrom, txFailure } from './errors';
 
 export type OracleOutput = { count: number; transcript_sha256: string; source_url: string; code_hash: string; attestation: string };
@@ -66,6 +67,7 @@ export const OUTLAYER_API = 'https://testnet-api.outlayer.ai';
 export const ORACLE = oracle as { url: string; sha256: string; bytes: number; txs: { chunk: number; hash: string; explorer: string }[] };
 export const DEPLOYMENT = deployment as { contract_id: string; contract_sha256: string; oracle_sha256: string; oracle_url: string; deploy: { hash: string; explorer: string }; initialize: { hash: string; explorer: string } };
 export const RUN = run as { network: string; contract: string; steps: Step[] };
+export const JUDGE_DEMO = judgeDemo;
 export const UNIT_NEAR = 0.001; // one winning share pays 0.001 NEAR
 export const PINNED_TEXT_SHA = 'b3a6ffd6c6912f1ff63c04bbb544913eff55917cbbb57fab17d317d28ff706f1';
 export const PINNED_PDF_SHA = '2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3';

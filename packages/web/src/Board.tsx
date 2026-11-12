@@ -22,7 +22,7 @@ function EventCard({ ev, index, prev, now, onCall }: { ev: KEvent; index: number
   const lead = hottest(ev.markets);
   const traded = ev.markets.reduce((n, m) => n + shares(m), 0);
   return <article className={`ev-card ${ev.open ? '' : 'ev-closed'}`}>
-    <div className="ev-notch">{ev.open ? <span className="chip-time"><Icon name="clock" size={14} /><Countdown target={ev.closeMs} now={now} compact /></span> : <span className="chip-time">Settled</span>}</div>
+    <div className="ev-notch">{ev.open ? <span className="chip-time"><Icon name="clock" size={14} /><Countdown target={ev.closeMs} now={now} compact /></span> : <span className="chip-time">{ev.markets.every(m => m.status === 'Final') ? 'Settled' : ev.markets.every(m => m.result) ? 'Provisional' : 'Awaiting resolution'}</span>}</div>
     <span className="chip-src"><i className="dot-fed" />FOMC</span>
     <h3>{ev.title}</h3>
     <p className="ev-when">{ev.date ? longDay(ev.date.getTime()) : ''}{ev.open ? ` · bets close ${fmtTimeUTC(ev.closeMs)} UTC` : ` · ${ev.date?.getUTCFullYear() ?? ''}`}</p>
@@ -36,7 +36,7 @@ function EventCard({ ev, index, prev, now, onCall }: { ev: KEvent; index: number
           <span>Last</span>{prev.markets.map((m) => <i key={m.id} className={`past past-${(outcome(m) ?? 'none').toLowerCase()}`} title={`${m.phrase}: ${outcome(m) ?? 'pending'}`}>{outcome(m) === 'YES' ? '▲' : outcome(m) === 'NO' ? '▼' : ''}</i>)}
         </div>}
         {ev.open ? <button className="pill-ink" onClick={onCall}>Your call <Icon name="arrow" size={15} /></button>
-          : <Link to={`/market/${lead.id}`} className="pill-ink">See the proof <Icon name="arrow" size={15} /></Link>}
+          : <Link to={`/market/${lead.id}`} className="pill-ink">{lead.result ? 'See the proof' : 'Resolve the market'} <Icon name="arrow" size={15} /></Link>}
       </div>
     </div>
   </article>;
@@ -92,7 +92,7 @@ function Phone({ markets, now, onPick }: { markets: Market[]; now: number; onPic
   const [day, setDay] = useState<number | null>(() => (next?.date ? next.date.getTime() : null));
   const [filter, setFilter] = useState<'all' | 'open' | 'settled'>('all');
   const [sheet, setSheet] = useState<KEvent | null>(null);
-  const list = markets.filter((m) => (filter === 'open' ? isOpen(m, now) : filter === 'settled' ? !isOpen(m, now) : true) && (day === null || dayOf(m) === day))
+  const list = markets.filter((m) => (filter === 'open' ? isOpen(m, now) : filter === 'settled' ? m.result !== null : true) && (day === null || dayOf(m) === day))
     .sort((a, b) => Number(isOpen(b, now)) - Number(isOpen(a, now)) || a.close_ns - b.close_ns || shares(b) - shares(a));
   const settled = events.filter((e) => !e.open);
   return <>
@@ -133,7 +133,7 @@ export function MarketCard({ m, now, onPick }: { m: Market; now: number; onPick?
     </header>
     <h3><Link to={`/market/${m.id}`}>Will the Fed chair say “{m.phrase}”{m.threshold > 1 ? ` ${m.threshold}+ times` : ''}?</Link></h3>
     <p className="mcard-sum">{m.result
-      ? <>Said <b>{m.result.count}</b> {m.result.count === 1 ? 'time' : 'times'} in the official {date ? fmtDate(date) : ''} transcript, needing {m.threshold}. Counted inside an OutLayer TEE; {m.status === 'Final' ? 'final and paid out.' : 'challenge window open.'}</>
+      ? <>Said <b>{m.result.count}</b> {m.result.count === 1 ? 'time' : 'times'} in the official {date ? fmtDate(date) : ''} transcript, needing {m.threshold}. Counted inside an OutLayer TEE; {m.status === 'Final' ? 'final; winning shares can be claimed.' : 'challenge window open.'}</>
       : <>Resolves YES if “{m.phrase}” appears {m.threshold > 1 ? `at least ${m.threshold} times` : 'at least once'} in the official {date ? fmtDate(date) : ''} press conference transcript, counted by a sealed program.</>}</p>
     <span className="tok"><i className="tok-dot" />{m.id}:{open ? (p >= 0.5 ? 'YES' : 'NO') : (res ?? 'YES')}</span>
     {open && onPick ? <div className="yn">
@@ -145,12 +145,12 @@ export function MarketCard({ m, now, onPick }: { m: Market; now: number; onPick?
 
 function Web({ markets, now, onPick }: { markets: Market[]; now: number; onPick: (p: Pick) => void }) {
   const [tab, setTab] = useState<'open' | 'settled' | 'all'>('open');
-  const list = markets.filter((m) => (tab === 'open' ? isOpen(m, now) : tab === 'settled' ? !isOpen(m, now) : true))
+  const list = markets.filter((m) => (tab === 'open' ? isOpen(m, now) : tab === 'settled' ? m.result !== null : true))
     .sort((a, b) => Number(isOpen(b, now)) - Number(isOpen(a, now)) || shares(b) - shares(a));
   const next = markets.filter((m) => isOpen(m, now)).sort((a, b) => a.close_ns - b.close_ns)[0];
   return <>
     <div className="web-tabs" role="tablist" aria-label="Markets">
-      {(['open', 'settled', 'all'] as const).map((t) => <button key={t} role="tab" aria-selected={tab === t} className={tab === t ? 'on' : ''} onClick={() => setTab(t)}>{t === 'open' ? 'Open' : t === 'settled' ? 'Settled' : 'All'} <small>{markets.filter((m) => (t === 'open' ? isOpen(m, now) : t === 'settled' ? !isOpen(m, now) : true)).length}</small></button>)}
+      {(['open', 'settled', 'all'] as const).map((t) => <button key={t} role="tab" aria-selected={tab === t} className={tab === t ? 'on' : ''} onClick={() => setTab(t)}>{t === 'open' ? 'Open' : t === 'settled' ? 'Settled' : 'All'} <small>{markets.filter((m) => (t === 'open' ? isOpen(m, now) : t === 'settled' ? m.result !== null : true)).length}</small></button>)}
       {next && <span className="web-next"><i className="live-dot" />Next close · Fed {fmtDate(eventDate(next) ?? new Date(next.close_ns / 1e6))} · <Countdown target={next.close_ns / 1e6} now={now} compact /></span>}
     </div>
     {list.length ? <div className="web-grid">{list.map((m) => <MarketCard key={m.id} m={m} now={now} onPick={onPick} />)}</div>

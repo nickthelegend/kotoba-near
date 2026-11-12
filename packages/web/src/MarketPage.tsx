@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Boundary, Copy, Countdown, Icon, Link, Obj, Problem, SplitBar, State, useMarkets, useMounted, useNow } from './ui';
-import { DEPLOYMENT, PINNED_PDF_SHA, PINNED_TEXT_SHA, UNIT_NEAR, batchBalance, near, eventDate, fmtDate, outcome, runsFor, sha256Hex, short, splitHits, txUrl, pct, yesPrice, type Market, type Step } from './lib';
+import { DEPLOYMENT, JUDGE_DEMO, PINNED_PDF_SHA, PINNED_TEXT_SHA, UNIT_NEAR, batchBalance, near, eventDate, fmtDate, outcome, runsFor, sha256Hex, short, splitHits, txUrl, pct, yesPrice, type Market, type Step } from './lib';
 import { explain, type Explained } from './errors';
 import { CHAIN_CHANGED, refreshMarkets } from './store';
 import { runTx, type TxStage } from './tx';
@@ -57,6 +57,7 @@ function Transcript({ m }: { m: Market }) {
     marks.forEach((el, k) => el.classList.toggle('cur', k === n));
     marks[n].scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
+  if (!m.result && m.id === JUDGE_DEMO.args.id && m.source_url === JUDGE_DEMO.source_check.url) return <State kind="empty" art="transcript" title="Published transcript · replay demo">This uses the published October 28 transcript, not a forecast. A funded testnet wallet can resolve it after bets close and before {new Date(m.deadline_ns / 1e6).toUTCString().replace(':00 GMT', ' UTC')}. <a href={m.source_url} target="_blank" rel="noreferrer">Official published PDF</a></State>;
   if (!m.result) return <State kind="empty" art="transcript" title="Transcript not published yet">The Fed posts the press conference PDF after the event. The market can be resolved from its close until the deadline. <a href={m.source_url} target="_blank" rel="noreferrer">Expected source URL</a></State>;
   if (!pinned) return <State kind="setup" art="magnifier" title="Transcript text not pinned in this app">Open the official PDF and compare its SHA-256 to <code>{short(m.result.transcript_sha256, 12, 8)}</code>.</State>;
   if (err) return <State kind="error" title="Could not load the transcript text">{err}</State>;
