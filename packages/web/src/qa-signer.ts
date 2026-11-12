@@ -13,7 +13,7 @@ export const QA_SIGNER_MARKER = 'kotoba-qa-signer';
 const ALLOWED_RPC = new Set(['https://near-testnet.drpc.org', 'https://test.rpc.fastnear.com', 'https://archival-rpc.testnet.near.org']);
 const CAP = 3n * 10n ** 23n; // 0.3 NEAR, including a conservative prepaid gas reservation.
 const CONNECTED = 'kotoba-qa-signer-connected'; // Public session flag only; no credential storage.
-type Config = { accountId: string; secretKey: string; rpcUrl: string };
+type Config = { accountId: string; secretKey: string; rpcUrl: string; allowedMarketIds?: string[]; allowedMethods?: string[] };
 type PublicEvent = { hash: string; accountId: string; receiverId: string; methods: string[]; depositYocto: string; gas: string; stage: string; at: string; gasBurntYocto?: string };
 declare global {
   interface Window {
@@ -38,7 +38,7 @@ export function setupQaSigner(): WalletModuleFactory<InjectedWallet> {
       id: 'qa-signer', type: 'injected',
       metadata: { name: 'QA signer', description: 'Local testnet automation only', iconUrl: '', downloadUrl: '', available: true, deprecated: false },
       async init() {
-        let state: { accountId: string; rpcUrl: string; account: QaAccount; publicKey: ReturnType<KeyPair['getPublicKey']> } | undefined;
+        let state: { accountId: string; rpcUrl: string; account: QaAccount; publicKey: ReturnType<KeyPair['getPublicKey']>; allowedMarketIds?: string[]; allowedMethods?: string[] } | undefined;
         const contractId = CONTRACT;
         requireTestnet(contractId);
         let reserved = BigInt(sessionStorage.getItem('kotoba-qa-reserved') ?? '0');
@@ -63,7 +63,7 @@ export function setupQaSigner(): WalletModuleFactory<InjectedWallet> {
           } catch { throw new Error('QA_INVALID_STARTUP_KEY'); }
           await keys.setKey('testnet', config.accountId, key);
           const connection = Connection.fromConfig({ networkId: 'testnet', provider: { type: 'JsonRpcProvider', args: { url: config.rpcUrl } }, signer: { type: 'InMemorySigner', keyStore: keys } });
-          state = { accountId: config.accountId, rpcUrl: config.rpcUrl, account: new QaAccount(connection, config.accountId), publicKey: key.getPublicKey() };
+          state = { accountId: config.accountId, rpcUrl: config.rpcUrl, account: new QaAccount(connection, config.accountId), publicKey: key.getPublicKey(), allowedMarketIds: config.allowedMarketIds, allowedMethods: config.allowedMethods };
           delete window.__KOTOBA_QA_SIGNER__;
           return state;
         }
@@ -86,17 +86,26 @@ export function setupQaSigner(): WalletModuleFactory<InjectedWallet> {
             const a = action as unknown as { functionCall?: { methodName: string; args: Uint8Array; gas: bigint; deposit: bigint }; type?: string; params?: { methodName: string; args: object; gas: string; deposit: string } };
             const call = a.functionCall ?? (a.type === 'FunctionCall' ? a.params : undefined);
             if (!call) throw new Error('QA_FUNCTION_CALL_ONLY');
+            const args = call.args instanceof Uint8Array ? JSON.parse(new TextDecoder().decode(call.args)) : call.args;
+            if (s.allowedMethods && !s.allowedMethods.includes(call.methodName)) throw new Error('QA_METHOD_NOT_ALLOWED');
+            if (s.allowedMarketIds && !s.allowedMarketIds.includes((args as { id?: string }).id ?? '')) throw new Error('QA_MARKET_NOT_ALLOWED');
             const d = BigInt(call.deposit), g = BigInt(call.gas);
             if (d < 0n || g <= 0n || g > 300_000_000_000_000n) throw new Error('QA_INVALID_CALL_BUDGET');
             deposit += d; gas += g; methods.push(call.methodName);
             return transactions.functionCall(call.methodName, call.args, g, d);
           });
           if (!actions.length) throw new Error('QA_ACTION_REQUIRED');
+          const price = await rpc(s.rpcUrl, 'gas_price', [null]);
+          const gasPrice = BigInt(price.gas_price);
+          if (gasPrice <= 0n || gasPrice > 1_000_000_000n) throw new Error('QA_GAS_PRICE_OUT_OF_BOUNDS');
+          // Prepaid gas is refunded when unused. Reserve twice the current chain price
+          // for spending; keep the app's stricter balance allowance independently.
+          const spendReservation = deposit + gas * gasPrice * 2n + 10n ** 21n;
           const need = deposit + gas * 1_000_000_000n + 10n ** 21n;
-          if (reserved + need > CAP) throw new Error('QA_SPEND_CAP_0_3_NEAR');
+          if (reserved + spendReservation > CAP) throw new Error('QA_SPEND_CAP_0_3_NEAR');
           const balance = await rpc(s.rpcUrl, 'query', { request_type: 'view_account', finality: 'final', account_id: s.accountId });
           if (BigInt(balance.amount) - BigInt(balance.storage_usage) * 10n ** 19n < need) throw new Error('QA_LOW_TESTNET_BALANCE');
-          reserved += need; sessionStorage.setItem('kotoba-qa-reserved', reserved.toString());
+          reserved += spendReservation; sessionStorage.setItem('kotoba-qa-reserved', reserved.toString());
           const [hashBytes, signed] = await s.account.signCall(receiver, actions);
           const hash = utils.serialize.base_encode(hashBytes);
           const event = { hash, accountId: s.accountId, receiverId: receiver, methods, depositYocto: deposit.toString(), gas: gas.toString() };

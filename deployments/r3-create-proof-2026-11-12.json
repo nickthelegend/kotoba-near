@@ -1,0 +1,67 @@
+{
+  "network": "testnet",
+  "contract": "kotoba-edfa2b47.testnet",
+  "account": "kotoba-edfa2b47.testnet",
+  "rpc": "https://near-testnet.drpc.org",
+  "status": "final",
+  "args": {
+    "id": "fomc-2026-09-inflation-replay",
+    "event": "FOMC press conference · 2026-09-16 · replay demo",
+    "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260916.pdf",
+    "phrase": "inflation",
+    "threshold": 1,
+    "close_ns": 1794474974204000000,
+    "deadline_ns": 1795651200000000000,
+    "b": 100
+  },
+  "source_check": {
+    "url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260916.pdf",
+    "status": 200,
+    "bytes": 200169,
+    "sha256": "aa308d25613c429101f2b2ac540d5d3b38a1448cf30ebf61b6f15acd74ae927c",
+    "checked_at": "2026-11-12T09:15:44.204Z"
+  },
+  "cap_yocto": "300000000000000000000000",
+  "attached_deposit_yocto": "70000000000000000000000",
+  "gas": "50000000000000",
+  "reserved_budget_yocto": "121000000000000000000000",
+  "existing_escrow_reserve_yocto": "446000000000000000000000",
+  "before": {
+    "amount": "3884057445739721000000000",
+    "storage_usage": 316355,
+    "spendable_yocto": "720507445739721000000000"
+  },
+  "tx": "5LT6xu9vD2Q1HSqdtom2MB7CEJPjV1EHD1UyExmDR5EP",
+  "explorer": "https://testnet.nearblocks.io/txns/5LT6xu9vD2Q1HSqdtom2MB7CEJPjV1EHD1UyExmDR5EP",
+  "signed_at": "2026-11-12T09:15:44.717Z",
+  "final_at": "2026-11-12T09:15:48.843Z",
+  "tokens_burnt_yocto": "207956687889800000000",
+  "after": {
+    "amount": "3883849489051831200000000",
+    "storage_usage": 316638,
+    "spendable_yocto": "717469489051831200000000"
+  },
+  "market": {
+    "id": "fomc-2026-09-inflation-replay",
+    "event": "FOMC press conference · 2026-09-16 · replay demo",
+    "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260916.pdf",
+    "phrase": "inflation",
+    "threshold": 1,
+    "close_ns": 1794474974204000000,
+    "deadline_ns": 1795651200000000000,
+    "b": 100,
+    "yes": 0,
+    "no": 0,
+    "burned_yes": 0,
+    "burned_no": 0,
+    "creator": "kotoba-edfa2b47.testnet",
+    "status": "Open",
+    "result": null,
+    "challenge_until_ns": null,
+    "pending": false,
+    "resolver": null,
+    "challenger": null
+  },
+  "balance_decrease_yocto": "207956687889800000000",
+  "new_storage_locked_yocto": "2830000000000000000000"
+}

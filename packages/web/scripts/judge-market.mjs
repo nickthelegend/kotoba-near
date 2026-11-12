@@ -8,10 +8,13 @@ import { createHash } from 'node:crypto';
 const root = resolve(import.meta.dirname, '../../..');
 const contract = 'kotoba-edfa2b47.testnet';
 const rpcUrl = 'https://near-testnet.drpc.org';
-const id = 'fomc-2026-10-inflation-replay';
-const source = 'https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf';
+const proof = process.argv.includes('--r3-proof'), second = process.argv.includes('--r3-second');
+if (proof && second) throw Error('CHOOSE_ONE_REPLAY');
+const id = proof ? 'fomc-2026-09-inflation-replay' : second ? 'fomc-2026-10-employment-replay' : 'fomc-2026-10-inflation-replay';
+const date = proof ? '20260916' : '20261028';
+const source = `https://www.federalreserve.gov/mediacenter/files/FOMCpresconf${date}.pdf`;
 const deadline = Date.parse('2026-11-26T00:00:00Z');
-const file = resolve(root, 'deployments/judge-market-2026-11-12.json');
+const file = resolve(root, proof ? 'deployments/r3-create-proof-2026-11-12.json' : second ? 'deployments/r3-create-second-2026-11-12.json' : 'deployments/judge-market-2026-11-12.json');
 const deposit = 70n * 10n ** 21n, gas = 50_000_000_000_000n, cap = 3n * 10n ** 23n;
 const reserved = deposit + gas * 1_000_000_000n + 10n ** 21n;
 const wait = ms => new Promise(r => setTimeout(r, ms));
@@ -57,9 +60,11 @@ try {
   try { evidence = JSON.parse(await readFile(file, 'utf8')); } catch (e) { if (e.code !== 'ENOENT') throw e; }
   if (evidence?.tx) {
     if (evidence.contract !== contract || evidence.account !== contract || evidence.args?.id !== id || evidence.reserved_budget_yocto !== reserved.toString()) throw Error('SAVED_EVIDENCE_MISMATCH');
-    await follow();
+    if (evidence.status === 'final') console.log(JSON.stringify({ status: 'already_created', tx: evidence.tx, market: await view('get_market', { id }) }));
+    else await follow();
   }
   else {
+    if (!proof && !second) throw Error('ORIGINAL_REPLAY_RESERVED_FOR_JUDGES');
     if (Date.now() + 120000 >= deadline) throw Error('JUDGING_WINDOW_EXPIRED');
     if (await view('get_market', { id })) throw Error('MARKET_EXISTS_REFUSE_DUPLICATE');
     const before = await balance(), markets = await view('list_markets', {});
@@ -70,7 +75,7 @@ try {
     const response = await fetch(source, { signal: AbortSignal.timeout(20000) });
     const pdf = Buffer.from(await response.arrayBuffer());
     if (!response.ok || pdf.subarray(0, 4).toString() !== '%PDF') throw Error('PUBLISHED_PDF_UNAVAILABLE');
-    const args = { id, event: 'FOMC press conference · 2026-10-28 · replay demo', source_url: source, phrase: 'inflation', threshold: 1, close_ns: (Date.now() + 120000) * 1e6, deadline_ns: deadline * 1e6, b: 100 };
+    const args = { id, event: `FOMC press conference · ${proof ? '2026-09-16' : '2026-10-28'} · replay demo`, source_url: source, phrase: second ? 'employment' : 'inflation', threshold: 1, close_ns: (Date.now() + 30000) * 1e6, deadline_ns: deadline * 1e6, b: 100 };
     evidence = { network: 'testnet', contract, account: contract, rpc: rpcUrl, status: 'preflight', args, source_check: { url: source, status: response.status, bytes: pdf.length, sha256: createHash('sha256').update(pdf).digest('hex'), checked_at: new Date().toISOString() }, cap_yocto: cap.toString(), attached_deposit_yocto: deposit.toString(), gas: gas.toString(), reserved_budget_yocto: reserved.toString(), existing_escrow_reserve_yocto: priorReserve.toString(), before };
     if (!process.argv.includes('--send')) console.log(JSON.stringify(evidence, null, 2));
     else {
