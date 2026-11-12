@@ -59,7 +59,14 @@ try {
         await page.getByRole('button', { name: `Connect to ${method}`, exact: true }).click({ timeout: 60000 });
         const button = page.getByRole('button', { name: method === 'resolve' ? 'Resolve with OutLayer · 0.12 NEAR' : 'Finalize', exact: true });
         await button.waitFor({ timeout: 60000 }); await page.screenshot({ path: `${shots}/before-${method}-1440.png`, fullPage: true });
-        await button.click(); await page.locator('.settle .why.ok').waitFor({ timeout: 240000 });
+        await button.click();
+        await page.waitForFunction(() => document.querySelector('.settle .why.ok,.settle .problem'), undefined, { timeout: 240000 });
+        if (await page.locator('.settle .problem').count()) {
+          const message = (await page.locator('.settle .problem').innerText()).replace(/ed25519:[1-9A-HJ-NP-Za-km-z]{60,}/g, '[redacted]');
+          await page.screenshot({ path: `${shots}/failed-${method}-1440.png`, fullPage: true });
+          proof.failures ??= []; proof.failures.push({ method, message, at: new Date().toISOString(), transaction_sent: ledger.transactions.some(t => t.method === method) }); await save();
+          console.log(message.slice(0, 300)); throw Error('APP_PREFLIGHT_OR_SIGNING_FAILED');
+        }
         assert.deepEqual(errors, []); await page.screenshot({ path: `${shots}/after-${method}-1440.png`, fullPage: true });
       } finally { await context.close(); }
     } finally { await browser.close(); }

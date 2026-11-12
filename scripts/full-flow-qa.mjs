@@ -9,9 +9,12 @@ delete process.env.PWDEBUG;
 const { chromium } = await import('playwright-core');
 const base = process.env.KOTOBA_WEB || 'http://127.0.0.1:5591';
 assert.ok(new URL(base).hostname === '127.0.0.1' && +new URL(base).port >= 5300 && +new URL(base).port <= 5999);
-const out = '/Volumes/Extreme SSD/Projects/grokbot/orchestration/shots/kotoba/full-flow';
+const out = '/Volumes/Extreme SSD/Projects/grokbot/orchestration/shots/kotoba/r3/full-flow';
 const contract = 'kotoba-edfa2b47.testnet', player = `player.${contract}`, market = '/market/fomc-2026-12-employment';
-const ids = ['fomc-2026-12-employment', 'fomc-2026-12-inflation', 'fomc-2026-12-recession', 'fomc-2026-12-tariffs', 'fomc-2026-01-inflation-40', 'fomc-2026-01-recession', 'fomc-2026-10-inflation-replay'];
+const snapshotResponse = await fetch('https://near-testnet.drpc.org', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'flow-market-snapshot', method: 'query', params: { request_type: 'call_function', finality: 'final', account_id: contract, method_name: 'list_markets', args_base64: 'e30=' } }), signal: AbortSignal.timeout(20000) });
+const snapshotBody = await snapshotResponse.json(); assert.ok(snapshotResponse.ok && !snapshotBody.error, 'LIVE_MARKET_SNAPSHOT_REQUIRED');
+const liveMarkets = JSON.parse(Buffer.from(snapshotBody.result.result));
+const ids = liveMarkets.map(m => m.id);
 const rpcPattern = /https:\/\/(test\.rpc\.fastnear\.com|near-testnet\.drpc\.org)\/?$/;
 // Meteor's restored-session reader requires a signer even for reads. This fresh,
 // unregistered key authorizes no on-chain account and is never printed or copied to a file.
@@ -32,7 +35,7 @@ await withChromeLock(async () => {
         const request = route.request();
         if (request.method() === 'POST') {
           let body; try { body = request.postDataJSON(); } catch {}
-          if (body?.jsonrpc && !['query', 'tx', 'status', 'block', 'gas_price'].includes(body.method)) return route.abort('blockedbyclient');
+          if (body?.jsonrpc && !['query', 'tx', 'EXPERIMENTAL_tx_status', 'status', 'block', 'gas_price'].includes(body.method)) return route.abort('blockedbyclient');
         }
         return route.continue();
       });
@@ -124,10 +127,11 @@ await withChromeLock(async () => {
       await step('creators', async () => { await page.locator('.creator').waitFor(); await page.getByLabel('Word or phrase').fill('soft landing'); assert.equal(await page.locator('#err-id').count(), 0); });
       await step('composer-invalid', async () => { await page.getByLabel('Word or phrase').fill('bad  phrase'); await page.getByText('Letters and single spaces only', { exact: true }).waitFor(); await page.getByLabel('Liquidity b').fill('99'); await page.getByText('Between 100 and 100,000', { exact: true }).waitFor(); });
       await step('composer-duplicate', async () => { await page.getByLabel('Word or phrase').fill('employment'); await page.getByLabel('Liquidity b').fill('100'); await page.getByText(/fomc-2026-12-employment already exists/).waitFor(); });
-      await step('resolved', async () => { await goto('/resolved', '.mcard'); assert.equal(await page.locator('.mcard').count(), 2); });
+      await step('resolved', async () => { await goto('/resolved', '.mcard'); assert.equal(await page.locator('.mcard').count(), liveMarkets.filter(m => m.result).length); });
       for (const id of ids) await step(id, async () => {
         await goto('/market/' + id, '.market-head');
         if (id.includes('2026-01')) { await page.waitForFunction(() => [...document.querySelectorAll('.run .seal')].every(s => s.textContent.includes('Seal verified')), undefined, { timeout: 60000 }); await page.locator('.paper-text').waitFor(); }
+        else if (liveMarkets.find(m => m.id === id)?.result) await page.locator('.seal-ok').waitFor({ timeout: 90000 });
         else if (id.endsWith('-replay')) { await page.getByText('Published transcript · replay demo', { exact: true }).waitFor(); await page.getByRole('button', { name: 'Connect to resolve', exact: true }).waitFor(); }
         else await page.getByText('Transcript not published yet', { exact: true }).waitFor();
       });
