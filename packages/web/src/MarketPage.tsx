@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Boundary, Copy, Countdown, Icon, Link, Obj, Problem, SplitBar, State, useMarkets, useMounted, useNow } from './ui';
-import { DEPLOYMENT, JUDGE_DEMO, PINNED_PDF_SHA, PINNED_TEXT_SHA, UNIT_NEAR, batchBalance, near, eventDate, fmtDate, outcome, runsFor, sha256Hex, short, splitHits, txUrl, pct, yesPrice, type Market, type Step } from './lib';
+import { CONTRACT, DEPLOYMENT, JUDGE_DEMO, OUTLAYER_API, PINNED_PDF_SHA, PINNED_TEXT_SHA, UNIT_NEAR, batchBalance, near, eventDate, fmtDate, outcome, runsFor, sha256Hex, short, splitHits, txUrl, pct, yesPrice, type Market, type Step } from './lib';
 import { explain, type Explained } from './errors';
 import { CHAIN_CHANGED, refreshMarkets } from './store';
 import { runTx, type TxStage } from './tx';
 import { verifyLive, type LiveVerification } from './verify';
 import { BetSheet } from './Trade';
 import { WALLET, type Wallet } from './wallet';
+import { discoverResolutionRuns, type DiscoveredRun } from './discovery.mjs';
 
-function RunCard({ run, label }: { run: Step; label: string }) {
+function RunCard({ run, label }: { run: Step | DiscoveredRun; label: string }) {
   const o = run.outlayer!;
+  const recorded = o.attestation;
   const [live, setLive] = useState<LiveVerification | null>(null);
   const [err, setErr] = useState<Explained | null>(null);
   const [attempt, setAttempt] = useState(0);
@@ -18,24 +20,42 @@ function RunCard({ run, label }: { run: Step; label: string }) {
   const allOk = live?.checks.every((c) => c.ok);
   return <article className="run">
     <header className="run-head">
-      <div><p className="label">{label}</p><h3>OutLayer request #{o.attestation.request_id}</h3></div>
+      <div><p className="label">{label}</p><h3>{recorded || live ? `OutLayer request #${recorded?.request_id ?? live?.requestId}` : 'Live OutLayer execution'}</h3></div>
       <span className={`seal ${live ? (allOk ? 'seal-ok' : 'seal-bad') : ''}`}><Icon name="seal" size={16} />{live ? (allOk ? 'Seal verified in your browser' : 'Check failed') : err ? 'Unavailable' : 'Checking…'}</span>
     </header>
     <ul className="checks">
       {(live?.checks ?? []).map((c) => <li key={c.key} className={c.ok ? 'ok' : 'bad'}><Icon name={c.ok ? 'check' : 'x'} size={16} /><div><b>{c.label}</b><span>{c.detail}</span></div></li>)}
       {!live && !err && [0, 1, 2, 3, 4].map((i) => <li key={i} className="pending"><i className="pulse" /><div><b>Re-checking</b><span>fetching the attestation from OutLayer</span></div></li>)}
-      <li className={o.attestation.checks.intel_signature_chain ? 'ok' : 'bad'}><Icon name={o.attestation.checks.intel_signature_chain ? 'check' : 'x'} size={16} /><div><b>Intel signature chain</b><span>recorded by <code>verify-attestation.mjs</code> (dcap-qvl): TCB {o.attestation.tcb.status ?? o.attestation.tcb.error}</span></div></li>
+      {recorded ? <li className={recorded.checks.intel_signature_chain ? 'ok' : 'bad'}><Icon name={recorded.checks.intel_signature_chain ? 'check' : 'x'} size={16} /><div><b>Intel signature chain</b><span>recorded by <code>verify-attestation.mjs</code> (dcap-qvl): TCB {recorded.tcb.status ?? recorded.tcb.error}</span></div></li>
+        : <li><Icon name="book" size={16} /><div><b>Intel signature chain</b><span>check with the SDK: <code>{`node packages/sdk/scripts/verify-attestation.mjs --tx ${run.tx} --sender ${run.signer}`}</code></span></div></li>}
     </ul>
     {err && <Problem x={err} onRetry={() => setAttempt((n) => n + 1)} compact />}
     <dl className="kv">
       <div><dt>Counted</dt><dd>{res.count}</dd></div>
       <div><dt>Transaction</dt><dd><a href={txUrl(run.tx)} target="_blank" rel="noreferrer" className="mono">{short(run.tx, 8, 6)}</a></dd></div>
       <div><dt>TDX quote</dt><dd className="mono">{live ? `${live.quoteBytes} bytes` : '…'}</dd></div>
-      <div><dt>Report data</dt><dd className="mono">{short(o.attestation.report_data, 14, 8)}</dd></div>
-      <div><dt>RTMR3 (app)</dt><dd className="mono">{short(o.attestation.measurements.rtmr3, 14, 8)}</dd></div>
-      <div><dt>Raw record</dt><dd><a href={o.attestation.source} target="_blank" rel="noreferrer">OutLayer API <Icon name="external" size={12} /></a></dd></div>
+      <div><dt>Report data</dt><dd className="mono">{short(recorded?.report_data ?? live?.reportData ?? '…', 14, 8)}</dd></div>
+      <div><dt>RTMR3 (app)</dt><dd className="mono">{short(recorded?.measurements.rtmr3 ?? live?.rtmr3 ?? '…', 14, 8)}</dd></div>
+      <div><dt>Raw record</dt><dd><a href={recorded?.source ?? `${OUTLAYER_API}/attestations/by-tx/${run.tx}`} target="_blank" rel="noreferrer">OutLayer API <Icon name="external" size={12} /></a></dd></div>
     </dl>
   </article>;
+}
+
+function DiscoveredSeal({ market }: { market: Market }) {
+  const [runs, setRuns] = useState<DiscoveredRun[] | null>(null);
+  const [problem, setProblem] = useState('');
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => {
+    let active = true; setRuns(null); setProblem('');
+    discoverResolutionRuns({ contract: CONTRACT, marketId: market.id }).then(r => { if (active) setRuns(r); }).catch(() => { if (active) setProblem('Public resolve or challenge receipts are not available yet. Retry in a moment.'); });
+    return () => { active = false; };
+  }, [market.id, market.status, market.result?.count, market.result?.transcript_sha256, attempt]);
+  return <section className="runs">
+    <header className="board-head"><h2 className="h-obj"><Obj name="seal" size={44} still />The seal</h2><span className="mono dim">live public transaction lookup</span></header>
+    {problem ? <State kind="setup" title="Seal lookup unavailable" action={<button className="pill-light" onClick={() => setAttempt(n => n + 1)}>Try again</button>}>{problem}</State>
+      : !runs ? <State kind="loading" title="Finding resolve and challenge transactions…" />
+      : <div className="runs-grid">{runs.map(r => <Boundary key={r.tx} label="Attestation check"><RunCard run={r} label={r.method === 'challenge' ? 'Challenge re-run' : 'Resolution'} /></Boundary>)}</div>}
+  </section>;
 }
 
 function Transcript({ m }: { m: Market }) {
@@ -174,6 +194,7 @@ export default function MarketPage({ id, wallet }: { id: string; wallet: Wallet 
       <header className="board-head"><h2 className="h-obj"><Obj name="seal" size={44} still />The seal</h2><span className="mono dim">{runs.length === 2 ? 'resolved, then challenged and re-run with the same result' : 'one attested run'}</span></header>
       <div className="runs-grid">{runs.map((r, i) => <Boundary key={r.tx} label="Attestation check"><RunCard run={r} label={r.method === 'challenge' ? 'Challenge re-run' : i === 0 ? 'Resolution' : 'Run'} /></Boundary>)}</div>
     </section>}
+    {m.result && runs.length === 0 && <DiscoveredSeal market={m} />}
 
     <section className="board-sec"><header className="board-head"><h2>Every counted word</h2></header><Boundary label="Transcript"><Transcript m={m} /></Boundary></section>
     {side !== null && <BetSheet m={m} side={side} wallet={wallet} onClose={() => setSide(null)} />}
