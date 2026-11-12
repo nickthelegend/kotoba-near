@@ -75,7 +75,13 @@ try {
     proof.tx = entry.hash; proof.input = JSON.parse(Buffer.from(request.args, 'base64')).input_data; proof.output = Buffer.from(output.outcome.status.SuccessValue, 'base64').toString();
   }
   proof[method] = { tx: entry.hash, market, at: new Date().toISOString() }; proof.market = market;
+  if (method === 'finalize') {
+    const bondReturn = outcome.receipts.find(r => r.receiver_id === contract && r.receipt?.Action?.actions?.some(a => a.Transfer?.deposit === '100000000000000000000000'));
+    assert.ok(bondReturn, 'BOND_RETURN_RECEIPT_MISSING');
+    proof.finalize.bond_return = { receipt_id: bondReturn.receipt_id, receiver: contract, amount_yocto: '100000000000000000000000' };
+  }
   ledger.after = await balance(); ledger.cumulative_net_spend_yocto = (BigInt(ledger.initial.amount) - BigInt(ledger.after.amount)).toString();
+  ledger.additional_storage_locked_yocto = (BigInt(ledger.after.storage_usage - ledger.initial.storage_usage) * 10n ** 19n).toString();
   ledger.reserved_original_after = await view('get_market', { id: reserved }); assert.equal(ledger.reserved_original_after.status, 'Open'); assert.equal(ledger.reserved_original_after.result, null);
   assert.ok(BigInt(ledger.cumulative_net_spend_yocto) < 3n * 10n ** 23n); await save();
   console.log(JSON.stringify({ method, hash: entry.hash, status: market.status, count: market.result.count, challenge_until: market.challenge_until_ns && new Date(market.challenge_until_ns / 1e6).toISOString(), net_spend_yocto: ledger.cumulative_net_spend_yocto }));
