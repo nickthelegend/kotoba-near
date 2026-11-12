@@ -1,7 +1,8 @@
 // Discover public resolve/challenge calls, then obtain exact attested bytes from NEAR receipts.
-// The deployed contract has no transaction-hash view. NearBlocks v3 lists candidates only;
-// it cannot manufacture the question/answer used by the browser's independent checks.
-export async function discoverResolutionRuns({ contract, marketId, fetcher = fetch, rpc = 'https://archival-rpc.testnet.near.org', api = 'https://api-testnet.nearblocks.io' }) {
+// The deployed contract has no transaction-hash view. Read real public receipts;
+// the independent browser checks bind their exact input/output to the attestation.
+import { readResolutionReceipts } from '../../sdk/src/resolution-receipts.mjs';
+export async function discoverResolutionRuns({ contract, marketId, fetcher = fetch, rpc = 'https://near-testnet.drpc.org', api = 'https://api-testnet.nearblocks.io' }) {
   if (!/^[a-z0-9._-]+\.testnet$/.test(contract) || !/^[a-z0-9-]+$/.test(marketId)) throw Error('Testnet market required');
   const candidates = new Map(); let cursor;
   for (let page = 0; page < 20; page++) {
@@ -23,12 +24,12 @@ export async function discoverResolutionRuns({ contract, marketId, fetcher = fet
     cursor = next;
   }
   const runs = [];
-  for (const [hash, candidate] of candidates) {
-    const response = await fetcher(rpc, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba-seal-discovery', method: 'EXPERIMENTAL_tx_status', params: { tx_hash: hash, sender_account_id: candidate.signer_account_id, wait_until: 'FINAL' } }), signal: AbortSignal.timeout(20000) });
-    const body = await response.json();
-    if (!response.ok || body.error || !body.result?.transaction) throw Error('NEAR transaction receipts are unavailable; retry the seal lookup');
-    const outcome = body.result, tx = outcome.transaction;
+  const newestFirst = [...candidates].sort((a, b) => Number(BigInt(b[1].block?.block_timestamp ?? b[1].block_timestamp) - BigInt(a[1].block?.block_timestamp ?? a[1].block_timestamp)));
+  for (const [hash, candidate] of newestFirst) {
+    const outcome = await readResolutionReceipts({ hash, sender: candidate.signer_account_id, fetcher, rpc, api });
+    const tx = outcome.transaction;
     if (tx.hash !== hash || tx.receiver_id !== contract || tx.signer_id !== candidate.signer_account_id || outcome.status?.Failure) continue;
+    if (outcome.status?.SuccessValue !== btoa('true')) continue; // on_result must have accepted the output.
     const call = tx.actions.map(a => a.FunctionCall).find(a => a && ['resolve', 'challenge'].includes(a.method_name));
     if (!call) continue;
     const args = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(call.args), c => c.charCodeAt(0))));
@@ -36,11 +37,17 @@ export async function discoverResolutionRuns({ contract, marketId, fetcher = fet
     const requests = (outcome.receipts ?? []).filter(r => r.receiver_id === 'outlayer.testnet').flatMap(r => r.receipt?.Action?.actions ?? []).map(a => a.FunctionCall).filter(a => a?.method_name === 'request_execution');
     const request = requests[0];
     const result = outcome.receipts_outcome.find(r => r.outcome.executor_id === 'outlayer.testnet' && r.outcome.status.SuccessValue && new TextDecoder().decode(Uint8Array.from(atob(r.outcome.status.SuccessValue), c => c.charCodeAt(0))).includes('transcript_sha256'));
-    if (!request || !result || requests.length !== 1) throw Error('Matching resolution has no complete OutLayer receipt; retry');
+    // Failed OutLayer callbacks refund their bond and can preserve an earlier valid
+    // result. Such an attempt has no attested answer and must not hide that result's seal.
+    if (!request || !result) continue;
+    if (requests.length !== 1) throw Error('Matching resolution has ambiguous OutLayer receipts; retry');
     const decode = value => new TextDecoder().decode(Uint8Array.from(atob(value), c => c.charCodeAt(0)));
     const input = JSON.parse(decode(request.args)).input_data, output = decode(result.outcome.status.SuccessValue);
     if (typeof input !== 'string' || !Number.isInteger(JSON.parse(output).count)) throw Error('Resolution bytes are invalid');
     runs.push({ tx: hash, signer: tx.signer_id, method: call.method_name, at: String(candidate.block?.block_timestamp ?? candidate.block_timestamp), outlayer: { input, output } });
+    // The factory permits one accepted resolve, followed by at most one accepted
+    // challenge. Walking newest first has already collected any later challenge.
+    if (call.method_name === 'resolve') break;
   }
   if (!runs.length) throw Error('No matching resolve or challenge is indexed yet. Retry in a moment.');
   return runs.sort((a, b) => Number(BigInt(a.at) - BigInt(b.at)));

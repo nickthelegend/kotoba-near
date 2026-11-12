@@ -13,7 +13,8 @@ test('discovers the real January recession resolution without confusing another 
   assert.deepEqual(runs.map(r => r.tx), ['GiwqWBNzKtN96xeRfkhhEJCVdzPHYwZm8znysas2bpGf']);
   assert.equal(JSON.parse(runs[0].outlayer.output).count, 0);
 });
-test('discovery rejects mainnet and missing live records without inventing a pass', async () => {
+test('discovery rejects mainnet and an explicit HTTP 429 fault without inventing a pass', async () => {
   await assert.rejects(discoverResolutionRuns({ contract: 'wrong.near', marketId: 'example' }), /Testnet/);
-  await assert.rejects(discoverResolutionRuns({ contract: 'kotoba-edfa2b47.testnet', marketId: 'missing-r3-market' }), /No matching/);
+  // Failure injection only: no successful transaction, receipt or attestation is mocked.
+  await assert.rejects(discoverResolutionRuns({ contract: 'kotoba-edfa2b47.testnet', marketId: 'missing-r3-market', fetcher: async () => new Response('{}', { status: 429 }) }), /lookup unavailable \(HTTP 429\)/);
 });

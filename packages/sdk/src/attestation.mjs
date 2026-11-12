@@ -6,6 +6,7 @@
 import { createHash } from 'node:crypto';
 import { getCollateralAndVerify } from '@phala/dcap-qvl';
 import { TESTNET_RPC, testnetFetch } from './index.mjs';
+import { readResolutionReceipts } from './resolution-receipts.mjs';
 
 export const OUTLAYER_TESTNET_API = 'https://testnet-api.outlayer.ai';
 const sha = (b) => createHash('sha256').update(b).digest('hex');
@@ -71,13 +72,12 @@ export async function verifyExecution({ txHash, input, output, wasmHash }) {
 
 /** Reads the exact OutLayer input and output from a resolve/challenge transaction, then verifies the attestation. */
 export async function verifyResolutionTx(txHash, senderId, wasmHash, rpc = TESTNET_RPC) {
-  const response = await testnetFetch({ method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba', method: 'EXPERIMENTAL_tx_status', params: { tx_hash: txHash, sender_account_id: senderId, wait_until: 'FINAL' } }) }, rpc);
-  const body = await response.json();
-  if (body.error) throw new Error(`tx_status: ${JSON.stringify(body.error).slice(0, 200)}`);
-  const request = body.result.receipts.flatMap((r) => r.receipt?.Action?.actions ?? []).map((a) => a.FunctionCall).find((f) => f?.method_name === 'request_execution');
+  const result = await readResolutionReceipts({ hash: txHash, sender: senderId, rpc });
+  if (result.status?.SuccessValue !== Buffer.from('true').toString('base64')) throw new Error('Factory callback did not accept this resolution');
+  const request = result.receipts.flatMap((r) => r.receipt?.Action?.actions ?? []).map((a) => a.FunctionCall).find((f) => f?.method_name === 'request_execution');
   if (!request) throw new Error('This transaction made no OutLayer request_execution call');
   const args = JSON.parse(Buffer.from(request.args, 'base64').toString());
-  const outcome = body.result.receipts_outcome.find((r) => r.outcome.executor_id.startsWith('outlayer.') && r.outcome.status.SuccessValue && Buffer.from(r.outcome.status.SuccessValue, 'base64').toString().includes('transcript_sha256'));
+  const outcome = result.receipts_outcome.find((r) => r.outcome.executor_id.startsWith('outlayer.') && r.outcome.status.SuccessValue && Buffer.from(r.outcome.status.SuccessValue, 'base64').toString().includes('transcript_sha256'));
   if (!outcome) throw new Error('OutLayer returned no oracle output in this transaction');
   const output = Buffer.from(outcome.outcome.status.SuccessValue, 'base64').toString();
   return { output: JSON.parse(output), verification: await verifyExecution({ txHash, input: args.input_data, output, wasmHash: wasmHash ?? args.source?.WasmUrl?.hash }) };
