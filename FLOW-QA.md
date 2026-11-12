@@ -13,7 +13,9 @@
 - **PASS:** web production build, all 14 web tests and all 17 SDK tests (including live attestation verification). Contract/oracle code was not changed or rebuilt. The official Q-001 now counts code from October 19; the README baseline wording matches it. Kotoba's first commit remains November 9.
 - **MANUAL / BLOCKED:** actual human Meteor approval, public hosting, repo publication, the X post and final lead/contact/payout/other-project fields remain Nick's actions. The replay's extracted text and future attestation panels are not automatically bundled; its official PDF and the SDK verifier are available as documented in the README. The film exists, but it was not re-shot in this pass.
 
-Screenshots and diagnostics now use `/Volumes/Extreme SSD/Projects/grokbot/orchestration/shots/kotoba/` with the orchestration Chrome lock. `judging-r2/before/` and `judging-r2/after/` each contain Board, Resolved, future-market and replay captures at both widths, plus `checks.json`. `judging-r2/resolve-checks.json` and `resolve-{funded-view,low-balance}-{1440,375}.png` record the targeted real-data checks. `full-flow/audit.json` contains the 71 passing cases and all per-step screenshots. Ordinary cases had zero console errors, page errors, failed requests, HTTP errors, overflow, undefined/NaN text or loading placeholders; deliberate outages remain labelled expected faults. [TESTING.md](TESTING.md#published-transcript-judge-replay-2026-11-12) explains how to repeat the read-only checks. All owned browser/server processes were closed after verification.
+Screenshots and diagnostics now use `kotoba` with the orchestration Chrome lock. `judging-r2/before/` and `judging-r2/after/` each contain Board, Resolved, future-market and replay captures at both widths, plus `checks.json`. `judging-r2/resolve-checks.json` and `resolve-{funded-view,low-balance}-{1440,375}.png` record the targeted real-data checks. `full-flow/audit.json` contains the 71 passing cases and all per-step screenshots. Ordinary cases had zero console errors, page errors, failed requests, HTTP errors, overflow, undefined/NaN text or loading placeholders; deliberate outages remain labelled expected faults. [TESTING.md](TESTING.md#published-transcript-judge-replay-2026-11-12) explains how to repeat the read-only checks. All owned browser/server processes were closed after verification.
+
+Screenshots were captured locally during QA and are not committed.
 
 ## November 11 production walkthrough
 
@@ -76,7 +78,7 @@ The December 9 PDF URL currently returns 404 because the event is in the future.
 
 ## Screenshot and diagnostic paths
 
-Base: `/private/tmp/claude-501/-Volumes-Extreme-SSD-Projects-grokbot/0f121b7c-0081-4ec0-81a9-0ccb4f7f8b48/scratchpad/flow-qa/kotoba/`.
+Base: `kotoba`.
 
 - `full-flow/audit.json`: 69 passing cases, per-step diagnostics, screenshot paths, internal/external links and public Meteor login request fields. Outage cases have `expected_fault: true`; all ordinary cases have zero console/network/page errors, no overflow and no pending placeholders.
 - `full-flow/<width>-<stem>.png`: full-page screenshots at 1440 and 375. Separate `*-state.png` captures retain disconnected, unknown-market and mainnet states before their recovery actions.
@@ -84,3 +86,5 @@ Base: `/private/tmp/claude-501/-Volumes-Extreme-SSD-Projects-grokbot/0f121b7c-00
 - `qa-signer/connected-*.png`, `balance-block-*.png`, `receipt-*.png`, `position-*.png`: latest real signing run. Existing `before-*.png` and `after-production-*.png` preserve the production appearance comparison. No approved UI styling was changed. The phone's existing confirmation toast covers lower sheet content, while the receipt and hash remain readable.
 
 The build, 14 web tests, frozen-lockfile install and real signing run pass. The Rust/SDK/MCP suite was not rerun because no contract, oracle, SDK or MCP code changed. All browsers and servers started for this QA are closed after verification; nothing was pushed.
+
+Screenshots were captured locally during QA and are not committed.
