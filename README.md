@@ -1,12 +1,14 @@
 # Kotoba (言葉)
 
-Kotoba is a word prediction market on NEAR testnet, settled from official Fed transcripts by an OutLayer TEE program.
+Kotoba is a word prediction market on NEAR testnet: a word count anyone can check, settled from official Fed transcripts by an OutLayer TEE program.
 
 Word bets need someone to choose the transcript and count the words. A wrong source or count can change who gets paid. Kotoba pins the counting program and records the transcript hash so people can check the result.
 
 ## Try it
 
 Use Node.js and pnpm 10.29.2 (the version in `package.json`). No hosted app URL is documented; run the web app locally against the recorded testnet deployment. Reading markets and checking the transcript needs no wallet or local credentials.
+
+Proposed tracks, best first: **open**, then **privacy**. The TEE supports verifiable execution; bets and transcripts are public, not confidential. Nick confirms the final track array.
 
 1. From the repository root, run `pnpm install --frozen-lockfile`, then `pnpm dev` - see Vite start at `http://127.0.0.1:5198`. Leave that terminal running.
 2. Open `http://127.0.0.1:5198/app` - see the December 9 FOMC markets and live YES/NO odds. Open a market's bet sheet - see a quote from the contract.
@@ -178,7 +180,7 @@ Reproduce the whole run on a fresh account with `packages/sdk/scripts/upload-ora
 
 ## Tests
 
-`pnpm test` builds both WASM files and runs the test suites. The current source defines 45 tests: oracle 3, contract unit 5, near-workspaces sandbox 1, SDK 17 (4 against the live deployment and OutLayer's API), MCP 2 (1 live) and web 17 (14 error-mapping tests, 2 live public transaction-discovery tests and 1 explicit failure test). See [TESTING.md](TESTING.md) for recorded results and browser QA limits. The R3 pass ran the web and SDK suites; the unchanged Rust and MCP suites were not rerun.
+`pnpm test` builds both WASM files and runs the test suites. The current source defines 45 tests: oracle 3, contract unit 5, near-workspaces sandbox 1, SDK 17 (4 against the live deployment and OutLayer's API), MCP 2 (1 live) and web 17 (14 error-mapping tests, 2 live public transaction-discovery tests and 1 explicit failure test). See [TESTING.md](TESTING.md) for recorded results and browser QA limits. The full R4 `pnpm test` run on November 12 passed all 45 tests with no failures or skips, including the oracle and contract builds, local contract sandbox, SDK, MCP and web suites.
 
 ## Hackathon disclosures
 

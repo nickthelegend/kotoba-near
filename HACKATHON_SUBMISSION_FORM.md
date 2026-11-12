@@ -8,7 +8,7 @@ Draft for Nick to complete and confirm. Field names match the [official form and
 | leadName | TBD Nick (2-80 characters) |
 | email | TBD Nick (valid email, max 160 characters; max 2 submissions per email) |
 | size | TBD Nick: one of `1`, `2 - 4`, `4 - 6`, `6 - 8`, `8+` |
-| tracks | Proposed, best first: `privacy` - hash-pinned transcript counting inside an OutLayer TEE, with verifiable execution; bets and transcripts are public, not confidential.<br>`open` - word prediction markets with a verifiable public-transcript oracle. Nick confirms the final array. |
+| tracks | Proposed, best first: `open` - word prediction markets with a verifiable public-transcript oracle.<br>`privacy` - secondary proposal for hash-pinned transcript counting inside an OutLayer TEE, with verifiable execution; bets and transcripts are public, not confidential. Nick confirms the final array. |
 | nearAddress | TBD Nick: NEAR MAINNET payout account (2-64 characters, lowercase named or 64-character implicit account; not the testnet contract) |
 | projectUrl | TBD: public GitHub repo URL after push (max 300 characters) |
 | demoUrl | TBD: the public X post URL (max 300 characters) |
