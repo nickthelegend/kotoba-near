@@ -2,13 +2,18 @@ import { createHash } from 'node:crypto';
 export const TESTNET_RPC = 'https://test.rpc.fastnear.com';
 export const MAINNET_RPC = 'https://rpc.fastnear.com';
 export const UNIT = 10n ** 21n;
-// FastNEAR rate-limits busy shared IPs with HTTP 429; reads fall back to the official testnet endpoint.
-export const TESTNET_RPC_FALLBACK = 'https://rpc.testnet.near.org';
+// FastNEAR rate-limits shared IPs; the former rpc.testnet.near.org endpoint is retired.
+export const TESTNET_RPC_FALLBACK = 'https://near-testnet.drpc.org';
 export async function testnetFetch(init, primary = TESTNET_RPC) {
   let last;
   for (const url of [...new Set([primary, TESTNET_RPC_FALLBACK])]) {
     const response = await fetch(url, init).catch((e) => { last = e; return null; });
-    if (response?.ok) return response;
+    if (response?.ok) {
+      const body = await response.clone().json().catch(() => null);
+      if (![-429, 30].includes(body?.error?.code)) return response;
+      last = new Error(`NEAR testnet RPC temporarily unavailable at ${url}`);
+      continue;
+    }
     if (response) last = new Error(`NEAR testnet RPC HTTP ${response.status} at ${url}`);
   }
   throw last;
