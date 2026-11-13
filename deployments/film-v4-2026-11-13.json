@@ -3,7 +3,7 @@
   "contract": "kotoba-markets.testnet",
   "account": "trader.kotoba-markets.testnet",
   "signer": "QA signer (dev-only, film test wallet), real testnet transactions",
-  "final_film": "videos/kotoba-near/kotoba-near-film.mp4 = versions/v4/kotoba-near-film-v4d.mp4 (take5)",
+  "final_film": "videos/kotoba-near/kotoba-near-film.mp4 = versions/v4/kotoba-near-film-v4e.mp4 (take5; v4d with route-load frames covered)",
   "note": "Every take placed real orders; all are listed. Deposits stay in the contract as escrow or trader cash; only fees and gas are spent.",
   "gasBurntYoctoRecorded": "10496736456505800000000",
   "takes": [

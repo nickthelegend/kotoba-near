@@ -8,7 +8,7 @@
 
 **App** (`packages/web/src/pm`, readable components): landing (approved sticker hero + live board, how it works with the real book, the seal, FAQ), markets grid with resolved markets, event page (chance chart, word rows with Buy Yes/No, inline order book with Yes/No mirror, trade ticket with fill estimate), rules & resolution with the live seal check, portfolio (P&L, open orders, cancel, withdraw), activity. Mobile 390: stacked rows, bottom buy bar and sheet, tab bar. Public RPCs rate-limit this IP, so reads rotate across four endpoints.
 
-**Film v4d** (`videos/kotoba-near/kotoba-near-film.mp4`, 2:26; share 720p 7.4 MB): landing → event → live 10-share fill by 0:13, then book, limit, explorer, portfolio + cancel, sell, activity, rules + seal, markets, landing close. Bottom subtitles only, no bands. Self-judged 9/10 (versions/v4/JUDGE-v4a…d). Five live takes; all their transactions are in `deployments/film-v4-2026-11-13.json`.
+**Film v4e** (`videos/kotoba-near/kotoba-near-film.mp4`, 2:26; share 720p 7.4 MB; v4d with the four route-load frames covered): landing → event → live 10-share fill by 0:13, then book, limit, explorer, portfolio + cancel, sell, activity, rules + seal, markets, landing close. Bottom subtitles only, no bands. Self-judged 9/10 (versions/v4/JUDGE-v4a…e). Five live takes; all their transactions are in `deployments/film-v4-2026-11-13.json`.
 
 **Not done / limits:** no v4 market has settled; human Meteor approval not filmed; Kalshi/Polymarket blocked automated Chrome from this network; no hosting.
 
