@@ -12,17 +12,17 @@ Draft for Nick to complete and confirm. Field names match the [official form and
 | nearAddress | TBD Nick: NEAR MAINNET payout account (2-64 characters, lowercase named or 64-character implicit account; not the testnet contract) |
 | projectUrl | TBD: public GitHub repo URL after push (max 300 characters) |
 | demoUrl | TBD: the public X post URL (max 300 characters) |
-| idea | Word bets need a result people can check: which transcript was used, how words were counted, and who gets paid. Kotoba is a prediction market for words in official Federal Reserve press conferences. Users buy YES or NO shares with native testnet NEAR. A NEAR contract holds escrow, issues NEP-245 shares and pays winning holders. It requests a hash-pinned OutLayer program that fetches the official PDF, records its hash and counts whole-word matches in a TEE. A bonded challenge reruns the same program. The SDK verifies TDX attestations off-chain; the contract trusts the OutLayer callback. Recorded testnet runs include resolution, a challenge and payouts. The web demo runs locally; full Meteor Wallet approval still needs human verification.<br>Character count: **746** (idea text only). |
+| idea | Bet on what they will say. Kotoba is a mention prediction market on NEAR testnet, with five word outcomes for December's FOMC press conference. Users place escrowed YES/NO limit orders, match by price and arrival time, sell before the event and cancel resting orders. The app reads real order-book depth, fills, price history, positions and trade-based P&L. Demo accounts seed the small book; it is not customer volume. Official Fed transcripts settle whole-word matches, including reporters. A hash-pinned OutLayer program runs in a TEE; the browser checks five evidence bindings and the SDK checks Intel signatures. The contract trusts OutLayer's callback. Previous-contract evidence includes a challenge rerun, verified September result and payouts. V3 has a separate deployed contract; both October judge replays remain untouched. Honest limits: local testnet demo, public bets, upgrade authority, nonrefundable order storage fee; human Meteor approval remains manual.<br>Character count: **972** (idea text only). |
 | consent | Nick ticks after agreeing: "I agree that the organizers may use these details to review our submission and contact us about this hackathon." |
 
-Before submitting, Nick must fill the README's other-project disclosure with the team's actual other project names (Q-015), publish the repository, and publish the demo post with a video. The local-only demo film is `kotoba-near-film-share.mp4` (1920×1080, 2:57.92); the smaller upload copy is `kotoba-near-film-share.mp4` in the same directory. Repository publication and the X post remain TBD. Submit this project only once.
+Before submitting, Nick fills the team disclosure and required fields, publishes the repo, and posts the demo video. Attach `kotoba-near-film-share.mp4`; publication and the X post URL remain TBD. The new film uses the new book; historic settlement context is dated.
 
 ## X post draft
 
-The human posts this and attaches the video. Text length: **225 characters** (under 280; attachment note excluded).
+The human posts this and attaches the video. Text length: **215 characters**.
 
 ```text
-word bets need a checkable result. kotoba counts official Fed transcript words in an OutLayer TEE; NEAR testnet holds shares and pays winners. built at NEAR HACKATHON @NEARProtocol #NEARHackathon. which word would you bet on?
+bet on what they'll say. kotoba is mention markets on NEAR: real limit orders, fills, selling and canceling, with a transcript count you can check. built at NEAR HACKATHON @NEARProtocol #NEARHackathon. testnet demo.
 ```
 
 attach: kotoba-near-film-share.mp4

@@ -1,41 +1,47 @@
 # Kotoba (言葉)
 
-Kotoba is a word prediction market on NEAR testnet: a word count anyone can check, settled from official Fed transcripts by an OutLayer TEE program.
+**Bet on what they'll say.** Kotoba is a mention prediction market on NEAR: trade YES or NO on words in an upcoming press conference.
 
-Word bets need someone to choose the transcript and count the words. A wrong source or count can change who gets paid. Kotoba pins the counting program and records the transcript hash so people can check the result.
+People disagree about which words a speaker will use. Traders need real prices, a way to sell before the event, and a result they can check. Kotoba combines an on-chain order book with official-transcript settlement evidence.
 
 ## Try it
 
-Use Node.js and pnpm 10.29.2 (the version in `package.json`). No hosted app URL is documented; run the web app locally against the recorded testnet deployment. Reading markets and checking the transcript needs no wallet or local credentials.
+Node.js and pnpm 10.29.2 are required. No hosted URL is claimed. Reading markets and checking evidence needs no wallet or credentials. Proposed tracks, best first: **open**, then **privacy**; bets and transcripts are public, and the TEE provides verifiable execution rather than confidentiality.
 
-Proposed tracks, best first: **open**, then **privacy**. The TEE supports verifiable execution; bets and transcripts are public, not confidential. Nick confirms the final track array.
+1. Run `pnpm install --frozen-lockfile`, then `pnpm dev` from the repo root - see the local URL printed by Vite. Open it - see **Bet on what they'll say** and the real December event. Earnings calls and debates are labelled coming soon.
+2. Open `/event/powell-dec-9` (also linked from `/app`) - see five on-chain word markets: Tariff, Recession, Inflation, AI and Employment. Select a word - see its real trade-price history and escrowed bids/asks. **Last fill %** uses the latest YES trade; the Yes/No buttons show current ask prices. On mobile, use Chart / Order book and Trade to reach the ticket.
+3. Connect a funded Meteor `.testnet` wallet. Choose Buy, YES or NO, Limit or Market, price and whole shares - see the depth-based fill estimate, maximum cost, payout and storage fee. Submit and approve in Meteor - see a FINAL receipt linked to the explorer. A limit can rest; a market order fills available depth and returns its remainder. The 0.005 NEAR storage fee is nonrefundable, including an unfilled order.
+4. Open `/portfolio` - see available cash, positions, trade-based P&L and open orders. Sell available shares through the event ticket or cancel your own resting order - see the final receipt and refreshed balances. Reload - see the state read from NEAR. P&L excludes storage/network fees and is unavailable for an unknown minted/transferred basis.
+5. Open `/activity` - see actual matched trades. Demo accounts seeded this small book; this is not customer volume. Select Rules & resolution on the event - see the official transcript rule and September's recorded proof, with five browser checks rerun against live evidence. The separate SDK checks Intel's signature chain.
+6. Open `/market/fomc-2026-09-inflation-replay` or `/resolved` - see previous-version settlement evidence. Both October judge replays below remain untouched for judges; do not consume them in filming or automated QA. Human Meteor approval remains a manual check; the four v3 filmed actions used the build-gated test wallet in the real app.
 
-1. From the repository root, run `pnpm install --frozen-lockfile`, then `pnpm dev` - see Vite start at `http://127.0.0.1:5198`. Leave that terminal running.
-2. Open `http://127.0.0.1:5198/app` - see the December 9 FOMC markets and live YES/NO odds. Open a market's bet sheet - see a quote from the contract.
-3. Open `http://127.0.0.1:5198/market/fomc-2026-10-inflation-replay` - see a replay on the published October 28 transcript. Connect a Meteor `.testnet` wallet with at least **0.421 NEAR spendable**, choose **Resolve with OutLayer · 0.12 NEAR** and approve - see the count, verdict and transaction link after execution. Each of the two October replays listed below is one-shot and open for resolution until **November 26, 2026 at 00:00 UTC**. If someone already resolved it, inspect their result instead.
-4. Open `http://127.0.0.1:5198/market/fomc-2026-01-inflation-40` - see the recorded YES result, 40 highlighted hits, and the resolve and challenge runs. The page rechecks five attestation properties; the Intel signature-chain result is recorded separately. The October replay's extracted text is not bundled; its official PDF remains available.
-5. Open `http://127.0.0.1:5198/resolved` - see counted markets, including the two settled January markets. Open `http://127.0.0.1:5198/creators` - see markets grouped by creator and the Fed-market composer.
-6. For a testnet buy, click **Connect** with a funded Meteor `.testnet` account, choose YES or NO and approve in Meteor - see the transaction status and then your shares at `http://127.0.0.1:5198/you`. Human Meteor sign-in and approval remain a manual check. The browser buy, final receipt and updated position pass with the development-only QA signer on real testnet. See [FLOW-QA.md](FLOW-QA.md) and [TESTING.md](TESTING.md).
-
-Reads need NEAR RPC and OutLayer's API. If a service is unavailable, the app shows an error with a retry action. The local-only demo needs a video in Nick's X post; the draft is in [HACKATHON_SUBMISSION_FORM.md](HACKATHON_SUBMISSION_FORM.md).
+Trading units: **100¢ = 0.001 test NEAR per winning share, not US dollars**. YES and NO are separate books backed by fully collateralized pairs. Prices/volume/history are real contract state. The counter currently includes the **whole official transcript, including reporters**, not speaker-isolated recognition. December has not settled and its expected PDF is not published yet. Errors show retry or a specific field message; no successful receipt is invented.
 
 ## Live on NEAR testnet
 
-Main contract: [`kotoba-edfa2b47.testnet`](https://testnet.nearblocks.io/address/kotoba-edfa2b47.testnet). It holds market escrow and shares. Resolution calls go to `outlayer.testnet`; attestation checks query `worker.outlayer.testnet`.
-
-The demo contract account keeps a [full-access key](https://docs.near.org/protocol/accounts-contracts/access-keys) to sign its market creations, so the operator can also redeploy its code; deleting the last access key would end operator signing and upgrades, while other accounts could still call the deployed contract.
-
-These are recorded testnet transactions, copied from [deployments/testnet-2026-11-09.json](deployments/testnet-2026-11-09.json) and [deployments/real-run.json](deployments/real-run.json):
+Current order-book contract: [`kotoba-book-v3-20261113.testnet`](https://testnet.nearblocks.io/address/kotoba-book-v3-20261113.testnet). It holds escrowed cash/shares, retained orders and matched trades. [V3 deployment evidence](deployments/book-v3-2026-11-13.json) records deployment, all five markets, real seed trades and resting liquidity. A fresh Kotoba-owned helper-faucet account funded it; no old or other project's account was charged.
 
 | Evidence | Transaction |
 | --- | --- |
-| Deploy the market contract | [GT6mg7jYHgAAe7ETHvpiebABgJU2mLgmBXCWtq4i66ea](https://testnet.nearblocks.io/txns/GT6mg7jYHgAAe7ETHvpiebABgJU2mLgmBXCWtq4i66ea) |
-| Buy 25 YES shares | [3TwLfxmR2nA7NW8pwbQGSjXuZNhUHAEwiUJazFyr6BcK](https://testnet.nearblocks.io/txns/3TwLfxmR2nA7NW8pwbQGSjXuZNhUHAEwiUJazFyr6BcK) |
-| Resolve through OutLayer: inflation count 40 | [33sMfUjXnhbPmL3jad6ijjXZwYWYXodeHLH9fTQujAyV](https://testnet.nearblocks.io/txns/33sMfUjXnhbPmL3jad6ijjXZwYWYXodeHLH9fTQujAyV) |
-| Challenge rerun: count 40 again | [BT5BmcjyhUdheNEMqNuwyB294e6oD9uqEa4Rk4rSP15E](https://testnet.nearblocks.io/txns/BT5BmcjyhUdheNEMqNuwyB294e6oD9uqEa4Rk4rSP15E) |
-| Claim the winning shares | [Eoudkc8kzcrL9qSydTm41HnfKk52gYJfdMQzMSvKUZFE](https://testnet.nearblocks.io/txns/Eoudkc8kzcrL9qSydTm41HnfKk52gYJfdMQzMSvKUZFE) |
+| Deploy and initialize v3 | [FoU1azKAuSaiAPnzWYFL8y28qDeDcCXURsxLW3mzozqX](https://nearvalidate.org/txns/FoU1azKAuSaiAPnzWYFL8y28qDeDcCXURsxLW3mzozqX?network=testnet) |
+| Add the coherent snapshot view | [3UZowDUUBFZoBwiY9nMzJn8FFvJ37PgbKCQjgpEUgAHG](https://nearvalidate.org/txns/3UZowDUUBFZoBwiY9nMzJn8FFvJ37PgbKCQjgpEUgAHG?network=testnet) |
+| In-app limit buy, filled at 66¢ | [2xsQDraurpzoVyX6TkJFXFbk2cdTFMpPs7VSnrdUUoSo](https://nearvalidate.org/txns/2xsQDraurpzoVyX6TkJFXFbk2cdTFMpPs7VSnrdUUoSo?network=testnet) |
+| In-app market sell, filled at 60¢ | [5RiyMyhEvnPB9E1QP36qS1oSrzsiPaWqVdk1HfRgWRKc](https://nearvalidate.org/txns/5RiyMyhEvnPB9E1QP36qS1oSrzsiPaWqVdk1HfRgWRKc?network=testnet) |
+| In-app cancel of a resting order | [5fUMHDvPL71kSu8t8iJe4vGV72Vhc4XxChWYEQt3JS1X](https://nearvalidate.org/txns/5fUMHDvPL71kSu8t8iJe4vGV72Vhc4XxChWYEQt3JS1X?network=testnet) |
 
-## Deployment evidence (Nov 9 2026)
+Previous contract: [`kotoba-edfa2b47.testnet`](https://testnet.nearblocks.io/address/kotoba-edfa2b47.testnet); its links, replays, original oracle pin and payout records remain available. OutLayer resolution still uses `outlayer.testnet` and `worker.outlayer.testnet`. Settlement proofs below are historical previous-version evidence, not a claim that December or the new order book has settled.
+
+Both contract accounts retain full-access keys for demo market/liquidity management and code upgrades. Deleting the last key would end operator signing/upgrades and strand the contract-account maker's own orders and holdings; other accounts could still call deployed methods. No key was deleted. This is upgradeable, unaudited testnet software, with 32 markets, 4,096 lifetime orders and 8,192 fills capped in the prototype.
+
+## V3 contract and tests
+
+`packages/book-contract` adds native-NEAR cash escrow, share escrow, maker-price matching with price-time priority, partial fills, market IOC refunds, cancellation, selling, complete-pair mint/redemption and callback-safe cash withdrawal. Self trades are skipped. Matching performs no external calls; withdrawal debits before transfer and reconciles a single private callback without overwriting concurrent credits. The legacy LMSR buy is disabled on v3. One snapshot supplies a coherent set of books, trades and account reads per refresh.
+
+`CARGO_BUILD_JOBS=1 pnpm test` passed **57/57** tests: oracle 3, old contract unit 5 + sandbox 1, SDK 17, MCP 2, web 17, book unit 8 + sandbox 4. See [TESTING.md](TESTING.md) and [FLOW-QA.md](FLOW-QA.md). Full human Meteor approval, mainnet, confidential bets, gasless trading and general transcript sources remain outside the shown flow.
+
+## Previous-version deployment evidence (Nov 9 2026)
+
+The following deployment, LMSR and creator-fee records describe `kotoba-edfa2b47.testnet`. The new order book is a separate contract; no old market was migrated or rewritten.
 
 - Factory contract: [`kotoba-edfa2b47.testnet`](https://testnet.nearblocks.io/address/kotoba-edfa2b47.testnet). Deploy tx [GT6mg7jY…](https://testnet.nearblocks.io/txns/GT6mg7jYHgAAe7ETHvpiebABgJU2mLgmBXCWtq4i66ea), init tx [Gz2LyFjq…](https://testnet.nearblocks.io/txns/Gz2LyFjqBaA9svLUoNC5yjQiaAv2AmD8banUnyMCL2QP).
 - Oracle program (WASI P2), stored on FastFS: `https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314.wasm`, SHA-256 `b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314`. Upload txs: [9R7w4vtj…](https://testnet.nearblocks.io/txns/9R7w4vtjxpCsZoc7vuzk2i3iqapiTmSSPfq8UUGkiciF) and [mPZQ85xH…](https://testnet.nearblocks.io/txns/mPZQ85xHx4evsDFGmoXPNeMAeqDKUqLrkR91McCoczS).
@@ -131,7 +137,7 @@ Hosting was prepared but not deployed. Keep the eventual hosted app available th
    Run it yourself: `node packages/sdk/scripts/verify-attestation.mjs deployments/outlayer-direct-DSYxhNQquvqFd96X7mod6eTXs28o4sAa45DBx1zx8dqt.json`. The resolution page re-runs the first five checks in your browser.
 3. **The transcript.** `packages/web/public/archive-20260128.txt` is the oracle's own `lopdf` extraction of PDF `2c2683d9…5cd3`. The page checks its hash, highlights every whole-word hit and compares the browser count with the attested count (40 = 40).
 
-## Wallet and CLI details
+## Previous-version wallet and CLI details
 
 - `/`: the landing page with live contract figures (markets, open, settled, shares, free balance, verified TEE runs) and the recorded transactions.
 - `/app`: the Dec 9 FOMC countdown and four live markets with LMSR odds. **Trade** opens the bet sheet with a live `quote` from the contract. **Connect** signs in with Meteor Wallet (testnet), and **Buy** sends a real `buy` transaction.
@@ -152,7 +158,7 @@ NEAR_TESTNET_CONTRACT=kotoba-edfa2b47.testnet node packages/mcp/src/main.mjs   #
 ```
 Reproduce the whole run on a fresh account with `packages/sdk/scripts/upload-oracle.mjs`, `deploy-testnet.mjs` and `real-run.mjs` (see its header for subcommands). Keys come from gitignored `.near-credentials/` or `.env` only.
 
-## Components
+## Previous-version components
 
 | Package | What it is |
 | --- | --- |
@@ -172,15 +178,17 @@ Reproduce the whole run on a fresh account with `packages/sdk/scripts/upload-ora
 
 ## Limits, stated plainly
 
+The LMSR scripts and creator fee above belong to the previous version. V3 adds early selling and cancellation through the real order book; it has no LMSR backstop.
+
 - Sources are Fed press conference PDFs only. White House briefings and earnings calls have no reliable free transcript feed (see [docs/RESEARCH.md](docs/RESEARCH.md)). Podcast and creator transcript URLs are future work.
 - The contract trusts the OutLayer promise result, not a quote it verifies on-chain. The TDX quote is verified off-chain, by the SDK, the MCP tool and the browser.
 - Email sign-in, NEP-366 gasless bets and NEP-141 collateral are not built. Bets use a NEAR testnet wallet and native testnet NEAR. See [BLOCKED.md](BLOCKED.md).
 - Shares are small: 1 share = 0.001 NEAR payout, because the recorded demo funding was 4 NEAR.
-- There is no sell: the contract has `buy` only, so shares are held to settlement (or sent with NEP-245 `mt_transfer`).
+- Previous-version LMSR shares cannot be sold through a book. V3 adds real early selling; old holdings remain on the old contract.
 
 ## Tests
 
-`pnpm test` builds both WASM files and runs the test suites. The current source defines 45 tests: oracle 3, contract unit 5, near-workspaces sandbox 1, SDK 17 (4 against the live deployment and OutLayer's API), MCP 2 (1 live) and web 17 (14 error-mapping tests, 2 live public transaction-discovery tests and 1 explicit failure test). See [TESTING.md](TESTING.md) for recorded results and browser QA limits. The full R4 `pnpm test` run on November 12 passed all 45 tests with no failures or skips, including the oracle and contract builds, local contract sandbox, SDK, MCP and web suites.
+`CARGO_BUILD_JOBS=1 pnpm test` builds all three WASM targets and passes 57 tests (November 13): oracle 3, previous contract 6, SDK 17, MCP 2, web 17, book contract 12. The November 12 R4 count of 45 remains historical. See [TESTING.md](TESTING.md) for the real browser flow and current limits.
 
 ## Hackathon disclosures
 
@@ -190,7 +198,7 @@ Built for NEAR HACKATHON 2026 (Nov 1-14). Submission deadline: November 14, 2026
 
 The current [Q-001](https://nearhackathon.com/HACKATHON.md) counts work from the October 19, 2026 announcement through November 14; earlier code is baseline. No pre-October 19 commits appear in this repository's complete local history. The first commit, `feffd1e` (November 9), contains only the MIT license and `.gitignore`. There is no tracked NOTICE file or former project name. The existing inspiration notes name Mentioned and Memetic Machines; they are references, not sibling codebases, and no code was reused from them.
 
-The November 9-10 commits add the NEAR contract, LMSR pricing, NEP-245 shares, OutLayer transcript program, FastFS upload, deployment and settlement records, scheduler, SDK, MCP tools, web app, tests and Meteor Wallet integration. Only NEAR work built in the hackathon window is presented for judging. Review the implementation since the initial scaffold with `git diff feffd1e..HEAD -- packages deployments scripts docs package.json pnpm-workspace.yaml pnpm-lock.yaml`; inspect dated commits with `git log --reverse --date=iso-strict --format='%h %ad %s'`.
+November 13 adds the new on-chain CLOB, seeded five-word event, category-layout app and v3 film. The November 9-10 commits add the NEAR contract, LMSR pricing, NEP-245 shares, OutLayer transcript program, FastFS upload, deployment and settlement records, scheduler, SDK, MCP tools, web app, tests and Meteor Wallet integration. Only NEAR work built in the hackathon window is presented for judging. Review the implementation since the initial scaffold with `git diff feffd1e..HEAD -- packages deployments scripts docs package.json pnpm-workspace.yaml pnpm-lock.yaml`; inspect dated commits with `git log --reverse --date=iso-strict --format='%h %ad %s'`.
 
 November 11-12 adds the browser QA signer and real browser buys, the published-transcript judge replay, and the local 3D art kit. These are also inside the eligible window.
 

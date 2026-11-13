@@ -1,5 +1,37 @@
 # Full-flow QA
 
+## V3 prediction-market flow — 2026-11-13
+
+New contract `kotoba-book-v3-20261113.testnet`; previous contract and all its markets remain unchanged. Baseline, reference attempts and after captures are saved outside the repo. Kalshi/Polymarket rejected automated Chrome with SSL errors; Manifold and both local picks were inspected. The explicit brief supplied the category structure.
+
+| Ordered step | Status and result | Capture names |
+| --- | --- | --- |
+| 1. Landing → understand | PASS: Bet on what they'll say; one real December event; other categories coming soon. | `after-home-{1440,390,375}.png` |
+| 2. Browse → event | PASS: five actual word markets; real history; seeded volume labelled. % means last YES fill; buttons mean asks. | `after-event-*.png` |
+| 3. Select outcome / book | PASS: YES/NO books, real bids/asks, cumulative NEAR totals, last price/spread, price-time ordering. Mobile chart/book tabs and Trade jump work. | `after-event-*.png` |
+| 4. Connect | PASS with scoped development test wallet; production Meteor uses testnet and the new contract. Human Meteor sign-in/approval remains manual. | `connected-event-*.png` |
+| 5. Limit buy → receipt | PASS: real app-signed order matched one YES at 66¢; displayed price moved 62% → 66%; FINAL receipt. | Film `hook.png`; transaction below |
+| 6. Market sell → receipt | PASS: one YES sold at real 60¢ bid; cash credited, YES position returned to 3. | Film `sell.png` |
+| 7. Portfolio / reload | PASS: network shares, available cash, real-price P&L, own trade history. Storage/network fees excluded. | `portfolio-*.png`, `portfolio-reloaded-*.png` |
+| 8. Resting bid → cancel | PASS: real 10¢ bid rested, owner cancelled, cash unlocked and zero open trader orders. | Film `cancel.png` |
+| 9. Activity | PASS: actual fills only, demo seeding explicit. | `after-activity-*.png`, `activity-*.png` |
+| 10. Rules / resolution | PASS: official whole-transcript scope including reporters; five fresh browser checks on dated September proof; Intel SDK command separate. | `after-rules-*.png`, `rules-*-viewport.png` |
+| 11. Errors / empties | PASS: disconnected portfolio; NO held = 0 disables sale; too-large YES sell disabled with actual holdings; NO chart explicitly has no fills. No signed error-state transaction. | `sell-no-market-*.png`, film `limits.png` |
+| 12. Previous version | PASS: legacy September detail and original links still work. No automatic write targets either October replay. | `after-previous-*.png` |
+
+The 18 signed-out route checks at 1440/390/375 had zero console/page/network errors, overflow or raw error text and five seal checks at every width. Connected read-only audit results are recorded separately in `deployments/qa-book-browser-*.json`. The full unit/integration suite passed 57/57. The film used four real UI transactions, not terminal calls:
+
+| Action | Hash |
+| --- | --- |
+| Limit buy, filled | `2xsQDraurpzoVyX6TkJFXFbk2cdTFMpPs7VSnrdUUoSo` |
+| Market sell, filled | `5RiyMyhEvnPB9E1QP36qS1oSrzsiPaWqVdk1HfRgWRKc` |
+| Place resting bid | `GhN9ioTm9wWiaFJ3NV9ej8aTYH6GUV7eFbJ8NzVm9hpP` |
+| Cancel that bid | `5fUMHDvPL71kSu8t8iJe4vGV72Vhc4XxChWYEQt3JS1X` |
+
+Total filmed wallet spend: **0.0173925160301097 testnet NEAR**. No additional signatures were made to finish read-only scenes after interruption. Independent UI review found proof/label contrast and a buried mobile ticket; those were fixed with readable proof text/links, darker labels and mobile chart/book tabs plus Trade jump. Old evidence below remains dated previous-version history.
+
+Production preview: **24/24 cases pass** at 1440/390/375, including hard refresh on `/`, `/app`, `/event/powell-dec-9`, `/portfolio`, `/activity` and the previous September detail. Meteor opens its real testnet login with the new contract ID; closed and blocked messages pass at every width. These checks perform no signature or spend. Evidence: `deployments/v3-production-qa-2026-11-13.json`. The connected audit separately passed 18/18 cases, zero spend; ordinary signed-out checks passed 18/18. A first wallet-message test used an incorrect exact-text locator; the corrected alert locator passes. Human approval remains manual.
+
 ## R3 live-resolution proof — 2026-11-12
 
 **DONE:** fresh live seals, a separate browser-signed proof, a second untouched judge replay and a host-ready static build. No public deploy, push, film change or contract-key change was performed.

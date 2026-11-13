@@ -1,0 +1,2045 @@
+{
+  "status": "PASS",
+  "contract": "kotoba-book-v3-20261113.testnet",
+  "account": "trader.kotoba-book-v3-20261113.testnet",
+  "network": "testnet",
+  "startedAt": "2026-11-13T14:16:04.960Z",
+  "transactions": [
+    {
+      "scene": "hook",
+      "hash": "2xsQDraurpzoVyX6TkJFXFbk2cdTFMpPs7VSnrdUUoSo",
+      "accountId": "trader.kotoba-book-v3-20261113.testnet",
+      "receiverId": "kotoba-book-v3-20261113.testnet",
+      "methods": [
+        "place_order"
+      ],
+      "depositYocto": "5660000000000000000000",
+      "gas": "150000000000000",
+      "stage": "final",
+      "at": "2026-11-13T14:16:12.405Z",
+      "gasBurntYocto": "391444876606300000000",
+      "explorerShown": true,
+      "explorerURL": "https://nearvalidate.org/txns/2xsQDraurpzoVyX6TkJFXFbk2cdTFMpPs7VSnrdUUoSo?network=testnet"
+    },
+    {
+      "scene": "sell",
+      "hash": "5RiyMyhEvnPB9E1QP36qS1oSrzsiPaWqVdk1HfRgWRKc",
+      "accountId": "trader.kotoba-book-v3-20261113.testnet",
+      "receiverId": "kotoba-book-v3-20261113.testnet",
+      "methods": [
+        "place_order"
+      ],
+      "depositYocto": "5000000000000000000000",
+      "gas": "150000000000000",
+      "stage": "final",
+      "at": "2026-11-13T14:16:52.509Z",
+      "gasBurntYocto": "395568190177300000000",
+      "explorerShown": true,
+      "explorerURL": "https://nearvalidate.org/txns/5RiyMyhEvnPB9E1QP36qS1oSrzsiPaWqVdk1HfRgWRKc?network=testnet"
+    },
+    {
+      "scene": "cancel",
+      "hash": "GhN9ioTm9wWiaFJ3NV9ej8aTYH6GUV7eFbJ8NzVm9hpP",
+      "accountId": "trader.kotoba-book-v3-20261113.testnet",
+      "receiverId": "kotoba-book-v3-20261113.testnet",
+      "methods": [
+        "place_order"
+      ],
+      "depositYocto": "5200000000000000000000",
+      "gas": "150000000000000",
+      "stage": "final",
+      "at": "2026-11-13T14:17:26.350Z",
+      "gasBurntYocto": "380850678687100000000",
+      "explorerShown": true,
+      "explorerURL": "https://nearvalidate.org/txns/GhN9ioTm9wWiaFJ3NV9ej8aTYH6GUV7eFbJ8NzVm9hpP?network=testnet"
+    },
+    {
+      "scene": "cancel",
+      "hash": "5fUMHDvPL71kSu8t8iJe4vGV72Vhc4XxChWYEQt3JS1X",
+      "accountId": "trader.kotoba-book-v3-20261113.testnet",
+      "receiverId": "kotoba-book-v3-20261113.testnet",
+      "methods": [
+        "cancel_order"
+      ],
+      "depositYocto": "1",
+      "gas": "150000000000000",
+      "stage": "final",
+      "at": "2026-11-13T14:17:35.034Z",
+      "gasBurntYocto": "364652284639000000000",
+      "explorerShown": true,
+      "explorerURL": "https://nearvalidate.org/txns/5fUMHDvPL71kSu8t8iJe4vGV72Vhc4XxChWYEQt3JS1X?network=testnet"
+    }
+  ],
+  "errors": [],
+  "before": {
+    "account": {
+      "amount": "263155061533964500000000",
+      "block_hash": "C6vLuSkeNmwcfv64WQojEUPGm2zsvxDo9gUMxRW9JftB",
+      "block_height": 277520975,
+      "code_hash": "11111111111111111111111111111111",
+      "locked": "0",
+      "storage_paid_at": 0,
+      "storage_usage": 182
+    },
+    "book": {
+      "markets": [
+        {
+          "id": "fomc-2026-12-ai",
+          "event": "What will Powell say? \u00b7 December FOMC press conference",
+          "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+          "phrase": "ai",
+          "threshold": 1,
+          "close_ns": 1796844600000000000,
+          "deadline_ns": 1799452800000000000,
+          "b": 100,
+          "yes": 30,
+          "no": 30,
+          "burned_yes": 0,
+          "burned_no": 0,
+          "creator": "kotoba-book-v3-20261113.testnet",
+          "status": "Open",
+          "result": null,
+          "challenge_until_ns": null,
+          "pending": false,
+          "resolver": null,
+          "challenger": null
+        },
+        {
+          "id": "fomc-2026-12-employment",
+          "event": "What will Powell say? \u00b7 December FOMC press conference",
+          "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+          "phrase": "employment",
+          "threshold": 1,
+          "close_ns": 1796844600000000000,
+          "deadline_ns": 1799452800000000000,
+          "b": 100,
+          "yes": 30,
+          "no": 30,
+          "burned_yes": 0,
+          "burned_no": 0,
+          "creator": "kotoba-book-v3-20261113.testnet",
+          "status": "Open",
+          "result": null,
+          "challenge_until_ns": null,
+          "pending": false,
+          "resolver": null,
+          "challenger": null
+        },
+        {
+          "id": "fomc-2026-12-inflation",
+          "event": "What will Powell say? \u00b7 December FOMC press conference",
+          "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+          "phrase": "inflation",
+          "threshold": 1,
+          "close_ns": 1796844600000000000,
+          "deadline_ns": 1799452800000000000,
+          "b": 100,
+          "yes": 30,
+          "no": 30,
+          "burned_yes": 0,
+          "burned_no": 0,
+          "creator": "kotoba-book-v3-20261113.testnet",
+          "status": "Open",
+          "result": null,
+          "challenge_until_ns": null,
+          "pending": false,
+          "resolver": null,
+          "challenger": null
+        },
+        {
+          "id": "fomc-2026-12-recession",
+          "event": "What will Powell say? \u00b7 December FOMC press conference",
+          "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+          "phrase": "recession",
+          "threshold": 1,
+          "close_ns": 1796844600000000000,
+          "deadline_ns": 1799452800000000000,
+          "b": 100,
+          "yes": 30,
+          "no": 30,
+          "burned_yes": 0,
+          "burned_no": 0,
+          "creator": "kotoba-book-v3-20261113.testnet",
+          "status": "Open",
+          "result": null,
+          "challenge_until_ns": null,
+          "pending": false,
+          "resolver": null,
+          "challenger": null
+        },
+        {
+          "id": "fomc-2026-12-tariff",
+          "event": "What will Powell say? \u00b7 December FOMC press conference",
+          "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+          "phrase": "tariff",
+          "threshold": 1,
+          "close_ns": 1796844600000000000,
+          "deadline_ns": 1799452800000000000,
+          "b": 100,
+          "yes": 30,
+          "no": 30,
+          "burned_yes": 0,
+          "burned_no": 0,
+          "creator": "kotoba-book-v3-20261113.testnet",
+          "status": "Open",
+          "result": null,
+          "challenge_until_ns": null,
+          "pending": false,
+          "resolver": null,
+          "challenger": null
+        }
+      ],
+      "books": {
+        "fomc-2026-12-aiY": {
+          "bids": [
+            {
+              "order_id": 51,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 29,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            },
+            {
+              "order_id": 52,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 25,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 49,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 35,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            },
+            {
+              "order_id": 50,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 39,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            }
+          ],
+          "last_price": 31,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-aiN": {
+          "bids": [
+            {
+              "order_id": 55,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 67,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            },
+            {
+              "order_id": 56,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 63,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 53,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 73,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            },
+            {
+              "order_id": 54,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 77,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            }
+          ],
+          "last_price": null,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-employmentY": {
+          "bids": [
+            {
+              "order_id": 65,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 52,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            },
+            {
+              "order_id": 66,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 48,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 63,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 58,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            },
+            {
+              "order_id": 64,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 62,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            }
+          ],
+          "last_price": 54,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-employmentN": {
+          "bids": [
+            {
+              "order_id": 69,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 44,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            },
+            {
+              "order_id": 70,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 40,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 67,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 50,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            },
+            {
+              "order_id": 68,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 54,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            }
+          ],
+          "last_price": null,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-inflationY": {
+          "bids": [
+            {
+              "order_id": 37,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 84,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            },
+            {
+              "order_id": 38,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 80,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 35,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 90,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            },
+            {
+              "order_id": 36,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 94,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            }
+          ],
+          "last_price": 86,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-inflationN": {
+          "bids": [
+            {
+              "order_id": 41,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 12,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            },
+            {
+              "order_id": 42,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 8,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 39,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 18,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            },
+            {
+              "order_id": 40,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 22,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            }
+          ],
+          "last_price": null,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-recessionY": {
+          "bids": [
+            {
+              "order_id": 23,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 22,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            },
+            {
+              "order_id": 24,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 18,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 21,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 28,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            },
+            {
+              "order_id": 22,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 32,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            }
+          ],
+          "last_price": 24,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-recessionN": {
+          "bids": [
+            {
+              "order_id": 27,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 74,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            },
+            {
+              "order_id": 28,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 70,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 25,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 80,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            },
+            {
+              "order_id": 26,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 84,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            }
+          ],
+          "last_price": null,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-tariffY": {
+          "bids": [
+            {
+              "order_id": 9,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 60,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            },
+            {
+              "order_id": 10,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 56,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 7,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 66,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            },
+            {
+              "order_id": 8,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 70,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            }
+          ],
+          "last_price": 62,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-tariffN": {
+          "bids": [
+            {
+              "order_id": 13,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 36,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            },
+            {
+              "order_id": 14,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 32,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 11,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 42,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            },
+            {
+              "order_id": 12,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 46,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            }
+          ],
+          "last_price": null,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        }
+      },
+      "history": {
+        "fomc-2026-12-ai": [
+          {
+            "trade_id": 10,
+            "market_id": "fomc-2026-12-ai",
+            "yes": true,
+            "price": 26,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 43,
+            "taker_order": 44,
+            "taker_buy": true,
+            "at_ns": 1794578531554088200
+          },
+          {
+            "trade_id": 11,
+            "market_id": "fomc-2026-12-ai",
+            "yes": true,
+            "price": 29,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 45,
+            "taker_order": 46,
+            "taker_buy": true,
+            "at_ns": 1794578540994604500
+          },
+          {
+            "trade_id": 12,
+            "market_id": "fomc-2026-12-ai",
+            "yes": true,
+            "price": 31,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 47,
+            "taker_order": 48,
+            "taker_buy": true,
+            "at_ns": 1794578809605916700
+          }
+        ],
+        "fomc-2026-12-employment": [
+          {
+            "trade_id": 13,
+            "market_id": "fomc-2026-12-employment",
+            "yes": true,
+            "price": 49,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 57,
+            "taker_order": 58,
+            "taker_buy": true,
+            "at_ns": 1794578879351646200
+          },
+          {
+            "trade_id": 14,
+            "market_id": "fomc-2026-12-employment",
+            "yes": true,
+            "price": 52,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 59,
+            "taker_order": 60,
+            "taker_buy": true,
+            "at_ns": 1794578887262375700
+          },
+          {
+            "trade_id": 15,
+            "market_id": "fomc-2026-12-employment",
+            "yes": true,
+            "price": 54,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 61,
+            "taker_order": 62,
+            "taker_buy": true,
+            "at_ns": 1794578895113737500
+          }
+        ],
+        "fomc-2026-12-inflation": [
+          {
+            "trade_id": 7,
+            "market_id": "fomc-2026-12-inflation",
+            "yes": true,
+            "price": 81,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 29,
+            "taker_order": 30,
+            "taker_buy": true,
+            "at_ns": 1794578488690200800
+          },
+          {
+            "trade_id": 8,
+            "market_id": "fomc-2026-12-inflation",
+            "yes": true,
+            "price": 84,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 31,
+            "taker_order": 32,
+            "taker_buy": true,
+            "at_ns": 1794578498450766000
+          },
+          {
+            "trade_id": 9,
+            "market_id": "fomc-2026-12-inflation",
+            "yes": true,
+            "price": 86,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 33,
+            "taker_order": 34,
+            "taker_buy": true,
+            "at_ns": 1794578508132424200
+          }
+        ],
+        "fomc-2026-12-recession": [
+          {
+            "trade_id": 4,
+            "market_id": "fomc-2026-12-recession",
+            "yes": true,
+            "price": 19,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 15,
+            "taker_order": 16,
+            "taker_buy": true,
+            "at_ns": 1794578446427511800
+          },
+          {
+            "trade_id": 5,
+            "market_id": "fomc-2026-12-recession",
+            "yes": true,
+            "price": 22,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 17,
+            "taker_order": 18,
+            "taker_buy": true,
+            "at_ns": 1794578455440422700
+          },
+          {
+            "trade_id": 6,
+            "market_id": "fomc-2026-12-recession",
+            "yes": true,
+            "price": 24,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 19,
+            "taker_order": 20,
+            "taker_buy": true,
+            "at_ns": 1794578465080835300
+          }
+        ],
+        "fomc-2026-12-tariff": [
+          {
+            "trade_id": 1,
+            "market_id": "fomc-2026-12-tariff",
+            "yes": true,
+            "price": 57,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 1,
+            "taker_order": 2,
+            "taker_buy": true,
+            "at_ns": 1794578403556335400
+          },
+          {
+            "trade_id": 2,
+            "market_id": "fomc-2026-12-tariff",
+            "yes": true,
+            "price": 60,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 3,
+            "taker_order": 4,
+            "taker_buy": true,
+            "at_ns": 1794578412915771000
+          },
+          {
+            "trade_id": 3,
+            "market_id": "fomc-2026-12-tariff",
+            "yes": true,
+            "price": 62,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 5,
+            "taker_order": 6,
+            "taker_buy": true,
+            "at_ns": 1794578422219793700
+          }
+        ]
+      },
+      "held": {
+        "fomc-2026-12-ai:YES": 3,
+        "fomc-2026-12-ai:NO": 0,
+        "fomc-2026-12-employment:YES": 3,
+        "fomc-2026-12-employment:NO": 0,
+        "fomc-2026-12-inflation:YES": 3,
+        "fomc-2026-12-inflation:NO": 0,
+        "fomc-2026-12-recession:YES": 3,
+        "fomc-2026-12-recession:NO": 0,
+        "fomc-2026-12-tariff:YES": 3,
+        "fomc-2026-12-tariff:NO": 0
+      },
+      "orders": [],
+      "cash": "0"
+    },
+    "reserved": [
+      {
+        "id": "fomc-2026-10-inflation-replay",
+        "event": "FOMC press conference \u00b7 2026-10-28 \u00b7 replay demo",
+        "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf",
+        "phrase": "inflation",
+        "threshold": 1,
+        "close_ns": 1794466435989000000,
+        "deadline_ns": 1795651200000000000,
+        "b": 100,
+        "yes": 0,
+        "no": 0,
+        "burned_yes": 0,
+        "burned_no": 0,
+        "creator": "kotoba-edfa2b47.testnet",
+        "status": "Open",
+        "result": null,
+        "challenge_until_ns": null,
+        "pending": false,
+        "resolver": null,
+        "challenger": null
+      },
+      {
+        "id": "fomc-2026-10-employment-replay",
+        "event": "FOMC press conference \u00b7 2026-10-28 \u00b7 replay demo",
+        "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf",
+        "phrase": "employment",
+        "threshold": 1,
+        "close_ns": 1794476408188000000,
+        "deadline_ns": 1795651200000000000,
+        "b": 100,
+        "yes": 0,
+        "no": 0,
+        "burned_yes": 0,
+        "burned_no": 0,
+        "creator": "kotoba-edfa2b47.testnet",
+        "status": "Open",
+        "result": null,
+        "challenge_until_ns": null,
+        "pending": false,
+        "resolver": null,
+        "challenger": null
+      }
+    ]
+  },
+  "after": {
+    "account": {
+      "amount": "245762545503854799999999",
+      "block_hash": "9mea1dpHs9Tc262PkGeEwaioUaUendPQzRiP7T7JG45v",
+      "block_height": 277522293,
+      "code_hash": "11111111111111111111111111111111",
+      "locked": "0",
+      "storage_paid_at": 0,
+      "storage_usage": 182
+    },
+    "book": {
+      "markets": [
+        {
+          "id": "fomc-2026-12-ai",
+          "event": "What will Powell say? \u00b7 December FOMC press conference",
+          "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+          "phrase": "ai",
+          "threshold": 1,
+          "close_ns": 1796844600000000000,
+          "deadline_ns": 1799452800000000000,
+          "b": 100,
+          "yes": 30,
+          "no": 30,
+          "burned_yes": 0,
+          "burned_no": 0,
+          "creator": "kotoba-book-v3-20261113.testnet",
+          "status": "Open",
+          "result": null,
+          "challenge_until_ns": null,
+          "pending": false,
+          "resolver": null,
+          "challenger": null
+        },
+        {
+          "id": "fomc-2026-12-employment",
+          "event": "What will Powell say? \u00b7 December FOMC press conference",
+          "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+          "phrase": "employment",
+          "threshold": 1,
+          "close_ns": 1796844600000000000,
+          "deadline_ns": 1799452800000000000,
+          "b": 100,
+          "yes": 30,
+          "no": 30,
+          "burned_yes": 0,
+          "burned_no": 0,
+          "creator": "kotoba-book-v3-20261113.testnet",
+          "status": "Open",
+          "result": null,
+          "challenge_until_ns": null,
+          "pending": false,
+          "resolver": null,
+          "challenger": null
+        },
+        {
+          "id": "fomc-2026-12-inflation",
+          "event": "What will Powell say? \u00b7 December FOMC press conference",
+          "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+          "phrase": "inflation",
+          "threshold": 1,
+          "close_ns": 1796844600000000000,
+          "deadline_ns": 1799452800000000000,
+          "b": 100,
+          "yes": 30,
+          "no": 30,
+          "burned_yes": 0,
+          "burned_no": 0,
+          "creator": "kotoba-book-v3-20261113.testnet",
+          "status": "Open",
+          "result": null,
+          "challenge_until_ns": null,
+          "pending": false,
+          "resolver": null,
+          "challenger": null
+        },
+        {
+          "id": "fomc-2026-12-recession",
+          "event": "What will Powell say? \u00b7 December FOMC press conference",
+          "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+          "phrase": "recession",
+          "threshold": 1,
+          "close_ns": 1796844600000000000,
+          "deadline_ns": 1799452800000000000,
+          "b": 100,
+          "yes": 30,
+          "no": 30,
+          "burned_yes": 0,
+          "burned_no": 0,
+          "creator": "kotoba-book-v3-20261113.testnet",
+          "status": "Open",
+          "result": null,
+          "challenge_until_ns": null,
+          "pending": false,
+          "resolver": null,
+          "challenger": null
+        },
+        {
+          "id": "fomc-2026-12-tariff",
+          "event": "What will Powell say? \u00b7 December FOMC press conference",
+          "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+          "phrase": "tariff",
+          "threshold": 1,
+          "close_ns": 1796844600000000000,
+          "deadline_ns": 1799452800000000000,
+          "b": 100,
+          "yes": 30,
+          "no": 30,
+          "burned_yes": 0,
+          "burned_no": 0,
+          "creator": "kotoba-book-v3-20261113.testnet",
+          "status": "Open",
+          "result": null,
+          "challenge_until_ns": null,
+          "pending": false,
+          "resolver": null,
+          "challenger": null
+        }
+      ],
+      "books": {
+        "fomc-2026-12-aiY": {
+          "bids": [
+            {
+              "order_id": 51,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 29,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            },
+            {
+              "order_id": 52,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 25,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 49,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 35,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            },
+            {
+              "order_id": 50,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 39,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            }
+          ],
+          "last_price": 31,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-aiN": {
+          "bids": [
+            {
+              "order_id": 55,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 67,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            },
+            {
+              "order_id": 56,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 63,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 53,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 73,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            },
+            {
+              "order_id": 54,
+              "market_id": "fomc-2026-12-ai",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 77,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578864228384800,
+              "cancelled": false
+            }
+          ],
+          "last_price": null,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-employmentY": {
+          "bids": [
+            {
+              "order_id": 65,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 52,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            },
+            {
+              "order_id": 66,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 48,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 63,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 58,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            },
+            {
+              "order_id": 64,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 62,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            }
+          ],
+          "last_price": 54,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-employmentN": {
+          "bids": [
+            {
+              "order_id": 69,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 44,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            },
+            {
+              "order_id": 70,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 40,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 67,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 50,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            },
+            {
+              "order_id": 68,
+              "market_id": "fomc-2026-12-employment",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 54,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578898788560000,
+              "cancelled": false
+            }
+          ],
+          "last_price": null,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-inflationY": {
+          "bids": [
+            {
+              "order_id": 37,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 84,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            },
+            {
+              "order_id": 38,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 80,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 35,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 90,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            },
+            {
+              "order_id": 36,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 94,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            }
+          ],
+          "last_price": 86,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-inflationN": {
+          "bids": [
+            {
+              "order_id": 41,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 12,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            },
+            {
+              "order_id": 42,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 8,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 39,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 18,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            },
+            {
+              "order_id": 40,
+              "market_id": "fomc-2026-12-inflation",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 22,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578511822255600,
+              "cancelled": false
+            }
+          ],
+          "last_price": null,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-recessionY": {
+          "bids": [
+            {
+              "order_id": 23,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 22,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            },
+            {
+              "order_id": 24,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 18,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 21,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 28,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            },
+            {
+              "order_id": 22,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 32,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            }
+          ],
+          "last_price": 24,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-recessionN": {
+          "bids": [
+            {
+              "order_id": 27,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 74,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            },
+            {
+              "order_id": 28,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 70,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 25,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 80,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            },
+            {
+              "order_id": 26,
+              "market_id": "fomc-2026-12-recession",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 84,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578469363280400,
+              "cancelled": false
+            }
+          ],
+          "last_price": null,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-tariffY": {
+          "bids": [
+            {
+              "order_id": 9,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 60,
+              "quantity": 5,
+              "remaining": 4,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            },
+            {
+              "order_id": 10,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": true,
+              "price": 56,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 7,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 66,
+              "quantity": 10,
+              "remaining": 9,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            },
+            {
+              "order_id": 8,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": true,
+              "buy": false,
+              "price": 70,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            }
+          ],
+          "last_price": 60,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        },
+        "fomc-2026-12-tariffN": {
+          "bids": [
+            {
+              "order_id": 13,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 36,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            },
+            {
+              "order_id": 14,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": true,
+              "price": 32,
+              "quantity": 5,
+              "remaining": 5,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            }
+          ],
+          "asks": [
+            {
+              "order_id": 11,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 42,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            },
+            {
+              "order_id": 12,
+              "market_id": "fomc-2026-12-tariff",
+              "owner": "kotoba-book-v3-20261113.testnet",
+              "yes": false,
+              "buy": false,
+              "price": 46,
+              "quantity": 10,
+              "remaining": 10,
+              "created_ns": 1794578426341442800,
+              "cancelled": false
+            }
+          ],
+          "last_price": null,
+          "spread": 6,
+          "storage_fee": "5000000000000000000000",
+          "payout": "1000000000000000000000"
+        }
+      },
+      "history": {
+        "fomc-2026-12-ai": [
+          {
+            "trade_id": 10,
+            "market_id": "fomc-2026-12-ai",
+            "yes": true,
+            "price": 26,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 43,
+            "taker_order": 44,
+            "taker_buy": true,
+            "at_ns": 1794578531554088200
+          },
+          {
+            "trade_id": 11,
+            "market_id": "fomc-2026-12-ai",
+            "yes": true,
+            "price": 29,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 45,
+            "taker_order": 46,
+            "taker_buy": true,
+            "at_ns": 1794578540994604500
+          },
+          {
+            "trade_id": 12,
+            "market_id": "fomc-2026-12-ai",
+            "yes": true,
+            "price": 31,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 47,
+            "taker_order": 48,
+            "taker_buy": true,
+            "at_ns": 1794578809605916700
+          }
+        ],
+        "fomc-2026-12-employment": [
+          {
+            "trade_id": 13,
+            "market_id": "fomc-2026-12-employment",
+            "yes": true,
+            "price": 49,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 57,
+            "taker_order": 58,
+            "taker_buy": true,
+            "at_ns": 1794578879351646200
+          },
+          {
+            "trade_id": 14,
+            "market_id": "fomc-2026-12-employment",
+            "yes": true,
+            "price": 52,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 59,
+            "taker_order": 60,
+            "taker_buy": true,
+            "at_ns": 1794578887262375700
+          },
+          {
+            "trade_id": 15,
+            "market_id": "fomc-2026-12-employment",
+            "yes": true,
+            "price": 54,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 61,
+            "taker_order": 62,
+            "taker_buy": true,
+            "at_ns": 1794578895113737500
+          }
+        ],
+        "fomc-2026-12-inflation": [
+          {
+            "trade_id": 7,
+            "market_id": "fomc-2026-12-inflation",
+            "yes": true,
+            "price": 81,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 29,
+            "taker_order": 30,
+            "taker_buy": true,
+            "at_ns": 1794578488690200800
+          },
+          {
+            "trade_id": 8,
+            "market_id": "fomc-2026-12-inflation",
+            "yes": true,
+            "price": 84,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 31,
+            "taker_order": 32,
+            "taker_buy": true,
+            "at_ns": 1794578498450766000
+          },
+          {
+            "trade_id": 9,
+            "market_id": "fomc-2026-12-inflation",
+            "yes": true,
+            "price": 86,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 33,
+            "taker_order": 34,
+            "taker_buy": true,
+            "at_ns": 1794578508132424200
+          }
+        ],
+        "fomc-2026-12-recession": [
+          {
+            "trade_id": 4,
+            "market_id": "fomc-2026-12-recession",
+            "yes": true,
+            "price": 19,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 15,
+            "taker_order": 16,
+            "taker_buy": true,
+            "at_ns": 1794578446427511800
+          },
+          {
+            "trade_id": 5,
+            "market_id": "fomc-2026-12-recession",
+            "yes": true,
+            "price": 22,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 17,
+            "taker_order": 18,
+            "taker_buy": true,
+            "at_ns": 1794578455440422700
+          },
+          {
+            "trade_id": 6,
+            "market_id": "fomc-2026-12-recession",
+            "yes": true,
+            "price": 24,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 19,
+            "taker_order": 20,
+            "taker_buy": true,
+            "at_ns": 1794578465080835300
+          }
+        ],
+        "fomc-2026-12-tariff": [
+          {
+            "trade_id": 1,
+            "market_id": "fomc-2026-12-tariff",
+            "yes": true,
+            "price": 57,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 1,
+            "taker_order": 2,
+            "taker_buy": true,
+            "at_ns": 1794578403556335400
+          },
+          {
+            "trade_id": 2,
+            "market_id": "fomc-2026-12-tariff",
+            "yes": true,
+            "price": 60,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 3,
+            "taker_order": 4,
+            "taker_buy": true,
+            "at_ns": 1794578412915771000
+          },
+          {
+            "trade_id": 3,
+            "market_id": "fomc-2026-12-tariff",
+            "yes": true,
+            "price": 62,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 5,
+            "taker_order": 6,
+            "taker_buy": true,
+            "at_ns": 1794578422219793700
+          },
+          {
+            "trade_id": 16,
+            "market_id": "fomc-2026-12-tariff",
+            "yes": true,
+            "price": 66,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 7,
+            "taker_order": 71,
+            "taker_buy": true,
+            "at_ns": 1794579369746080300
+          },
+          {
+            "trade_id": 17,
+            "market_id": "fomc-2026-12-tariff",
+            "yes": true,
+            "price": 60,
+            "quantity": 1,
+            "maker": "kotoba-book-v3-20261113.testnet",
+            "taker": "trader.kotoba-book-v3-20261113.testnet",
+            "maker_order": 9,
+            "taker_order": 72,
+            "taker_buy": false,
+            "at_ns": 1794579409862449200
+          }
+        ]
+      },
+      "held": {
+        "fomc-2026-12-ai:YES": 3,
+        "fomc-2026-12-ai:NO": 0,
+        "fomc-2026-12-employment:YES": 3,
+        "fomc-2026-12-employment:NO": 0,
+        "fomc-2026-12-inflation:YES": 3,
+        "fomc-2026-12-inflation:NO": 0,
+        "fomc-2026-12-recession:YES": 3,
+        "fomc-2026-12-recession:NO": 0,
+        "fomc-2026-12-tariff:YES": 3,
+        "fomc-2026-12-tariff:NO": 0
+      },
+      "orders": [],
+      "cash": "800000000000000000000"
+    },
+    "reserved": [
+      {
+        "id": "fomc-2026-10-inflation-replay",
+        "event": "FOMC press conference \u00b7 2026-10-28 \u00b7 replay demo",
+        "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf",
+        "phrase": "inflation",
+        "threshold": 1,
+        "close_ns": 1794466435989000000,
+        "deadline_ns": 1795651200000000000,
+        "b": 100,
+        "yes": 0,
+        "no": 0,
+        "burned_yes": 0,
+        "burned_no": 0,
+        "creator": "kotoba-edfa2b47.testnet",
+        "status": "Open",
+        "result": null,
+        "challenge_until_ns": null,
+        "pending": false,
+        "resolver": null,
+        "challenger": null
+      },
+      {
+        "id": "fomc-2026-10-employment-replay",
+        "event": "FOMC press conference \u00b7 2026-10-28 \u00b7 replay demo",
+        "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf",
+        "phrase": "employment",
+        "threshold": 1,
+        "close_ns": 1794476408188000000,
+        "deadline_ns": 1795651200000000000,
+        "b": 100,
+        "yes": 0,
+        "no": 0,
+        "burned_yes": 0,
+        "burned_no": 0,
+        "creator": "kotoba-edfa2b47.testnet",
+        "status": "Open",
+        "result": null,
+        "challenge_until_ns": null,
+        "pending": false,
+        "resolver": null,
+        "challenger": null
+      }
+    ]
+  },
+  "spentYocto": "17392516030109700000001",
+  "completedAt": "2026-11-13T14:31:32.754Z",
+  "captureAttempts": [
+    {
+      "status": "stopped-before-read-only-finish",
+      "stage": "preflight",
+      "reason": "locator.waitFor: Timeout 30000ms exceeded.",
+      "note": "Finish resumed read-only after clicking Connect. No transaction repeated."
+    }
+  ],
+  "scopeNote": "All new v3 actions signed in app. October replays read only. September and January settlement/payout are previous-version context."
+}

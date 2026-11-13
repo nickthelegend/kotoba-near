@@ -1,0 +1,217 @@
+{
+  "cases": 24,
+  "results": [
+    {
+      "id": "home",
+      "width": 1440,
+      "path": "/",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "app",
+      "width": 1440,
+      "path": "/app",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "event",
+      "width": 1440,
+      "path": "/event/powell-dec-9",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "portfolio",
+      "width": 1440,
+      "path": "/portfolio",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "activity",
+      "width": 1440,
+      "path": "/activity",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "previous",
+      "width": 1440,
+      "path": "/market/fomc-2026-09-inflation-replay",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "width": 1440,
+      "id": "meteor-closed",
+      "status": "PASS",
+      "url": "https://wallet.meteorwallet.app/connect/testnet/login",
+      "request": {
+        "actionType": "login",
+        "network": "testnet",
+        "contract_id": "kotoba-book-v3-20261113.testnet"
+      }
+    },
+    {
+      "width": 1440,
+      "id": "meteor-blocked",
+      "status": "PASS"
+    },
+    {
+      "id": "home",
+      "width": 390,
+      "path": "/",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "app",
+      "width": 390,
+      "path": "/app",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "event",
+      "width": 390,
+      "path": "/event/powell-dec-9",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "portfolio",
+      "width": 390,
+      "path": "/portfolio",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "activity",
+      "width": 390,
+      "path": "/activity",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "previous",
+      "width": 390,
+      "path": "/market/fomc-2026-09-inflation-replay",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "width": 390,
+      "id": "meteor-closed",
+      "status": "PASS",
+      "url": "https://wallet.meteorwallet.app/connect/testnet/login",
+      "request": {
+        "actionType": "login",
+        "network": "testnet",
+        "contract_id": "kotoba-book-v3-20261113.testnet"
+      }
+    },
+    {
+      "width": 390,
+      "id": "meteor-blocked",
+      "status": "PASS"
+    },
+    {
+      "id": "home",
+      "width": 375,
+      "path": "/",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "app",
+      "width": 375,
+      "path": "/app",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "event",
+      "width": 375,
+      "path": "/event/powell-dec-9",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "portfolio",
+      "width": 375,
+      "path": "/portfolio",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "activity",
+      "width": 375,
+      "path": "/activity",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "id": "previous",
+      "width": 375,
+      "path": "/market/fomc-2026-09-inflation-replay",
+      "status": "PASS",
+      "errors": [],
+      "overflow": false,
+      "rawError": false
+    },
+    {
+      "width": 375,
+      "id": "meteor-closed",
+      "status": "PASS",
+      "url": "https://wallet.meteorwallet.app/connect/testnet/login",
+      "request": {
+        "actionType": "login",
+        "network": "testnet",
+        "contract_id": "kotoba-book-v3-20261113.testnet"
+      }
+    },
+    {
+      "width": 375,
+      "id": "meteor-blocked",
+      "status": "PASS"
+    }
+  ],
+  "bundleQaSignerMarkers": false,
+  "normalAndForcedFlagBuildsPassed": true
+}

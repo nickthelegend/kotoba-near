@@ -1,3 +1,23 @@
+# Kotoba v3 — completed November 13, 2026
+
+The new order-book contract is `kotoba-book-v3-20261113.testnet`. Five December word markets have real seeded trades and resting YES/NO orders. Trading supports cash/share escrow, price-time priority, partial fills, selling, cancellation, IOC refunds and callback-safe cash withdrawal. Current deployed code matches the built WASM. The old contract and both October judge replays were only read; both replays remain Open with no result.
+
+The app now has event cards, word outcomes, actual price history, depth, Buy/Sell and Limit/Market controls, portfolio, P&L, open orders, activity and Rules with settlement evidence. Main routes are `/`, `/app`, `/event/powell-dec-9`, `/portfolio` and `/activity`; previous market links remain available. Mobile has Chart / Order book tabs and a Trade jump. Coral, Urbanist and microphone art remain. Independent UI review closed **SHIP** after contrast and mobile reachability fixes.
+
+Verification: **57/57 tests**, **18/18** signed-out cases, **18/18** connected cases and **24/24** production cases at 1440, 390 and 375. Production hard refresh, Meteor's testnet/new-contract popup, and closed/blocked messages pass. Human sign-in/approval remains manual. Forced-flag production builds exclude the QA signer. Root test/build commands include the book contract. `pnpm dev` uses port 5571. `test:e2e` defaults to read-only; its explicit `--send` mode is for future tests, not regenerating completed film actions.
+
+Film outputs are `kotoba-near-film.mp4` (1080p, 169.291 seconds) and `kotoba-near-film-share.mp4` (720p, 169.301 seconds, 4.24 MB). Production files and reviews are in the external `videos/kotoba-near/versions/v3/` folder; v1/v2 exports are preserved. The film opens on the actual market and book. The buy reaches FINAL and moves 62% to 66% by 7–8 seconds. It then shows a sell, portfolio, resting order and cancel, four new explorers, activity, dated historical proof/payout, a limits card and close. Independent render scores were **8.7 → 9.0 → 9.2/10**; this is not Nick's acceptance. Full/share contact sheets and focus frames were inspected. Product-only freeze and silence scans pass; peak audio is −1.5 dB. Voice is bm_george with original quiet music. Raw WebMs were deleted after final QA; encoded cuts remain.
+
+The four app-signed FINAL hashes and exact spend, **0.0173925160301097 testnet NEAR**, are in `deployments/film-v3-2026-11-13.json`. No live transaction was repeated after interruption. Read-only finishing and QA spent nothing. Final reserved-market state is recorded in `deployments/v3-final-readback-2026-11-13.json`.
+
+Safer choices and limits: a fresh Kotoba-owned helper-faucet account funded the new deployment because the old account could not cover duplicate code storage. No old or other-project account was debited. Keep the proven pinned counter and disclose its whole-transcript scope, including reporters; do not claim speaker isolation. Historical settlement does not establish December or new-book settlement. Bets are public, depth is seeded, the code is upgradeable and unaudited, and each order retains a 0.005 NEAR storage fee. The prototype caps lifetime history at 4,096 orders and 8,192 fills. Prices use 100¢ per 0.001 NEAR winning-share payout, not dollars. Mainnet, gasless trading and human Meteor approval are not demonstrated.
+
+Kalshi/Polymarket reference loads failed with SSL errors; failed attempts were saved, and Manifold/local picks were inspected. Public receipt rate limits were fixed by preferring archival RPC; the complete suite rerun passed. Source-video timing drift and light-card caption contrast were corrected without new trades. No hosting, push or key deletion was performed.
+
+README, FLOW-QA, TESTING, HACKATHON_SUBMISSION_FORM and the shared submission index are refreshed. Tracks remain `open` then `privacy`; the idea is 972 characters and the X draft is 215. The external index is outside this product repo. The original report below is historical previous-version evidence.
+
+---
+
 # Kotoba build report — 2026-11-09 (Claude pass)
 
 **Status: live on NEAR testnet.** One past FOMC press conference was settled end to end through real OutLayer TEE executions, and every attestation verifies. Four live markets are open for the Dec 9, 2026 FOMC press conference. See TESTING.md for the later UI rebuild and Meteor Wallet QA; full Meteor sign-in and approval still need human verification.

@@ -1,6 +1,41 @@
 # Verification
 
-## Full-suite rerun — 2026-11-12 (R4)
+## V3 full-suite rerun — 2026-11-13
+
+`CARGO_BUILD_JOBS=1 pnpm test` completed with exit code **0**: **57 passed, zero failed, zero skipped/ignored**. Oracle, previous contract and new book WASM builds succeeded. The root command now includes `pnpm test:book`.
+
+| Suite | Passed |
+| --- | ---: |
+| Oracle Rust | 3 |
+| Previous contract unit / sandbox | 5 / 1 |
+| SDK / MCP / web | 17 / 2 / 17 |
+| Book unit / sandbox | 8 / 4 |
+| **Total** | **57** |
+
+Book sandbox tests execute real local nearcore transactions for price-time priority, maker prices, partial fills, YES/NO separation, sell escrow, owner cancellation, repeated cancellation rejection, cash withdrawals, IOC refunds, integer-cent rounding, pair redemption, overselling, overfill, invalid prices/quantities, cash insufficiency, private-callback rejection, self-trade skipping and closed-market rejection. Unit callback fixtures test failed withdrawal restoration without overwriting a concurrent credit, successful reconciliation and replay rejection. Those isolated VM fixtures are tests, not product responses. No public chain success or film state is mocked.
+
+Two earlier full-suite attempts hit public NearBlocks HTTP 429 in discovery (the other completed suites passed). Historical receipt reads now prefer the public archival NEAR RPC; the complete third run passed all 57. The original close-time test advanced insufficient time; it now reads the actual sandbox timestamp. Free memory/disk gates and the one-Cargo-process rule were checked. Full-suite test logs remain local as `kotoba-v3-full-tests-3.log`.
+
+## V3 browser QA and reproduction
+
+Production compilation succeeds; normal and forced-flag builds exclude `kotoba-qa-signer`, `__KOTOBA_QA_SIGNER__` and credential-injection code. QA signing remains gated by **both** Vite development mode and `VITE_QA_SIGNER=1`. Production uses Meteor testnet. Wallet adapters are scoped to the selected contract; each QA action fetches a fresh nonce.
+
+```sh
+pnpm install --frozen-lockfile
+VITE_QA_SIGNER=1 pnpm dev
+# In another terminal (same existing dev server):
+pnpm test:e2e
+```
+
+`test:e2e` uses the new book flow at the local URL (override `KOTOBA_QA_URL`). It reads the ignored `book-trader.json` credential only in Node, injects it into the ephemeral local page, and signs nothing by default. It audits connected event/portfolio/reload, NO/Sell/Market insufficient shares, five live seal checks and activity at 1440/390/375. Every Chrome launch-to-close is inside the shared orchestration Chrome lock; no traces, HAR, key output or storage-state export.
+
+`pnpm test:e2e -- --send` explicitly performs four real new-contract actions at desktop width: limit buy, market sell, below-market resting order and owner cancel. It records signed hashes before broadcast, waits for FINAL, checks receipts and enforces four actions / 0.3 NEAR maximum through the signer. It requires 0.18 NEAR spendable and never targets old replays. **Do not run --send to regenerate film evidence:** the film's four finalized hashes already exist. The default run is read-only. Old scripts remain under `test:e2e:previous` / `test:flow:previous` for historical evidence; current route QA uses `test:flow`.
+
+The v3 filmed real actions are recorded in `deployments/film-v3-2026-11-13.json`. They moved tariff YES 3 → 4 → 3, placed and cancelled a 10¢ resting bid, and left zero trader open orders. Human Meteor approval remains manual. Both October judge replays were read back unchanged, Open, result None.
+
+Production preview: **24/24 cases pass** at 1440/390/375, including hard refresh on `/`, `/app`, `/event/powell-dec-9`, `/portfolio`, `/activity` and the previous September detail. Meteor opens its real testnet login with the new contract ID; closed and blocked messages pass at every width. These checks perform no signature or spend. Evidence: `deployments/v3-production-qa-2026-11-13.json`. The connected audit separately passed 18/18 cases, zero spend; ordinary signed-out checks passed 18/18. A first wallet-message test used an incorrect exact-text locator; the corrected alert locator passes. Human approval remains manual.
+
+## Historical full-suite rerun — 2026-11-12 (R4)
 
 The root test command completed with exit code **0**: **45 passed, 0 failed, 0 skipped or ignored**. Both the oracle WASI P2 build and the contract WASM build succeeded. No source fixes were required.
 
@@ -26,7 +61,7 @@ Environment: Node v26.5.0, pnpm 10.29.2 and the packages' pinned Rust 1.95.0 too
 
 The following sections retain earlier verification notes; the R4 table above is the latest complete suite run.
 
-`pnpm test` from the repository root builds both WASM files first. The current source defines **45 tests** (28 in the November 9 suites, 14 web error-mapping tests added November 10, and 2 live discovery tests and 1 failure-injection test added November 12). Earlier totals of 33 and 47 were arithmetic errors; the suite counts below are unchanged. These are recorded verification results; the full suite was not rerun for the docs-only submission pack. `pnpm --filter @kotoba/web test` alone: **14 passed, 0 failed** (Nov 10).
+`pnpm test` from the repository root builds both WASM files first. The November 12 source defined **45 tests** (28 in the November 9 suites, 14 web error-mapping tests added November 10, and 2 live discovery tests and 1 failure-injection test added November 12). Earlier totals of 33 and 47 were arithmetic errors; the suite counts below are unchanged. These are recorded verification results; the full suite was not rerun for the docs-only submission pack. `pnpm --filter @kotoba/web test` alone: **14 passed, 0 failed** (Nov 10).
 
 | Suite | Tests | What ran |
 | --- | ---: | --- |
