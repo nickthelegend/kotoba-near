@@ -4,7 +4,9 @@ export type Series = { id: string; name: string; color: string; points: { t: num
 const RANGES: [string, number][] = [['1H', 3600e3], ['6H', 6 * 3600e3], ['1D', 86400e3], ['ALL', Infinity]];
 
 /** Step chart of real fill prices: each line holds its last trade until the next one, then ends at the live price. */
-export function PriceChart({ series, height = 300, compact = false }: { series: Series[]; height?: number; compact?: boolean }) {
+export function PriceChart({ series: input, height = 300, compact = false }: { series: Series[]; height?: number; compact?: boolean }) {
+  // Colours follow the lines on screen, so two shown words never share one.
+  const series = input.map((s, i) => ({ ...s, color: COLORS[i % COLORS.length] }));
   const [range, setRange] = useState('ALL');
   const [hover, setHover] = useState<number | null>(null);
   const box = useRef<SVGSVGElement>(null);

@@ -413,3 +413,4 @@ a.k-l-row:hover span { color: var(--k-coral-ink); }
 .k-landing .l-sub { font-size: 17px; line-height: 1.55; max-width: 560px; }
 
 .k-cats a, .k-cats span { white-space: nowrap; }
+@media (max-width: 900px) { .k-section-head { flex-direction: column; gap: 4px; } .k-chart-legend { font-size: 13px; } }

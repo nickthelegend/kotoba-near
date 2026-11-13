@@ -10,6 +10,7 @@ export function TradePanel({ market, book, snap, wallet, ticket, setTicket, onDo
   ticket: Ticket; setTicket: (t: Ticket) => void; onDone?: (trades: Trade[]) => void;
 }) {
   const [shares, setShares] = useState('10');
+  const [draft, setDraft] = useState<string | null>(null); // the limit price while it is being typed
   const [status, setStatus] = useState<Status>({ step: 'idle' });
   const { yes, buy, kind } = ticket;
   const view = sideBook(book, yes);
@@ -85,10 +86,10 @@ export function TradePanel({ market, book, snap, wallet, ticket, setTicket, onDo
         <label className="k-field">
           <span>Limit price</span>
           <div className="k-stepper">
-            <button aria-label="Lower price" onClick={() => setTicket({ ...ticket, price: Math.max(1, (price ?? 50) - 1) })}>−</button>
-            <input aria-label="Limit price in cents" inputMode="numeric" value={price ?? ''} onChange={e => setTicket({ ...ticket, price: Number(e.target.value.replace(/\D/g, '')) || null })} />
+            <button aria-label="Lower price" onClick={() => { setDraft(null); setTicket({ ...ticket, price: Math.max(1, (price ?? 50) - 1) }); }}>−</button>
+            <input aria-label="Limit price in cents" inputMode="numeric" value={draft ?? String(price ?? '')} onBlur={() => setDraft(null)} onChange={e => { const v = e.target.value.replace(/\D/g, '').slice(0, 3); setDraft(v); setTicket({ ...ticket, price: v ? Number(v) : 0 }); }} />
             <em>¢</em>
-            <button aria-label="Raise price" onClick={() => setTicket({ ...ticket, price: Math.min(99, (price ?? 50) + 1) })}>+</button>
+            <button aria-label="Raise price" onClick={() => { setDraft(null); setTicket({ ...ticket, price: Math.min(99, (price ?? 50) + 1) }); }}>+</button>
           </div>
         </label>
       )}
@@ -115,7 +116,7 @@ export function TradePanel({ market, book, snap, wallet, ticket, setTicket, onDo
       )}
       {problem && wallet.account && <p className="k-field-error">{problem}</p>}
       <button className={'k-submit ' + (buy ? sideClass : 'sell')} disabled={busy || (!!wallet.account && !!problem)} onClick={submit}>
-        {!wallet.account ? 'Connect wallet to trade' : status.step === 'signing' ? 'Approve in your wallet…' : status.step === 'confirming' ? 'Confirming on NEAR…' : `${buy ? 'Buy' : 'Sell'} ${yes ? 'Yes' : 'No'}`}
+        {!wallet.account ? 'Connect wallet to trade' : status.step === 'signing' ? 'Signing in your wallet…' : status.step === 'confirming' ? 'Confirming on NEAR…' : `${buy ? 'Buy' : 'Sell'} ${yes ? 'Yes' : 'No'}`}
       </button>
       {status.step === 'done' && <div className="k-receipt ok" role="status"><b>{status.text}</b><a href={txURL(status.hash)} target="_blank" rel="noreferrer">Receipt ↗</a></div>}
       {status.step === 'confirming' && status.hash && <div className="k-receipt" role="status"><span className="k-spin" />Waiting for finality<a href={txURL(status.hash)} target="_blank" rel="noreferrer">Receipt ↗</a></div>}

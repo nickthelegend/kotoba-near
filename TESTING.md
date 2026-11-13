@@ -1,5 +1,19 @@
 # Verification
 
+## V4 — kotoba-markets.testnet (2026-11-13)
+
+| Suite | Command | Passed |
+| --- | --- | ---: |
+| Book contract unit (incl. 2,500-step randomized solvency session) | `cd packages/book-contract && cargo test --lib` | 12 |
+| Book contract sandbox (real compiled WASM on a local nearcore) | `pnpm test:book` | 4 |
+| Web (book math, chance rule, Yes/No mirror, labels, error mapping, discovery) | `pnpm --filter @kotoba/web test` | 21 |
+
+What the contract tests cover: two bids on opposite shares mint a pair at the maker's price; two asks merge one and split its unit; price-then-time priority across YES orders and mirrored NO orders; market orders return the unfilled rest; crossing your own order is refused; nobody cancels someone else's order; selling shares you don't hold, underfunded bids, bad prices and quantities are refused; cancel returns escrow and removes the order; trading and minting stop at close while cancel still works; claims before Final are refused; `on_result` and `on_book_withdraw` are private; a failed withdrawal is re-credited without losing a concurrent credit and a replayed callback is refused; the snapshot view is one coherent read. The randomized session asserts after every successful call that outstanding YES = outstanding NO, every YES share is held or escrowed, and cash + bid escrow + pairs × 0.001 NEAR equals everything deposited. Sandbox and unit fixtures are tests, not product responses; the app and film only read and write real testnet state.
+
+The deployed WASM (`sha256 97f24bf5…96fa`, in `deployments/markets-v4-2026-11-13.json`) is the build these tests ran against. SDK, MCP and oracle suites target the previous contract and are unchanged since the V3 run below.
+
+Browser QA (`FLOW-QA.md`): every route at 1440 and 390 with zero horizontal overflow and no console errors once an RPC answers. Public testnet RPCs rate-limit this machine's IP at times (HTTP 429 without CORS headers); the app rotates across four endpoints, keeps the last good snapshot and shows a "busy, retrying" bar instead of stale or invented data. The production build excludes the QA signer.
+
 ## V3 full-suite rerun — 2026-11-13
 
 `CARGO_BUILD_JOBS=1 pnpm test` completed with exit code **0**: **57 passed, zero failed, zero skipped/ignored**. Oracle, previous contract and new book WASM builds succeeded. The root command now includes `pnpm test:book`.
