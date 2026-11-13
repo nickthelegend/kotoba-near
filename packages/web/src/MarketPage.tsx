@@ -10,7 +10,7 @@ import { BetSheet } from './Trade';
 import { WALLET, type Wallet } from './wallet';
 import { discoverResolutionRuns, type DiscoveredRun } from './discovery.mjs';
 
-function RunCard({ run, label }: { run: Step | DiscoveredRun; label: string }) {
+export function RunCard({ run, label }: { run: Step | DiscoveredRun; label: string }) {
   const o = run.outlayer!;
   const recorded = o.attestation;
   const [live, setLive] = useState<LiveVerification | null>(null);

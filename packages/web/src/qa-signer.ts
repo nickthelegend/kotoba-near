@@ -15,7 +15,7 @@ class QaAccount extends Account {
 }
 
 export const QA_SIGNER_MARKER = 'kotoba-qa-signer';
-const ALLOWED_RPC = new Set(['https://near-testnet.drpc.org', 'https://test.rpc.fastnear.com', 'https://archival-rpc.testnet.near.org']);
+const ALLOWED_RPC = new Set(['https://near-testnet.drpc.org', 'https://test.rpc.fastnear.com', 'https://rpc.testnet.fastnear.com', 'https://archival-rpc.testnet.fastnear.com', 'https://archival-rpc.testnet.near.org']);
 const CAP = 3n * 10n ** 23n; // 0.3 NEAR, including a conservative prepaid gas reservation.
 const CONNECTED = 'kotoba-qa-signer-connected'; // Public session flag only; no credential storage.
 type Config = { accountId: string; secretKey: string; rpcUrl: string; allowedMarketIds?: string[]; allowedMethods?: string[] };

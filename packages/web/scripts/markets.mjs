@@ -9,7 +9,8 @@ import { resolve } from 'node:path';
 import { createHash, randomInt } from 'node:crypto';
 
 const root = resolve(import.meta.dirname, '../../..');
-const RPC = 'https://test.rpc.fastnear.com';
+const RPCS = ['https://archival-rpc.testnet.fastnear.com', 'https://rpc.testnet.fastnear.com', 'https://near-testnet.drpc.org'];
+const RPC = RPCS[0];
 const CONTRACT = 'kotoba-markets.testnet';
 const MAKER = 'kotoba-mm.testnet';
 const FLOW = 'flow.kotoba-mm.testnet';
@@ -66,11 +67,11 @@ const save = () => writeFile(evidencePath, JSON.stringify(evidence, null, 2) + '
 async function rpc(method, params) {
   for (let attempt = 0; ; attempt++) {
     try {
-      const r = await fetch(RPC, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba', method, params }), signal: AbortSignal.timeout(30000) });
+      const r = await fetch(RPCS[attempt % RPCS.length], { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba', method, params }), signal: AbortSignal.timeout(30000) });
       const b = await r.json();
       if (!r.ok || b.error) throw Error(`RPC_${method}_${b.error?.cause?.name ?? r.status}`);
       return b.result;
-    } catch (e) { if (attempt >= 3) throw e; await new Promise(r => setTimeout(r, 2000)); }
+    } catch (e) { if (attempt >= 5) throw e; await new Promise(r => setTimeout(r, 1500)); }
   }
 }
 export async function view(method_name, args = {}, account_id = CONTRACT) {

@@ -23,7 +23,7 @@ export type Step = {
 };
 
 export const CONTRACT: string = (import.meta.env.VITE_NEAR_TESTNET_CONTRACT as string | undefined) || deployment.contract_id;
-export const RPC: string = (import.meta.env.VITE_NEAR_TESTNET_RPC as string | undefined) || 'https://test.rpc.fastnear.com';
+export const RPC: string = (import.meta.env.VITE_NEAR_TESTNET_RPC as string | undefined) || 'https://rpc.testnet.fastnear.com';
 // FastNEAR answers 429 when busy (sometimes without CORS headers), so reads fail over to dRPC's public testnet endpoint.
 // rpc.testnet.near.org is deprecated and answers every call with a -429 body, so it is not in the list.
 const RPCS = [...new Set([RPC, 'https://near-testnet.drpc.org'])];
