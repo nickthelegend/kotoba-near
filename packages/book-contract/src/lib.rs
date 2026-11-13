@@ -444,6 +444,12 @@ impl Kotoba {
     pub fn cash_balance(&self,account:String)->U128 {U128(self.cash.get(&account).copied().unwrap_or(0))}
     pub fn account_orders(&self,account:String)->Vec<Order> {self.orders.values().filter(|o|o.owner==account&&o.remaining>0).cloned().collect()}
     pub fn trade_history(&self,id:String)->Vec<Trade> {self.trades.iter().filter(|t|t.market_id==id).cloned().collect()}
+    /// One coherent read avoids a request fan-out for every outcome and position.
+    pub fn snapshot(&self, account:Option<String>)->near_sdk::serde_json::Value {
+        let mut books=near_sdk::serde_json::Map::new();let mut history=near_sdk::serde_json::Map::new();let mut held=near_sdk::serde_json::Map::new();
+        for id in self.markets.keys(){for yes in [true,false]{books.insert(format!("{}{}",id,if yes{"Y"}else{"N"}),near_sdk::serde_json::to_value(self.get_book(id.clone(),yes)).unwrap());if let Some(a)=&account{held.insert(token_id(id,yes),near_sdk::serde_json::json!(self.shares.get(&(id.clone(),a.clone(),yes)).copied().unwrap_or(0)));}}history.insert(id.clone(),near_sdk::serde_json::to_value(self.trade_history(id.clone())).unwrap());}
+        near_sdk::serde_json::json!({"markets":self.markets.values().collect::<Vec<_>>(),"books":books,"history":history,"held":held,"orders":account.as_ref().map(|a|self.account_orders(a.clone())).unwrap_or_default(),"cash":account.map(|a|self.cash_balance(a).0.to_string()).unwrap_or("0".into())})
+    }
     pub fn get_book(&self,id:String,yes:bool)->Book {
         let mut bids:Vec<Order>=self.orders.values().filter(|o|o.market_id==id&&o.yes==yes&&o.buy&&o.remaining>0).cloned().collect();let mut asks:Vec<Order>=self.orders.values().filter(|o|o.market_id==id&&o.yes==yes&&!o.buy&&o.remaining>0).cloned().collect();bids.sort_by(|a,b|b.price.cmp(&a.price).then(a.order_id.cmp(&b.order_id)));asks.sort_by(|a,b|a.price.cmp(&b.price).then(a.order_id.cmp(&b.order_id)));let spread=bids.first().zip(asks.first()).map(|(b,a)|a.price as i32-b.price as i32);let last_price=self.trades.iter().rev().find(|t|t.market_id==id&&t.yes==yes).map(|t|t.price);Book{bids,asks,last_price,spread,storage_fee:BOOK_STORAGE.to_string(),payout:UNIT.to_string()}
     }
