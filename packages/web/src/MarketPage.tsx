@@ -1,3 +1,4 @@
+import previousProof from '../../../deployments/judge-path-proof-2026-11-12.json';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Boundary, Copy, Countdown, Icon, Link, Obj, Problem, SplitBar, State, useMarkets, useMounted, useNow } from './ui';
 import { CONTRACT, DEPLOYMENT, JUDGE_DEMO, OUTLAYER_API, PINNED_PDF_SHA, PINNED_TEXT_SHA, UNIT_NEAR, batchBalance, near, eventDate, fmtDate, outcome, runsFor, sha256Hex, short, splitHits, txUrl, pct, yesPrice, type Market, type Step } from './lib';
@@ -200,3 +201,6 @@ export default function MarketPage({ id, wallet }: { id: string; wallet: Wallet 
     {side !== null && <BetSheet m={m} side={side} wallet={wallet} onClose={() => setSide(null)} />}
   </div>;
 }
+
+/** Recorded, exact input/output bytes; live OutLayer checks still run independently. */
+export function PreviousSettlementProof(){const run:DiscoveredRun={tx:previousProof.tx,signer:CONTRACT,method:'resolve',at:String(previousProof.market.close_ns),outlayer:{input:previousProof.input,output:previousProof.output}};return <section className="runs"><RunCard run={run} label="September proof · recorded November 12, 2026"/></section>}
