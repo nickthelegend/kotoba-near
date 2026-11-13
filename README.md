@@ -41,7 +41,7 @@ Units: one winning share pays **0.001 test NEAR**, so 1¢ is 0.00001 NEAR, not U
 | Film: cancel that bid (escrow returned) | [BqnKAfEBFPdpEepRehUtcqPTTb376UmmxWeYGcmTMPT5](https://testnet.nearblocks.io/txns/BqnKAfEBFPdpEepRehUtcqPTTb376UmmxWeYGcmTMPT5) |
 | Film: market sell, 5 “oil” Yes into the best bid | [8vvQdGsnKHajBx1anAYqtGEC3G91fEa6GgY1tz56pBdW](https://testnet.nearblocks.io/txns/8vvQdGsnKHajBx1anAYqtGEC3G91fEa6GgY1tz56pBdW) |
 
-Every film take placed real orders from `trader.kotoba-markets.testnet`; all of them are in [deployments/film-v4-2026-11-13.json](deployments/film-v4-2026-11-13.json).
+Every film take placed real orders from `trader.kotoba-markets.testnet`. The current film (v5) approves each one on camera on the QA signer's Approve transaction sheet and then opens it on the explorer; its four transactions are in [deployments/film-v5-signing-2026-11-13.json](deployments/film-v5-signing-2026-11-13.json), earlier takes in [deployments/film-v4-2026-11-13.json](deployments/film-v4-2026-11-13.json).
 
 Demo liquidity: `kotoba-mm.testnet` and `flow.kotoba-mm.testnet` are Kotoba-owned maker accounts. They minted inventory, quote both sides and trade on a timer (`node packages/web/scripts/markets.mjs flow --send`); every one of their hashes is in the deployment file. Opening prices follow how often each phrase appeared in the July 29, September 16 and October 28, 2026 transcripts. This is testnet activity, not customer volume.
 

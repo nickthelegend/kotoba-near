@@ -1,0 +1,62 @@
+{
+  "film": "videos/kotoba-near/kotoba-near-film.mp4 (v5, signing pass)",
+  "date": "2026-11-13 (UTC)",
+  "network": "testnet",
+  "signer": "trader.kotoba-markets.testnet",
+  "contract": "kotoba-markets.testnet",
+  "note": "Each transaction was approved on camera on the development QA signer's Approve transaction sheet, then shown on nearvalidate.org. Testnet only.",
+  "transactions": [
+    {
+      "what": "Market buy: 10 Yes on \"oil\" (Dec 9)",
+      "hash": "F5s8En1TK7nbb5rac9wsmPExG7ArVPBbVDngBWGhttHp",
+      "methods": [
+        "place_order"
+      ],
+      "depositYocto": "4600000000000000000000",
+      "gas": "150000000000000",
+      "stage": "final",
+      "at": "2026-11-13T22:51:41.964Z",
+      "gasBurntYocto": "724322185266000000000",
+      "explorer": "https://testnet.nearblocks.io/txns/F5s8En1TK7nbb5rac9wsmPExG7ArVPBbVDngBWGhttHp"
+    },
+    {
+      "what": "Limit bid: 5 Yes on \"housing\" at 30c",
+      "hash": "6qXjBtWRwCUhsBkYsUhrGS7fCnTreGzn9aBWQ9JJ1Jjs",
+      "methods": [
+        "place_order"
+      ],
+      "depositYocto": "4460000000000000000000",
+      "gas": "150000000000000",
+      "stage": "final",
+      "at": "2026-11-13T22:53:20.398Z",
+      "gasBurntYocto": "690719491756200000000",
+      "explorer": "https://testnet.nearblocks.io/txns/6qXjBtWRwCUhsBkYsUhrGS7fCnTreGzn9aBWQ9JJ1Jjs"
+    },
+    {
+      "what": "Cancel that resting bid",
+      "hash": "6ob6hK5ti2HuzQsEisuphpM9SgVsutsNzCqid8usjurt",
+      "methods": [
+        "cancel_order"
+      ],
+      "depositYocto": "1",
+      "gas": "60000000000000",
+      "stage": "final",
+      "at": "2026-11-13T22:53:50.918Z",
+      "gasBurntYocto": "684303184090500000000",
+      "explorer": "https://testnet.nearblocks.io/txns/6ob6hK5ti2HuzQsEisuphpM9SgVsutsNzCqid8usjurt"
+    },
+    {
+      "what": "Market sell: 5 Yes on \"oil\"",
+      "hash": "5tKoBf244b5p6K2YfhbGxhRFhmPu8eg5m4Yo2VzXusGa",
+      "methods": [
+        "place_order"
+      ],
+      "depositYocto": "3000000000000000000000",
+      "gas": "150000000000000",
+      "stage": "final",
+      "at": "2026-11-13T22:54:17.369Z",
+      "gasBurntYocto": "708778184250600000000",
+      "explorer": "https://testnet.nearblocks.io/txns/5tKoBf244b5p6K2YfhbGxhRFhmPu8eg5m4Yo2VzXusGa"
+    }
+  ]
+}
