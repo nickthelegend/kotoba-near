@@ -36,7 +36,13 @@ Units: one winning share pays **0.001 test NEAR**, so 1¢ is 0.00001 NEAR, not U
 | Deploy + init | [DmLGSKUDbR95WubdCETcBppBhNNjWdUH5FCWeeEbZHTr](https://testnet.nearblocks.io/txns/DmLGSKUDbR95WubdCETcBppBhNNjWdUH5FCWeeEbZHTr) |
 | List December event (12 words) | [8iVvLvv4xRnAKS6fjLF5JAwbeFtHHy1H5ww71RQiVRGa](https://testnet.nearblocks.io/txns/8iVvLvv4xRnAKS6fjLF5JAwbeFtHHy1H5ww71RQiVRGa) |
 | List January event (5 words) | [HckEA7C6Brd83beksA6xShnGGLKURV9GAaYEWsDnH26A](https://testnet.nearblocks.io/txns/HckEA7C6Brd83beksA6xShnGGLKURV9GAaYEWsDnH26A) |
-{FILMROWS}
+| Film: market buy, 10 Yes on “oil” (fills at the asks) | [8d1tEMyJPLKjuacCSyioAZCdys8NUaTv8bMqU8RZFjBh](https://testnet.nearblocks.io/txns/8d1tEMyJPLKjuacCSyioAZCdys8NUaTv8bMqU8RZFjBh) |
+| Film: limit bid, 5 Yes on “housing” at 30¢ (rests) | [Cn7Y5bjteGqZHuNmtmspHogXyZEGfHFiJxafKECio9LM](https://testnet.nearblocks.io/txns/Cn7Y5bjteGqZHuNmtmspHogXyZEGfHFiJxafKECio9LM) |
+| Film: cancel that bid (escrow returned) | [BqnKAfEBFPdpEepRehUtcqPTTb376UmmxWeYGcmTMPT5](https://testnet.nearblocks.io/txns/BqnKAfEBFPdpEepRehUtcqPTTb376UmmxWeYGcmTMPT5) |
+| Film: market sell, 5 “oil” Yes into the best bid | [8vvQdGsnKHajBx1anAYqtGEC3G91fEa6GgY1tz56pBdW](https://testnet.nearblocks.io/txns/8vvQdGsnKHajBx1anAYqtGEC3G91fEa6GgY1tz56pBdW) |
+
+Every film take placed real orders from `trader.kotoba-markets.testnet`; all of them are in [deployments/film-v4-2026-11-13.json](deployments/film-v4-2026-11-13.json).
+
 Demo liquidity: `kotoba-mm.testnet` and `flow.kotoba-mm.testnet` are Kotoba-owned maker accounts. They minted inventory, quote both sides and trade on a timer (`node packages/web/scripts/markets.mjs flow --send`); every one of their hashes is in the deployment file. Opening prices follow how often each phrase appeared in the July 29, September 16 and October 28, 2026 transcripts. This is testnet activity, not customer volume.
 
 The contract account keeps a full-access key to list markets and upgrade code; this is unaudited, upgradeable testnet software. Older deployments stay readable and linked from the app: the v3 book [`kotoba-book-v3-20261113.testnet`](https://testnet.nearblocks.io/address/kotoba-book-v3-20261113.testnet) (separate YES and NO books; its markets were titled for Powell, which was wrong for December) and the original LMSR contract [`kotoba-edfa2b47.testnet`](https://testnet.nearblocks.io/address/kotoba-edfa2b47.testnet), which holds the settled markets and seal evidence below.

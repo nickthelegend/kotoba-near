@@ -19,4 +19,4 @@ R3 verification completed 17 web tests, 17 SDK tests, 14 focused production chec
 
 Screenshots were captured locally during QA and are not committed.
 
-V3 scope: real CLOB, early selling, cancellation, depth, trades, portfolio and the separate new deployment are implemented. The December v3 market has not settled; settlement footage uses dated previous-contract evidence. The counter includes reporters, not isolated speaker recognition. New code is unaudited, upgradeable and bounded to 4,096 lifetime orders / 8,192 fills; this is seeded testnet liquidity.
+V4 scope (kotoba-markets.testnet): one mirrored order book per word with mint/merge matching, early selling, cancellation, portfolio, activity and the rules page are live. No v4 market has settled yet (December 9 has not happened); the seal shown is the January 28, 2026 market on the previous contract. The counter includes reporters' questions, not speaker-isolated recognition. Books are seeded by Kotoba's demo maker accounts. Code is unaudited and upgradeable. Human Meteor approval on the new contract was not filmed; the film uses the dev-only QA signer with a test wallet on real testnet.

@@ -414,3 +414,5 @@ a.k-l-row:hover span { color: var(--k-coral-ink); }
 
 .k-cats a, .k-cats span { white-space: nowrap; }
 @media (max-width: 900px) { .k-section-head { flex-direction: column; gap: 4px; } .k-chart-legend { font-size: 13px; } }
+.k-ticket .k-receipt { font-size: 15px; padding: 14px 16px; }
+.k-receipt.ok b::before { content: '✓'; display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 8px; border-radius: 50%; background: var(--k-yes-solid); color: #fff; font-size: 13px; }

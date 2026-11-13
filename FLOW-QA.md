@@ -1,5 +1,20 @@
 # Full-flow QA
 
+## V4 — kotoba-markets.testnet, 2026-11-13
+
+Screens captured at 1440 and 390 into `grokbot/orchestration/shots/kotoba/v4/` (outside the repo): `home`, `markets`, `event_fed_2026_12_09`, `event_fed_2026_12_09_rules`, `activity`, `portfolio`. Horizontal overflow was 0 on every route at both widths; console errors appeared only while every public RPC answered HTTP 429, and the page then showed its busy/retry state. Polymarket and Kalshi refused automated Chrome from this network (SSL errors), so the layout follows their public structure from the brief; nothing of theirs ships.
+
+| Step | Result |
+| --- | --- |
+| Landing | Sticker hero "Bet on what they'll say." with the live chance of the top word and a countdown; live board (top words + chart), stats from chain, how it works with the real order book and latest fills, the seal section, FAQ, footer. |
+| Markets | Featured December event with top words, Yes/No quotes and a multi-line chance chart; two live event cards; "next on the mic" (no fake cards); resolved markets from the previous contract with their counts. |
+| Event | 12 words with chance, ▲/▼ since first fill, Buy Yes/Buy No; selected row expands its order book (Trade Yes / Trade No mirror, depth bars, last, spread, flashing changed levels); sticky ticket (Buy/Sell, Market/Limit, Yes/No, shares, average fill from the book, cost, fee, payout, receipt). Mobile: rows stack, bottom Buy Yes/No bar opens the ticket as a sheet, bottom tab bar. |
+| Live trading (film take, QA signer = test wallet, real testnet) | Market buy 10 Yes on Oil filled at the asks; limit bid 5 Yes on Housing at 30¢ rested and showed in the book; cancelled from Portfolio with the escrow returned; sold 5 Oil Yes into the best bid. Hashes in `deployments/film-v4-2026-11-13.json`. |
+| Portfolio | Positions marked at the live chance, P&L against own fill prices, open orders with Cancel, history, cash with Withdraw; disconnected state with Connect. |
+| Activity | Every fill on the contract with trader, side, word, price, value, time; demo makers labelled. |
+| Rules & resolution | Per-word thresholds, whole-transcript scope (reporters included), close-to-payout steps, the January 28, 2026 market's seal re-checked live (five checks pass) plus the recorded Intel chain. |
+| Errors | RPC busy bar with retry and last good snapshot; wallet errors and contract errors mapped to plain sentences (ERR_SELF_CROSS, ERR_CASH, …); invalid price/shares disable the button with a reason. |
+
 ## V3 prediction-market flow — 2026-11-13
 
 New contract `kotoba-book-v3-20261113.testnet`; previous contract and all its markets remain unchanged. Baseline, reference attempts and after captures are saved outside the repo. Kalshi/Polymarket rejected automated Chrome with SSL errors; Manifold and both local picks were inspected. The explicit brief supplied the category structure.

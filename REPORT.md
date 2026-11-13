@@ -1,3 +1,19 @@
+# Kotoba v4 — Claude pass, November 13, 2026
+
+**Why v4.** Reviewing the Codex v3 work: its contract was sound (12/12 tests rerun, deployed code matched the build), but every screen, the film and the on-chain markets asked "What will Powell say?" for December 9, 2026. Kevin Warsh has given the Fed press conferences since June 2026 (the October 28 official transcript reads "Chairman Warsh's Press Conference"), so the core premise was wrong on camera. v3 also kept separate YES and NO books (Yes 66¢ + No 42¢ = 108), its web app was one minified 20 KB file, and its film opened mid-app with a top caption band and a "LIVE ·" bar on every scene. Its commits and evidence are kept and pushed.
+
+**Contract** (`packages/book-contract`, deployed to `kotoba-markets.testnet`): one book per word; NO orders rest mirrored at 100 − price; two bids that add to ≥100¢ mint a backed pair, two asks merge one; price-then-time priority; IOC market orders; self-cross refused; operator-listed markets with an event id; resolution, challenge, claim and void unchanged. 12 unit tests (incl. a 2,500-step randomized solvency session) + 4 sandbox tests on the real WASM, all passing.
+
+**Markets.** "What will Warsh say?" — 12 words for December 9 and 5 for the tentative January 27, 2027 conference, opening prices from the July/September/October transcripts, books seeded and traded on a timer by Kotoba's own maker accounts (disclosed everywhere).
+
+**App** (`packages/web/src/pm`, readable components): landing (approved sticker hero + live board, how it works with the real book, the seal, FAQ), markets grid with resolved markets, event page (chance chart, word rows with Buy Yes/No, inline order book with Yes/No mirror, trade ticket with fill estimate), rules & resolution with the live seal check, portfolio (P&L, open orders, cancel, withdraw), activity. Mobile 390: stacked rows, bottom buy bar and sheet, tab bar. Public RPCs rate-limit this IP, so reads rotate across four endpoints.
+
+**Film v4d** (`videos/kotoba-near/kotoba-near-film.mp4`, 2:26; share 720p 7.4 MB): landing → event → live 10-share fill by 0:13, then book, limit, explorer, portfolio + cancel, sell, activity, rules + seal, markets, landing close. Bottom subtitles only, no bands. Self-judged 9/10 (versions/v4/JUDGE-v4a…d). Five live takes; all their transactions are in `deployments/film-v4-2026-11-13.json`.
+
+**Not done / limits:** no v4 market has settled; human Meteor approval not filmed; Kalshi/Polymarket blocked automated Chrome from this network; no hosting.
+
+---
+
 # Kotoba v3 — completed November 13, 2026
 
 The new order-book contract is `kotoba-book-v3-20261113.testnet`. Five December word markets have real seeded trades and resting YES/NO orders. Trading supports cash/share escrow, price-time priority, partial fills, selling, cancellation, IOC refunds and callback-safe cash withdrawal. Current deployed code matches the built WASM. The old contract and both October judge replays were only read; both replays remain Open with no result.

@@ -213,11 +213,26 @@ async function flow(rounds = 1) {
   }
 }
 
+/** Re-quotes one word around `fair` from the maker: asks above, NO asks (YES bids) below, minting if needed. */
+async function ladder(id, fair) {
+  const snap = await view('snapshot', { account: MAKER });
+  const yesHeld = snap.held[id + ':YES'] ?? 0, noHeld = snap.held[id + ':NO'] ?? 0;
+  const asks = [1, 2, 3, 5].map(o => fair + o).filter(p => p <= 99), bids = [1, 2, 3, 5].map(o => fair - o).filter(p => p >= 1);
+  const sizes = [5, 7, 9, 12];
+  const tag = new Date().toISOString().slice(0, 16);
+  await send(`ladder-${tag}-${id}`, 'mm.json', CONTRACT, [
+    ...(yesHeld < 40 || noHeld < 40 ? [fc('mint_pairs', { id, quantity: 60 }, FEE + 60n * U, 30n * TGAS)] : []),
+    ...asks.map((p, i) => order(id, true, false, p, sizes[i])),
+    ...bids.map((p, i) => order(id, false, false, 100 - p, sizes[i])),
+  ]);
+}
+
 const [cmd] = process.argv.slice(2);
 try {
   if (!process.argv.includes('--send')) throw Error('EXPLICIT_SEND_FLAG_REQUIRED');
   if (cmd === 'deploy') await deploy();
   else if (cmd === 'flow') await flow();
+  else if (cmd === 'ladder') await ladder(process.argv[3], Number(process.argv[4]));
   else throw Error('USAGE_deploy_or_flow');
 } catch (e) {
   console.error(/^[\w .:/-]+$/.test(e.message) ? e.message : 'MARKETS_SCRIPT_FAILED ' + String(e.message).replace(/ed25519:\w+/g, '[key]').slice(0, 300));
