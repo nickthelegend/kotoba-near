@@ -30,10 +30,19 @@ function requireTestnet(account: string) {
   if (!/^[a-z0-9][a-z0-9._-]*\.testnet$/.test(account)) throw new Error('QA_TESTNET_ACCOUNT_REQUIRED');
 }
 async function rpc(url: string, method: string, params: unknown): Promise<any> {
-  const response = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: QA_SIGNER_MARKER, method, params }), signal: AbortSignal.timeout(15000) });
-  const body = await response.json();
-  if (!response.ok || body.error) throw new Error(`QA_RPC_${method.toUpperCase()}_UNAVAILABLE`);
-  return body.result;
+  // Public testnet RPCs rate-limit per IP: try the configured one first, then the other allowed testnet RPCs.
+  // Only a transport or rate-limit failure moves on; a JSON-RPC answer (even an error) is final.
+  let last: unknown;
+  for (const u of [url, ...[...ALLOWED_RPC].filter(x => x !== url.replace(/\/$/, ''))]) {
+    try {
+      const response = await fetch(u, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: QA_SIGNER_MARKER, method, params }), signal: AbortSignal.timeout(15000) });
+      if (response.status === 429 || response.status >= 500 || response.status === 415) { last = new Error('busy'); continue; }
+      const body = await response.json();
+      if (!response.ok || body.error) throw new Error(`QA_RPC_${method.toUpperCase()}_UNAVAILABLE`);
+      return body.result;
+    } catch (e) { last = e; if (e instanceof Error && e.message.startsWith('QA_RPC_')) throw e; }
+  }
+  throw last instanceof Error && last.message.startsWith('QA_RPC_') ? last : new Error(`QA_RPC_${method.toUpperCase()}_UNAVAILABLE`);
 }
 export function setupQaSigner(target = CONTRACT): WalletModuleFactory<InjectedWallet> {
   return async ({ options }) => {
