@@ -7,7 +7,7 @@ export async function readResolutionReceipts({ hash, sender, fetcher = fetch, rp
   const key = `${rpc}/${hash}/${sender}`;
   if (fetcher === globalThis.fetch && finalized.has(key)) return finalized.get(key);
   let outcome;
-  for (const endpoint of [...new Set([rpc, 'https://near-testnet.drpc.org'])]) {
+  for (const endpoint of [...new Set(['https://archival-rpc.testnet.near.org', rpc, 'https://test.rpc.fastnear.com'])]) {
     try {
       const response = await fetcher(endpoint, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'kotoba-seal-discovery', method: 'EXPERIMENTAL_tx_status', params: { tx_hash: hash, sender_account_id: sender, wait_until: 'FINAL' } }), signal: AbortSignal.timeout(12000) });
       const body = await response.json();
