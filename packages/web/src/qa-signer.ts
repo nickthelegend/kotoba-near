@@ -2,6 +2,7 @@
 // Credentials arrive from Playwright memory, never from Vite env, storage or a file in the browser.
 import type { InjectedWallet, WalletModuleFactory } from '@near-wallet-selector/core';
 import { CONTRACT } from './lib';
+import { askApproval } from './qa-approve';
 import { Account, Connection, KeyPair, keyStores, transactions, utils } from 'near-api-js';
 
 type SignAndSendTransactionParams = Parameters<InjectedWallet['signAndSendTransaction']>[0];
@@ -18,7 +19,9 @@ export const QA_SIGNER_MARKER = 'kotoba-qa-signer';
 const ALLOWED_RPC = new Set(['https://near-testnet.drpc.org', 'https://test.rpc.fastnear.com', 'https://rpc.testnet.fastnear.com', 'https://archival-rpc.testnet.fastnear.com', 'https://archival-rpc.testnet.near.org']);
 const CAP = 3n * 10n ** 23n; // 0.3 NEAR, including a conservative prepaid gas reservation.
 const CONNECTED = 'kotoba-qa-signer-connected'; // Public session flag only; no credential storage.
-type Config = { accountId: string; secretKey: string; rpcUrl: string; allowedMarketIds?: string[]; allowedMethods?: string[] };
+// approval: 'sheet' (default) shows the Approve transaction sheet before every signature, like a wallet popup;
+// 'auto' is only for headless regression scripts that nobody watches.
+type Config = { accountId: string; secretKey: string; rpcUrl: string; allowedMarketIds?: string[]; allowedMethods?: string[]; approval?: 'sheet' | 'auto' };
 type PublicEvent = { hash: string; accountId: string; receiverId: string; methods: string[]; depositYocto: string; gas: string; stage: string; at: string; gasBurntYocto?: string };
 declare global {
   interface Window {
@@ -52,7 +55,7 @@ export function setupQaSigner(target = CONTRACT): WalletModuleFactory<InjectedWa
       id: 'qa-signer', type: 'injected',
       metadata: { name: 'QA signer', description: 'Local testnet automation only', iconUrl: '', downloadUrl: '', available: true, deprecated: false },
       async init() {
-        let state: { accountId: string; rpcUrl: string; account: QaAccount; publicKey: ReturnType<KeyPair['getPublicKey']>; allowedMarketIds?: string[]; allowedMethods?: string[] } | undefined;
+        let state: { accountId: string; rpcUrl: string; account: QaAccount; publicKey: ReturnType<KeyPair['getPublicKey']>; allowedMarketIds?: string[]; allowedMethods?: string[]; approval: 'sheet' | 'auto' } | undefined;
         const contractId = target;
         requireTestnet(contractId);
         let reserved = BigInt(sessionStorage.getItem('kotoba-qa-reserved') ?? '0');
@@ -77,7 +80,7 @@ export function setupQaSigner(target = CONTRACT): WalletModuleFactory<InjectedWa
           } catch { throw new Error('QA_INVALID_STARTUP_KEY'); }
           await keys.setKey('testnet', config.accountId, key);
           const connection = Connection.fromConfig({ networkId: 'testnet', provider: { type: 'JsonRpcProvider', args: { url: config.rpcUrl } }, signer: { type: 'InMemorySigner', keyStore: keys } });
-          state = { accountId: config.accountId, rpcUrl: config.rpcUrl, account: new QaAccount(connection, config.accountId), publicKey: key.getPublicKey(), allowedMarketIds: config.allowedMarketIds, allowedMethods: config.allowedMethods };
+          state = { accountId: config.accountId, rpcUrl: config.rpcUrl, account: new QaAccount(connection, config.accountId), publicKey: key.getPublicKey(), allowedMarketIds: config.allowedMarketIds, allowedMethods: config.allowedMethods, approval: config.approval === 'auto' ? 'auto' : 'sheet' };
           delete window.__KOTOBA_QA_SIGNER__;
           return state;
         }
@@ -95,6 +98,7 @@ export function setupQaSigner(target = CONTRACT): WalletModuleFactory<InjectedWa
           if (receiver !== contractId || (params.signerId && params.signerId !== s.accountId)) throw new Error('QA_ACCOUNT_MISMATCH');
           let deposit = 0n, gas = 0n;
           const methods: string[] = [];
+          const calls: { method: string; args: Record<string, unknown>; deposit: bigint; gas: bigint }[] = [];
           const actions = params.actions.map(action => {
             // Wallet Selector 10 supplies near-js Actions; also accept its older FunctionCall shape.
             const a = action as unknown as { functionCall?: { methodName: string; args: Uint8Array; gas: bigint; deposit: bigint }; type?: string; params?: { methodName: string; args: object; gas: string; deposit: string } };
@@ -105,7 +109,7 @@ export function setupQaSigner(target = CONTRACT): WalletModuleFactory<InjectedWa
             if (s.allowedMarketIds && !s.allowedMarketIds.includes((args as { id?: string }).id ?? '')) throw new Error('QA_MARKET_NOT_ALLOWED');
             const d = BigInt(call.deposit), g = BigInt(call.gas);
             if (d < 0n || g <= 0n || g > 300_000_000_000_000n) throw new Error('QA_INVALID_CALL_BUDGET');
-            deposit += d; gas += g; methods.push(call.methodName);
+            deposit += d; gas += g; methods.push(call.methodName); calls.push({ method: call.methodName, args: args as Record<string, unknown>, deposit: d, gas: g });
             return transactions.functionCall(call.methodName, call.args, g, d);
           });
           if (!actions.length) throw new Error('QA_ACTION_REQUIRED');
@@ -119,6 +123,8 @@ export function setupQaSigner(target = CONTRACT): WalletModuleFactory<InjectedWa
           if (reserved + spendReservation > CAP) throw new Error('QA_SPEND_CAP_0_3_NEAR');
           const balance = await rpc(s.rpcUrl, 'query', { request_type: 'view_account', finality: 'final', account_id: s.accountId });
           if (BigInt(balance.amount) - BigInt(balance.storage_usage) * 10n ** 19n < need) throw new Error('QA_LOW_TESTNET_BALANCE');
+          // Nothing is signed or reserved until the user approves what the sheet shows.
+          if (s.approval === 'sheet' && !(await askApproval({ accountId: s.accountId, receiverId: receiver, origin: location.host, calls }))) throw new Error('User rejected the transaction');
           reserved += spendReservation; sessionStorage.setItem('kotoba-qa-reserved', reserved.toString());
           const [hashBytes, signed] = await s.account.signCall(receiver, actions);
           const hash = utils.serialize.base_encode(hashBytes);

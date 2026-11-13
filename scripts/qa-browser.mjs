@@ -137,7 +137,7 @@ async function flow(base, credentials, width) {
       events.push({ hash: event.hash, stage: event.stage }); await persist();
     });
     page = await context.newPage();
-    await page.addInitScript(injectStartup, { origin: new URL(base).origin, config: { accountId: credentials.account_id, secretKey: credentials.secret_key, rpcUrl } }); const errors = []; page.on('pageerror', () => errors.push('pageerror'));
+    await page.addInitScript(injectStartup, { origin: new URL(base).origin, config: { accountId: credentials.account_id, secretKey: credentials.secret_key, rpcUrl, approval: 'auto' } }); const errors = []; page.on('pageerror', () => errors.push('pageerror'));
     page.on('popup', () => errors.push('unexpected wallet popup'));
     await load(page, base); await assertLayout(page);
     await page.getByRole('button', { name: /^Connect(?: wallet)?$/ }).click();

@@ -54,7 +54,7 @@ try {
           await save();
         });
         const page = await context.newPage(); const errors = []; page.on('pageerror', () => errors.push('pageerror'));
-        await page.addInitScript(({ origin, config }) => { if (location.origin === origin) window.__KOTOBA_QA_SIGNER__ = config; }, { origin: base, config: { accountId: credentials.account_id, secretKey: credentials.secret_key, rpcUrl, allowedMethods: [method], allowedMarketIds: [id] } });
+        await page.addInitScript(({ origin, config }) => { if (location.origin === origin) window.__KOTOBA_QA_SIGNER__ = config; }, { origin: base, config: { accountId: credentials.account_id, secretKey: credentials.secret_key, rpcUrl, allowedMethods: [method], allowedMarketIds: [id], approval: "auto" } });
         await page.goto(`${base}/market/${id}`, { waitUntil: 'domcontentloaded' });
         await page.getByRole('button', { name: `Connect to ${method}`, exact: true }).click({ timeout: 60000 });
         const button = page.getByRole('button', { name: method === 'resolve' ? 'Resolve with OutLayer · 0.12 NEAR' : 'Finalize', exact: true });
