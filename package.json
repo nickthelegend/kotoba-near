@@ -3,11 +3,14 @@
   "private": true,
   "packageManager": "pnpm@10.29.2",
   "scripts": {
-    "test": "(cd packages/oracle && cargo build --target wasm32-wasip2 --release && cargo test) && (cd packages/contract && cargo near build non-reproducible-wasm && cargo test) && pnpm --filter @kotoba/sdk test && pnpm --filter @kotoba/mcp test && pnpm --filter @kotoba/web test",
-    "build": "(cd packages/oracle && cargo build --target wasm32-wasip2 --release) && (cd packages/contract && cargo near build non-reproducible-wasm) && pnpm --filter @kotoba/web build",
+    "test": "(cd packages/oracle && cargo build --target wasm32-wasip2 --release && cargo test) && (cd packages/contract && cargo near build non-reproducible-wasm && cargo test) && pnpm --filter @kotoba/sdk test && pnpm --filter @kotoba/mcp test && pnpm --filter @kotoba/web test && pnpm test:book",
+    "build": "(cd packages/oracle && cargo build --target wasm32-wasip2 --release) && (cd packages/contract && cargo near build non-reproducible-wasm) && (cd packages/book-contract && cargo near build non-reproducible-wasm) && pnpm --filter @kotoba/web build",
     "dev": "pnpm --filter @kotoba/web dev",
-    "test:e2e": "node scripts/qa-browser.mjs",
-    "test:flow": "node scripts/full-flow-qa.mjs"
+    "test:e2e": "node scripts/qa-book-browser.mjs",
+    "test:flow": "node scripts/qa-book-browser.mjs",
+    "test:book": "(cd packages/book-contract && cargo near build non-reproducible-wasm && cargo test -- --test-threads=1)",
+    "test:e2e:previous": "node scripts/qa-browser.mjs",
+    "test:flow:previous": "node scripts/full-flow-qa.mjs"
   },
   "devDependencies": {
     "playwright-core": "1.63.0"

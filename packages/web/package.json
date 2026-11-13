@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1 --port 5198",
+    "dev": "vite --host 127.0.0.1 --port 5571 --strictPort",
     "build": "tsc -b && vite build",
     "test": "node --test test/*.test.ts",
     "capture-errors": "node scripts/capture-errors.mjs"
