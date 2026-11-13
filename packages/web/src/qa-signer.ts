@@ -6,7 +6,12 @@ import { Account, Connection, KeyPair, keyStores, transactions, utils } from 'ne
 
 type SignAndSendTransactionParams = Parameters<InjectedWallet['signAndSendTransaction']>[0];
 class QaAccount extends Account {
-  signCall(receiver: string, actions: transactions.Action[]) { return this.signTransaction(receiver, actions); }
+  signCall(receiver: string, actions: transactions.Action[]) {
+    // Manual signing does not advance near-js's cached nonce. Each sequential UI action
+    // must read the chain nonce; otherwise the second order repeats the first nonce.
+    this.accessKeyByPublicKeyCache = {};
+    return this.signTransaction(receiver, actions);
+  }
 }
 
 export const QA_SIGNER_MARKER = 'kotoba-qa-signer';
@@ -30,7 +35,7 @@ async function rpc(url: string, method: string, params: unknown): Promise<any> {
   if (!response.ok || body.error) throw new Error(`QA_RPC_${method.toUpperCase()}_UNAVAILABLE`);
   return body.result;
 }
-export function setupQaSigner(): WalletModuleFactory<InjectedWallet> {
+export function setupQaSigner(target = CONTRACT): WalletModuleFactory<InjectedWallet> {
   return async ({ options }) => {
     if (!import.meta.env.DEV || import.meta.env.VITE_QA_SIGNER !== '1') throw new Error('QA_SIGNER_DISABLED');
     if (options.network.networkId !== 'testnet') throw new Error('QA_TESTNET_NETWORK_REQUIRED');
@@ -39,7 +44,7 @@ export function setupQaSigner(): WalletModuleFactory<InjectedWallet> {
       metadata: { name: 'QA signer', description: 'Local testnet automation only', iconUrl: '', downloadUrl: '', available: true, deprecated: false },
       async init() {
         let state: { accountId: string; rpcUrl: string; account: QaAccount; publicKey: ReturnType<KeyPair['getPublicKey']>; allowedMarketIds?: string[]; allowedMethods?: string[] } | undefined;
-        const contractId = CONTRACT;
+        const contractId = target;
         requireTestnet(contractId);
         let reserved = BigInt(sessionStorage.getItem('kotoba-qa-reserved') ?? '0');
         let queue: Promise<unknown> = Promise.resolve();

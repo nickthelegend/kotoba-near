@@ -11,23 +11,21 @@ const QA_ENABLED = import.meta.env.DEV && import.meta.env.VITE_QA_SIGNER === '1'
 export const WALLET = QA_ENABLED
   ? { id: 'qa-signer', name: 'QA signer', url: '' } as const
   : { id: 'meteor-wallet', name: 'Meteor Wallet', url: 'https://wallet.meteorwallet.app' } as const;
-let selectorPromise: Promise<WalletSelector> | null = null;
+const selectors = new Map<string, Promise<WalletSelector>>();
 // The QA module is imported only by flagged development servers, never by production builds.
-const getSelector = () => (selectorPromise ??= import('@near-wallet-selector/core')
-  .then(async (core) => {
-    if (QA_ENABLED) {
-      const { setupQaSigner } = await import('./qa-signer');
-      return core.setupWalletSelector({ network: 'testnet', modules: [setupQaSigner()] });
-    }
+const getSelector = (target = CONTRACT): Promise<WalletSelector> => {
+  if (!selectors.has(target)) selectors.set(target, import('@near-wallet-selector/core').then(async core => {
+    if (QA_ENABLED) { const { setupQaSigner } = await import('./qa-signer'); return core.setupWalletSelector({ network: 'testnet', modules: [setupQaSigner(target)] }); }
     const { setupMeteorWallet } = await import('@near-wallet-selector/meteor-wallet');
     return core.setupWalletSelector({ network: 'testnet', modules: [setupMeteorWallet()] });
-  })
-  .catch((e) => { selectorPromise = null; throw e; }));
+  }).catch(e => { selectors.delete(target); throw e; }));
+  return selectors.get(target)!;
+};
 
 /** The result of a signed call: the transaction hash, and the outcome when the wallet already waited for it. */
 export type Sent = { hash: string | null; outcome: unknown };
 
-export function useWallet() {
+export function useWallet(target = CONTRACT) {
   const [account, setAccount] = useState('');
   const [problem, setProblem] = useState<Explained | null>(null);
   /** Set when the signed-in account cannot be used on testnet (a mainnet name, or an account testnet has never seen). */
@@ -36,7 +34,7 @@ export function useWallet() {
   const [connecting, setConnecting] = useState(false);
   useEffect(() => {
     let unsub: (() => void) | undefined;
-    getSelector().then((s) => {
+    getSelector(target).then((s) => {
       setReady(true);
       const sync = () => setAccount(s.store.getState().accounts.find((a) => a.active)?.accountId ?? '');
       sync();
@@ -56,21 +54,21 @@ export function useWallet() {
   }, [account]);
   async function connect() {
     setProblem(null); setConnecting(true);
-    try { const w = await (await getSelector()).wallet<InjectedWallet>(WALLET.id); await w.signIn({ contractId: CONTRACT, methodNames: [] }); }
+    try { const w = await (await getSelector(target)).wallet<InjectedWallet>(WALLET.id); await w.signIn({ contractId: target, methodNames: [] }); }
     catch (e) { setProblem(explain(e)); }
     finally { setConnecting(false); }
   }
   async function disconnect() {
-    try { const w = await (await getSelector()).wallet(); await w.signOut(); } catch (e) { setProblem(explain(e)); }
+    try { const w = await (await getSelector(target)).wallet(); await w.signOut(); } catch (e) { setProblem(explain(e)); }
     setAccount('');
   }
   /** Signs one function call. Calls without a deposit are signed by the function-call key Meteor Wallet issued at sign-in
    * (no pop-up); calls with a deposit open the Meteor Wallet pop-up for approval. */
   async function callContract(methodName: string, args: object, depositYocto: string, tgas = 30): Promise<Sent> {
-    const [selector, { actionCreators }] = await Promise.all([getSelector(), import('@near-wallet-selector/core')]);
+    const [selector, { actionCreators }] = await Promise.all([getSelector(target), import('@near-wallet-selector/core')]);
     const w = await selector.wallet();
     try {
-      const outcome = await w.signAndSendTransaction({ receiverId: CONTRACT, actions: [actionCreators.functionCall(methodName, args, BigInt(tgas) * 10n ** 12n, BigInt(depositYocto))] });
+      const outcome = await w.signAndSendTransaction({ receiverId: target, actions: [actionCreators.functionCall(methodName, args, BigInt(tgas) * 10n ** 12n, BigInt(depositYocto))] });
       const o = outcome as { transaction?: { hash?: string }; transaction_outcome?: { id?: string } } | undefined;
       return { hash: o?.transaction?.hash ?? o?.transaction_outcome?.id ?? null, outcome };
     } catch (e) {
