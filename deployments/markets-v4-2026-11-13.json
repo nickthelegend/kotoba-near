@@ -1,0 +1,443 @@
+{
+  "network": "testnet",
+  "contract": "kotoba-markets.testnet",
+  "maker": "kotoba-mm.testnet",
+  "flow": "flow.kotoba-mm.testnet",
+  "trader": "trader.kotoba-markets.testnet",
+  "startedAt": "2026-11-13T15:19:43.395Z",
+  "note": "Demo liquidity: every order and fill is real, placed by Kotoba-owned maker accounts. It is not customer volume.",
+  "transactions": [
+    {
+      "label": "deploy",
+      "hash": "DmLGSKUDbR95WubdCETcBppBhNNjWdUH5FCWeeEbZHTr",
+      "signer": "kotoba-markets.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:20:07.307Z",
+      "gasBurntYocto": "2339425531625400000000"
+    },
+    {
+      "label": "create-flow",
+      "hash": "AYpM8SR5JbRMfTSxfwfhBHXajwCpEWRyaDiC8i3TLV3K",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "flow.kotoba-mm.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:20:18.071Z",
+      "gasBurntYocto": "7114989537500000000000"
+    },
+    {
+      "label": "create-trader",
+      "hash": "mBn5b3pRCAt5a8h6MRshtZ5f9QCTkZ2i1vpHou8HSnA",
+      "signer": "kotoba-markets.testnet",
+      "receiver": "trader.kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:20:29.140Z",
+      "gasBurntYocto": "7114989537500000000000"
+    },
+    {
+      "label": "list-fed-2026-12-09",
+      "hash": "8iVvLvv4xRnAKS6fjLF5JAwbeFtHHy1H5ww71RQiVRGa",
+      "signer": "kotoba-markets.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:20:33.229Z",
+      "gasBurntYocto": "2168313806764200000000"
+    },
+    {
+      "label": "list-fed-2027-01-27",
+      "hash": "HckEA7C6Brd83beksA6xShnGGLKURV9GAaYEWsDnH26A",
+      "signer": "kotoba-markets.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:20:36.690Z",
+      "gasBurntYocto": "1094941121179700000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-inflation-30",
+      "hash": "EqCM6P4prgm2BnMUXovYAdeXnomvA4K8RRvgXDzBAbQM",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:20:40.314Z",
+      "gasBurntYocto": "2217569429031500000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-inflation-30",
+      "hash": "igcAVyvpg7UkDZrrqnEFq3UnRRs4FLCZ6F6WC8mEAGD",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:20:44.684Z",
+      "gasBurntYocto": "532602647107000000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-ai",
+      "hash": "Bo8VPsmjq1jyJExv1T7ZXdE8vWTf6exL8uVHdEVAyn83",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:20:48.899Z",
+      "gasBurntYocto": "2357513221572500000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-ai",
+      "hash": "5RCvJQ27Xai4rNYHzHZFAv1qq9JfuXLNwm9aeoZDDocQ",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:20:52.996Z",
+      "gasBurntYocto": "562437836425000000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-unemployment",
+      "hash": "3t9sEDKXP1gEdRhPGZuti1syfBGRsaAeRN1TG8EqzpgF",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:20:57.349Z",
+      "gasBurntYocto": "2511766734082700000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-unemployment",
+      "hash": "H3Ff3K9C4Gx4E1GhdQ7wdQAK6TCbMDwcZVWrGHE9QCRM",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:01.463Z",
+      "gasBurntYocto": "597492190022200000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-productivity",
+      "hash": "E5dmfUfrDvZx8cDEWcdSR3WrSw9ZgGAgVAK1k1CNMrr1",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:05.985Z",
+      "gasBurntYocto": "2673258222539900000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-productivity",
+      "hash": "A3qm8aWvZFPrxZWAPfEdZVpB8PdYy1fEDGjxT12V2Gmq",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:09.469Z",
+      "gasBurntYocto": "633562515777400000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-geopolitical",
+      "hash": "DTKHeK8cDztzFNdHqcU1ESAV5nanamAsvPceSpJXkgnQ",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:13.725Z",
+      "gasBurntYocto": "2822782971803900000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-geopolitical",
+      "hash": "3ySQjW5MN7H46oFEpP5NrTNSURNKcw6ArvLRwNJYuUz7",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:17.961Z",
+      "gasBurntYocto": "667275810143800000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-balance-sheet",
+      "hash": "HuFaeNeiuY5V97vVs9sphAHD8ECUbSrXPnn7TXXhCF5K",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:22.127Z",
+      "gasBurntYocto": "2967299185455800000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-balance-sheet",
+      "hash": "Hd2brM9hr35XKSmkmsG8iAPHBD31orfrNupTkgY98W8p",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:26.390Z",
+      "gasBurntYocto": "699126715839400000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-oil",
+      "hash": "DGgVv3VMMvApp3W1FbRGexSH8sQXN3Lr7vJgCjArqAvm",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:30.756Z",
+      "gasBurntYocto": "3109697111859200000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-oil",
+      "hash": "DuAN1WhYVUj8CV8Gp7EnbadRkooJJFLnmBwf8DXGYTEV",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:34.891Z",
+      "gasBurntYocto": "730401373112200000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-housing",
+      "hash": "AXp6aqSrTfz2Un3XtZ6eWriedwkcR7B759r1ogerDTFU",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:39.139Z",
+      "gasBurntYocto": "3260687512112000000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-housing",
+      "hash": "4qbPGQMbrWGdHXgD8AcRJcmNx7UWuAPCS2oUsM5xwSN1",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:43.651Z",
+      "gasBurntYocto": "762872538629800000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-tariffs",
+      "hash": "3Ypq3YMeLz4BBkJbfdidKxcfvVsYn5kiHuPQf1ybCuM8",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:48.269Z",
+      "gasBurntYocto": "3406751984207600000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-tariffs",
+      "hash": "7XTJeepRtYoCMxjH2e5dRLqsC5t1tZ1jRfLYrZhGHCRW",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:52.172Z",
+      "gasBurntYocto": "796104618571000000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-recession",
+      "hash": "8mh324hk49jarahypsV4KVB1jLvnLJ1Hf3NmiUkJXEqQ",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:21:56.458Z",
+      "gasBurntYocto": "3549771501698600000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-recession",
+      "hash": "AK7Xef7jPRaWfUXK5h1xxyHTmwXHkruudU4E8zb6NcPR",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:00.689Z",
+      "gasBurntYocto": "828171606776800000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-stagflation",
+      "hash": "366VMPWuKHevGiw1nBkuMKYFdmxmjDJFSqrRPpGL1nD3",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:05.029Z",
+      "gasBurntYocto": "3699724887239000000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-stagflation",
+      "hash": "GLWWVX7qniX1BaSt5ZDqv48fsFSEagFkQUmUVLFR3fJ5",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:09.196Z",
+      "gasBurntYocto": "442471177074300000000"
+    },
+    {
+      "label": "quote-fed-2026-12-09-bitcoin",
+      "hash": "5XTcfQpe6tTSJ3L93FeUopHv1FKfUBuDAvKYJm9SNhLY",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:13.457Z",
+      "gasBurntYocto": "2979458711089800000000"
+    },
+    {
+      "label": "depth-fed-2026-12-09-bitcoin",
+      "hash": "8N931Q5UgjVdgeE1WfmPgCSfyywfY96AtpiGwbJCogNe",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:17.813Z",
+      "gasBurntYocto": "455731141673700000000"
+    },
+    {
+      "label": "quote-fed-2027-01-27-inflation-30",
+      "hash": "E4TgUzKbFDBCHkYA4aXPHhdBg6rD4GC6PN3RwYQ3QF9r",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:22.035Z",
+      "gasBurntYocto": "3956670016875500000000"
+    },
+    {
+      "label": "depth-fed-2027-01-27-inflation-30",
+      "hash": "BS3dNteGiqdLqEtvNtyXMZS62hsHAzDb9RBXatq2g2CX",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:26.367Z",
+      "gasBurntYocto": "919218377983000000000"
+    },
+    {
+      "label": "quote-fed-2027-01-27-ai",
+      "hash": "6WxCW6Hiy23gnsPkJDHJB8Wv7cfVEpBeiJBBCuBsNw9N",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:30.183Z",
+      "gasBurntYocto": "4094808565925300000000"
+    },
+    {
+      "label": "depth-fed-2027-01-27-ai",
+      "hash": "2xiy7rpLfXam7zkXKbEe5J3pRYRfC65V6TtLcrUzURUG",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:34.036Z",
+      "gasBurntYocto": "949594473629800000000"
+    },
+    {
+      "label": "quote-fed-2027-01-27-oil",
+      "hash": "6y2S3NCcjaArP4Bvvn6tuToZKrUxVMNj3vckaCMjaYBd",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:38.142Z",
+      "gasBurntYocto": "4240920654872000000000"
+    },
+    {
+      "label": "depth-fed-2027-01-27-oil",
+      "hash": "BFewozwGWx6FXbvvDZ2ub2if5R7gq6GzgL3CLcifMkB8",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:42.203Z",
+      "gasBurntYocto": "981508269002200000000"
+    },
+    {
+      "label": "quote-fed-2027-01-27-recession",
+      "hash": "EbnPMWkHMG75ShSc1XrwoEPBKf7G9Hr7nfGLheKBp9eK",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:45.817Z",
+      "gasBurntYocto": "4390492195478600000000"
+    },
+    {
+      "label": "depth-fed-2027-01-27-recession",
+      "hash": "GiXYLZx5KLih6govMR4tgQ2RHRyYeYdsk8TBrEuGomK",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:49.233Z",
+      "gasBurntYocto": "1014595306956400000000"
+    },
+    {
+      "label": "quote-fed-2027-01-27-shutdown",
+      "hash": "HYYiGyTqhGJLVyPoC1Tof4yoaTwT8bcXe6sQ9XZLptZ",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:53.398Z",
+      "gasBurntYocto": "4536846883436300000000"
+    },
+    {
+      "label": "depth-fed-2027-01-27-shutdown",
+      "hash": "UPGnrcGCaZa18Y2vy6uR1dqEGdnm9xvPFNAEwwDWKAK",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:22:57.871Z",
+      "gasBurntYocto": "1046634841887100000000"
+    },
+    {
+      "label": "flow-2026-11-13T15:23-fed-2027-01-27-inflation-30",
+      "hash": "22ayitJU3fR2SrW8mQSMBJ1Ps7bC7VGooNZdbdyrcyet",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:23:24.508Z",
+      "gasBurntYocto": "556542309508500000000"
+    },
+    {
+      "label": "refill-2026-11-13T15:23-fed-2027-01-27-inflation-30",
+      "hash": "2cgdinTyro8FrnJ9jCuDvAVhZybW8JdQb8t8HKmu7PjX",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:23:28.988Z",
+      "gasBurntYocto": "541558123441800000000"
+    },
+    {
+      "label": "flow-2026-11-13T15:23-fed-2026-12-09-housing",
+      "hash": "25qiH29PA73Yf8TD4iLNMg5Gsw48yo2MZSfUja6N2cxE",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:23:33.230Z",
+      "gasBurntYocto": "560067030211200000000"
+    },
+    {
+      "label": "refill-2026-11-13T15:23-fed-2026-12-09-housing",
+      "hash": "6wmBwE185MZPu9bcWqJEdPzdy5AKoeXWiLnQUBBoZuvc",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:23:37.403Z",
+      "gasBurntYocto": "1065456933798100000000"
+    },
+    {
+      "label": "flow-2026-11-13T15:23-fed-2026-12-09-inflation-30",
+      "hash": "7H3NMenqXh3jeFFjyc1guPDj2jaPh6mKWLwtCMhnSpEB",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:23:41.633Z",
+      "gasBurntYocto": "566247068747700000000"
+    },
+    {
+      "label": "flow-2026-11-13T15:23-fed-2026-12-09-ai",
+      "hash": "DP9yh8nrNybXD3Gzxjbxgnjwk9e8hrMeaRuQpkZh154p",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-13T15:23:46.060Z",
+      "gasBurntYocto": "566422220608800000000"
+    },
+    {
+      "label": "flow-2026-11-13T15:24-fed-2026-12-09-inflation-30",
+      "hash": "D9UZXRaBbbbrRQh4ZdRfPFC5yFCXZdRJ1CXQkkmQHtiM",
+      "signer": "flow.kotoba-mm.testnet",
+      "receiver": "kotoba-markets.testnet",
+      "status": "signed",
+      "at": "2026-11-13T15:24:01.273Z"
+    }
+  ],
+  "funding": [
+    {
+      "account": "kotoba-markets.testnet",
+      "source": "NEAR testnet helper faucet",
+      "at": "2026-11-13T15:19:52.779Z"
+    },
+    {
+      "account": "kotoba-mm.testnet",
+      "source": "NEAR testnet helper faucet",
+      "at": "2026-11-13T15:20:04.357Z"
+    }
+  ],
+  "wasmSha256": "97f24bf5fafdb21a82fcfd0dfb0b792a1474cad86abf689fa389fe8ac1d996fa",
+  "oracle": {
+    "wasm_url": "https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314.wasm",
+    "wasm_hash": "b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314",
+    "challenge_window_ns": 900000000000
+  },
+  "deployedAt": "2026-11-13T15:23:01.470Z"
+}
