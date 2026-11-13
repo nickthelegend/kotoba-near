@@ -1,0 +1,1679 @@
+{
+  "network": "testnet",
+  "contract": "kotoba-book-v3-20261113.testnet",
+  "trader": "trader.kotoba-book-v3-20261113.testnet",
+  "transactions": [
+    {
+      "label": "deploy",
+      "hash": "FoU1azKAuSaiAPnzWYFL8y28qDeDcCXURsxLW3mzozqX",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T13:58:24.770Z",
+      "before": "10000000000000000000000000",
+      "gasBurntYocto": "2501353629126600000000",
+      "finalAt": "2026-11-13T13:58:29.513Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "rejected-cached-nonce-create-trader",
+      "hash": "J26nkcSwSofmY6QHhkC7QFrcnvcEvU224uwJdCHARCj5",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "trader.kotoba-book-v3-20261113.testnet",
+      "status": "not_broadcast",
+      "at": "2026-11-13T13:58:30.040Z",
+      "before": "9997498646370873400000000",
+      "reason": "Manual signTransaction reused cached nonce already consumed by deploy; hash absent on two RPCs. Fresh account wrapper obtains next nonce.",
+      "resumeSafety": {
+        "deployedNonce": 277517477000001,
+        "currentNonce": 277517477000001,
+        "traderExists": false,
+        "oldHashAbsentFromTwoRPCs": true
+      }
+    },
+    {
+      "label": "create-trader",
+      "hash": "9CK1RXUHz5i6BpGn2x4TzNKDjyN3KZdHyCV7Y9C7CYVo",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "trader.kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T13:59:43.472Z",
+      "before": "9997498646370873400000000",
+      "gasBurntYocto": "7114989537500000000000",
+      "finalAt": "2026-11-13T13:59:47.488Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "create-tariff",
+      "hash": "9FChFiCMifibhqiqBrosJEXrpUKPHgzzzjaU82nLHSqs",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T13:59:48.246Z",
+      "before": "9640383656833373400000000",
+      "gasBurntYocto": "181331257265900000000",
+      "finalAt": "2026-11-13T13:59:52.343Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "mint-tariff",
+      "hash": "EjLQ3yMKccA48zfRgXLNJbsgpD3pCvi5Qug1iShfSzyz",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T13:59:53.024Z",
+      "before": "9640202325576107500000000",
+      "gasBurntYocto": "191495576112200000000",
+      "finalAt": "2026-11-13T13:59:57.039Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "seed-ask-tariff-57",
+      "hash": "HyQWQGEwUCTVbA8VP5Mm77XwdKSRjT5JgTpEu85fTXJt",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T13:59:57.741Z",
+      "before": "9640010829999995300000000",
+      "gasBurntYocto": "201542640383800000000",
+      "finalAt": "2026-11-13T14:00:01.745Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MSwibWFya2V0X2lkIjoiZm9tYy0yMDI2LTEyLXRhcmlmZiIsIm93bmVyIjoia290b2JhLWJvb2stdjMtMjAyNjExMTMudGVzdG5ldCIsInllcyI6dHJ1ZSwiYnV5IjpmYWxzZSwicHJpY2UiOjU3LCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjoxLCJjcmVhdGVkX25zIjoxNzk0NTc4Mzk4NDQzNDY1NjQ2LCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "seed-fill-tariff-57",
+      "hash": "7d2RwR9yRMZpi8Bw2aRH75bHGkmtRgz9uKRuz3BnYZ5f",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:02.442Z",
+      "before": "350000000000000000000000",
+      "gasBurntYocto": "221799343913300000000",
+      "finalAt": "2026-11-13T14:00:06.479Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MiwibWFya2V0X2lkIjoiZm9tYy0yMDI2LTEyLXRhcmlmZiIsIm93bmVyIjoidHJhZGVyLmtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6dHJ1ZSwicHJpY2UiOjU3LCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjowLCJjcmVhdGVkX25zIjoxNzk0NTc4NDAzNTU2MzM1MzYwLCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "seed-ask-tariff-60",
+      "hash": "7hy2WkWXgeCqZj24UCcXwP9yUzhmQyQgtjYXDPqPg75M",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:07.177Z",
+      "before": "9645379287359611500000000",
+      "gasBurntYocto": "209407848499600000000",
+      "finalAt": "2026-11-13T14:00:11.194Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MywibWFya2V0X2lkIjoiZm9tYy0yMDI2LTEyLXRhcmlmZiIsIm93bmVyIjoia290b2JhLWJvb2stdjMtMjAyNjExMTMudGVzdG5ldCIsInllcyI6dHJ1ZSwiYnV5IjpmYWxzZSwicHJpY2UiOjYwLCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjoxLCJjcmVhdGVkX25zIjoxNzk0NTc4NDA3NTAzMjQyMTkzLCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "seed-fill-tariff-60",
+      "hash": "6xrj8RkwswHgth1KnPudU1DNfLhf2UALmCU846YvD2Y6",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:11.898Z",
+      "before": "344208200656086700000000",
+      "gasBurntYocto": "229044978722300000000",
+      "finalAt": "2026-11-13T14:00:15.930Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NCwibWFya2V0X2lkIjoiZm9tYy0yMDI2LTEyLXRhcmlmZiIsIm93bmVyIjoidHJhZGVyLmtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6dHJ1ZSwicHJpY2UiOjYwLCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjowLCJjcmVhdGVkX25zIjoxNzk0NTc4NDEyOTE1NzcwOTk3LCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "seed-ask-tariff-62",
+      "hash": "G1ZXA3tt4ka75tuKPvC9d6TaKDFMF42drj6XXVtjqxLU",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:16.600Z",
+      "before": "9650769879511111900000000",
+      "gasBurntYocto": "214466482233900000000",
+      "finalAt": "2026-11-13T14:00:20.622Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NSwibWFya2V0X2lkIjoiZm9tYy0yMDI2LTEyLXRhcmlmZiIsIm93bmVyIjoia290b2JhLWJvb2stdjMtMjAyNjExMTMudGVzdG5ldCIsInllcyI6dHJ1ZSwiYnV5IjpmYWxzZSwicHJpY2UiOjYyLCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjoxLCJjcmVhdGVkX25zIjoxNzk0NTc4NDE2OTI4OTQ4NzE2LCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "seed-fill-tariff-62",
+      "hash": "8DCRzm3aVyEszoRwxqmGMxmA6ZkcU9ExQdbxbPrBLqDX",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:21.306Z",
+      "before": "338379155677364400000000",
+      "gasBurntYocto": "234123111773800000000",
+      "finalAt": "2026-11-13T14:00:25.324Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NiwibWFya2V0X2lkIjoiZm9tYy0yMDI2LTEyLXRhcmlmZiIsIm93bmVyIjoidHJhZGVyLmtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6dHJ1ZSwicHJpY2UiOjYyLCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjowLCJjcmVhdGVkX25zIjoxNzk0NTc4NDIyMjE5NzkzNjU3LCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "depth-tariff",
+      "hash": "Du5vnGF3uYWmL3ccqkqqYicDbPbbs24CoxieP1qz29ib",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:26.009Z",
+      "before": "9656175413028878000000000",
+      "gasBurntYocto": "1626443913015600000000",
+      "finalAt": "2026-11-13T14:00:30.031Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MTQsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi10YXJpZmYiLCJvd25lciI6ImtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOmZhbHNlLCJidXkiOnRydWUsInByaWNlIjozMiwicXVhbnRpdHkiOjUsInJlbWFpbmluZyI6NSwiY3JlYXRlZF9ucyI6MTc5NDU3ODQyNjM0MTQ0Mjg5MiwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "create-recession",
+      "hash": "C5RGWLpfRRc5sbYSdiWxmPR9LNhu5T4Lne3wfodzrmMZ",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:30.740Z",
+      "before": "9654548969115862400000000",
+      "gasBurntYocto": "217575623336200000000",
+      "finalAt": "2026-11-13T14:00:34.825Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "mint-recession",
+      "hash": "BUA9dscDMk2zPAbnGmR8YAEjWiHJM4wHi2ykGeNxqwCu",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:35.498Z",
+      "before": "9654331393492526200000000",
+      "gasBurntYocto": "227823554578900000000",
+      "finalAt": "2026-11-13T14:00:39.493Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "seed-ask-recession-19",
+      "hash": "FbJBojeXD2ynXC9Gx9hHduGG6K7JqjYcpuQhoz7qhQ8k",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:40.168Z",
+      "before": "9654103569937947300000000",
+      "gasBurntYocto": "238116348563400000000",
+      "finalAt": "2026-11-13T14:00:44.180Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MTUsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1yZWNlc3Npb24iLCJvd25lciI6ImtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6ZmFsc2UsInByaWNlIjoxOSwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MSwiY3JlYXRlZF9ucyI6MTc5NDU3ODQ0MDg1NzAzOTEyMywiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "seed-fill-recession-19",
+      "hash": "ErbXDzUCrETBkzFduEdZn5oK9bJwRSkfty1LGWDuChM2",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:44.871Z",
+      "before": "332525032565590600000000",
+      "gasBurntYocto": "258225407048200000000",
+      "finalAt": "2026-11-13T14:00:49.068Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MTYsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1yZWNlc3Npb24iLCJvd25lciI6InRyYWRlci5rb3RvYmEtYm9vay12My0yMDI2MTExMy50ZXN0bmV0IiwieWVzIjp0cnVlLCJidXkiOnRydWUsInByaWNlIjoxOSwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MCwiY3JlYXRlZF9ucyI6MTc5NDU3ODQ0NjQyNzUxMTg1MywiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "seed-ask-recession-22",
+      "hash": "6Q5zuic3VSTzwh1zMJtVXKhyUE7Wqdh5bHYAa8czKTKF",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:49.742Z",
+      "before": "9659055453589383900000000",
+      "gasBurntYocto": "244374854325100000000",
+      "finalAt": "2026-11-13T14:00:53.774Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MTcsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1yZWNlc3Npb24iLCJvd25lciI6ImtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6ZmFsc2UsInByaWNlIjoyMiwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MSwiY3JlYXRlZF9ucyI6MTc5NDU3ODQ1MDYzNjEwNjQ2MSwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "seed-fill-recession-22",
+      "hash": "8sWSnWyeSSkfEi875EMHBmp61bd3kyfHXfe8PyBzf4ji",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:54.467Z",
+      "before": "327076807158542400000000",
+      "gasBurntYocto": "264177565013900000000",
+      "finalAt": "2026-11-13T14:00:58.499Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MTgsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1yZWNlc3Npb24iLCJvd25lciI6InRyYWRlci5rb3RvYmEtYm9vay12My0yMDI2MTExMy50ZXN0bmV0IiwieWVzIjp0cnVlLCJidXkiOnRydWUsInByaWNlIjoyMiwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MCwiY3JlYXRlZF9ucyI6MTc5NDU3ODQ1NTQ0MDQyMjYzOSwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "seed-ask-recession-24",
+      "hash": "2aZHDcyeqjFkzRFzoENW2Jo2fC7r37Kd87RzVqNxkBct",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:00:59.196Z",
+      "before": "9664031078735058800000000",
+      "gasBurntYocto": "249445305781500000000",
+      "finalAt": "2026-11-13T14:01:03.287Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MTksIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1yZWNlc3Npb24iLCJvd25lciI6ImtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6ZmFsc2UsInByaWNlIjoyNCwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MSwiY3JlYXRlZF9ucyI6MTc5NDU3ODQ1OTcxMDUyOTgzNiwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "seed-fill-recession-24",
+      "hash": "66sgvVq93bRDvtQL8g32PaP1vijn4YAoR16EbUezTqVh",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:04.020Z",
+      "before": "321592629593528500000000",
+      "gasBurntYocto": "269749897630300000000",
+      "finalAt": "2026-11-13T14:01:08.050Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MjAsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1yZWNlc3Npb24iLCJvd25lciI6InRyYWRlci5rb3RvYmEtYm9vay12My0yMDI2MTExMy50ZXN0bmV0IiwieWVzIjp0cnVlLCJidXkiOnRydWUsInByaWNlIjoyNCwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MCwiY3JlYXRlZF9ucyI6MTc5NDU3ODQ2NTA4MDgzNTM0NCwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "depth-recession",
+      "hash": "HVYy4Vv7s3b9Pis7sDyXk23G89cxkFD2G4m7MXzzfcYA",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:08.750Z",
+      "before": "9669021633429277300000000",
+      "gasBurntYocto": "1909531710986000000000",
+      "finalAt": "2026-11-13T14:01:12.847Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MjgsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1yZWNlc3Npb24iLCJvd25lciI6ImtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOmZhbHNlLCJidXkiOnRydWUsInByaWNlIjo3MCwicXVhbnRpdHkiOjUsInJlbWFpbmluZyI6NSwiY3JlYXRlZF9ucyI6MTc5NDU3ODQ2OTM2MzI4MDM2MSwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "create-inflation",
+      "hash": "8BKtM2fWGcCdA5W6omi3D31bD9PTDiE1JrwRqCKSmtVz",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:13.543Z",
+      "before": "9667112101718291300000000",
+      "gasBurntYocto": "252440884691300000000",
+      "finalAt": "2026-11-13T14:01:17.604Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "mint-inflation",
+      "hash": "ESDeAYkrtuZQJ2E3wiPjPDAd6KUt4qQg4rs52BMGwFhc",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:18.288Z",
+      "before": "9666859660833600000000000",
+      "gasBurntYocto": "262707081145400000000",
+      "finalAt": "2026-11-13T14:01:22.298Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "seed-ask-inflation-81",
+      "hash": "7XXCwCMAFF8QuLyQ5fV8nFxQKDVED7TnBKccoBtKGZN2",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:22.957Z",
+      "before": "9666596953752454600000000",
+      "gasBurntYocto": "273700369601500000000",
+      "finalAt": "2026-11-13T14:01:26.990Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MjksIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1pbmZsYXRpb24iLCJvd25lciI6ImtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6ZmFsc2UsInByaWNlIjo4MSwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MSwiY3JlYXRlZF9ucyI6MTc5NDU3ODQ4MzI1MjQ5MjQwMiwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "seed-fill-inflation-81",
+      "hash": "EnRdUKt1dHVZhQw4oUTfgX4Jetc5mYAmY7LnFC8ffNNb",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:27.662Z",
+      "before": "316082879695898200000000",
+      "gasBurntYocto": "293765986579500000000",
+      "finalAt": "2026-11-13T14:01:31.669Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MzAsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1pbmZsYXRpb24iLCJvd25lciI6InRyYWRlci5rb3RvYmEtYm9vay12My0yMDI2MTExMy50ZXN0bmV0IiwieWVzIjp0cnVlLCJidXkiOnRydWUsInByaWNlIjo4MSwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MCwiY3JlYXRlZF9ucyI6MTc5NDU3ODQ4ODY5MDIwMDkwMSwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "seed-ask-inflation-84",
+      "hash": "GgdeUoPszhdhQWbr7qzbtyKZgUXG1A8ZSszcKPhkaQds",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:32.332Z",
+      "before": "9672133253382853100000000",
+      "gasBurntYocto": "279891738516100000000",
+      "finalAt": "2026-11-13T14:01:36.367Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MzEsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1pbmZsYXRpb24iLCJvd25lciI6ImtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6ZmFsc2UsInByaWNlIjo4NCwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MSwiY3JlYXRlZF9ucyI6MTc5NDU3ODQ5MzAyMDc3MDk5NCwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "seed-fill-inflation-84",
+      "hash": "G6aaRcq6tFGf1C1WzQ7xBQT2M72igxjjHkr3vYrCQ2vt",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:37.068Z",
+      "before": "309979113709318700000000",
+      "gasBurntYocto": "299837197380900000000",
+      "finalAt": "2026-11-13T14:01:41.150Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MzIsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1pbmZsYXRpb24iLCJvd25lciI6InRyYWRlci5rb3RvYmEtYm9vay12My0yMDI2MTExMy50ZXN0bmV0IiwieWVzIjp0cnVlLCJidXkiOnRydWUsInByaWNlIjo4NCwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MCwiY3JlYXRlZF9ucyI6MTc5NDU3ODQ5ODQ1MDc2NTk1NCwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "seed-ask-inflation-86",
+      "hash": "8XHMuZ9Vs1PkfRcJEPuBptPVnDxMJLBq4iCXgV2maMqi",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:41.854Z",
+      "before": "9677693361644337000000000",
+      "gasBurntYocto": "285050389450900000000",
+      "finalAt": "2026-11-13T14:01:46.218Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MzMsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1pbmZsYXRpb24iLCJvd25lciI6ImtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6ZmFsc2UsInByaWNlIjo4NiwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MSwiY3JlYXRlZF9ucyI6MTc5NDU3ODUwMjY3Nzg4OTYwNiwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "seed-fill-inflation-86",
+      "hash": "Cd7pVr5wkVYLDAiH8SpkMRMpoJ7uV196n4RrPqE4B2eY",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:46.926Z",
+      "before": "303839276511937800000000",
+      "gasBurntYocto": "304984741109700000000",
+      "finalAt": "2026-11-13T14:01:50.972Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6MzQsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1pbmZsYXRpb24iLCJvd25lciI6InRyYWRlci5rb3RvYmEtYm9vay12My0yMDI2MTExMy50ZXN0bmV0IiwieWVzIjp0cnVlLCJidXkiOnRydWUsInByaWNlIjo4NiwicXVhbnRpdHkiOjEsInJlbWFpbmluZyI6MCwiY3JlYXRlZF9ucyI6MTc5NDU3ODUwODEzMjQyNDI2NCwiY2FuY2VsbGVkIjpmYWxzZX0="
+      }
+    },
+    {
+      "label": "depth-inflation",
+      "hash": "4A4353Du7mbHDYndXbmsms1BCrk2eQBWncDKVqwhdzJZ",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:51.640Z",
+      "before": "9683268311254886100000000",
+      "gasBurntYocto": "2191304110929000000000",
+      "finalAt": "2026-11-13T14:01:55.631Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NDIsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1pbmZsYXRpb24iLCJvd25lciI6ImtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOmZhbHNlLCJidXkiOnRydWUsInByaWNlIjo4LCJxdWFudGl0eSI6NSwicmVtYWluaW5nIjo1LCJjcmVhdGVkX25zIjoxNzk0NTc4NTExODIyMjU1NjUxLCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "create-ai",
+      "hash": "9AvHKvYTsTEhRb3d7Finh6kbr5FqJ7asT3ES1NMKx95e",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:01:56.316Z",
+      "before": "9681077007143957100000000",
+      "gasBurntYocto": "286756144966300000000",
+      "finalAt": "2026-11-13T14:02:00.335Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "mint-ai",
+      "hash": "Athzsb1RgVajQ9RgEAeUosbYDrVe1wYLYYP8jb8LFvs8",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:02:01.024Z",
+      "before": "9680790250998990800000000",
+      "gasBurntYocto": "296616976818300000000",
+      "finalAt": "2026-11-13T14:02:05.058Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "seed-ask-ai-26",
+      "hash": "DpPFVUdbiU6iDhEC8ppBgjktFXv9L7KX5396kNQMeLug",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:02:05.759Z",
+      "before": "9680493634022172500000000",
+      "gasBurntYocto": "307299677146100000000",
+      "finalAt": "2026-11-13T14:02:09.769Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NDMsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1haSIsIm93bmVyIjoia290b2JhLWJvb2stdjMtMjAyNjExMTMudGVzdG5ldCIsInllcyI6dHJ1ZSwiYnV5IjpmYWxzZSwicHJpY2UiOjI2LCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjoxLCJjcmVhdGVkX25zIjoxNzk0NTc4NTI2MjY4MzIzODkwLCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "seed-fill-ai-26",
+      "hash": "CUYYEtSwNtYxJQcnhP25xpzBpz76ckUaooLGoWzpDwvk",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:02:10.545Z",
+      "before": "297674291770828100000000",
+      "gasBurntYocto": "327261919275000000000",
+      "finalAt": "2026-11-13T14:02:14.560Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NDQsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1haSIsIm93bmVyIjoidHJhZGVyLmtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6dHJ1ZSwicHJpY2UiOjI2LCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjowLCJjcmVhdGVkX25zIjoxNzk0NTc4NTMxNTU0MDg4MTMyLCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "seed-ask-ai-29",
+      "hash": "3YCz6tLdAAVo5Vh1Qgq4NzDrWeKiAC1xGqKfW3rc6Bhm",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:02:15.243Z",
+      "before": "9685446334345026400000000",
+      "gasBurntYocto": "313501597423100000000",
+      "finalAt": "2026-11-13T14:02:19.324Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NDUsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1haSIsIm93bmVyIjoia290b2JhLWJvb2stdjMtMjAyNjExMTMudGVzdG5ldCIsInllcyI6dHJ1ZSwiYnV5IjpmYWxzZSwicHJpY2UiOjI5LCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjoxLCJjcmVhdGVkX25zIjoxNzk0NTc4NTM1OTU4NTEzNzk4LCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "seed-fill-ai-29",
+      "hash": "GUBGw3NrXAfmC9LB7qeaxRkbMW1Uuhc42BMxZDnMgJpp",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:02:20.011Z",
+      "before": "292087029851553100000000",
+      "gasBurntYocto": "333861626673600000000",
+      "finalAt": "2026-11-13T14:02:24.014Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NDYsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1haSIsIm93bmVyIjoidHJhZGVyLmtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6dHJ1ZSwicHJpY2UiOjI5LCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjowLCJjcmVhdGVkX25zIjoxNzk0NTc4NTQwOTk0NjA0NDg1LCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "seed-ask-ai-31",
+      "hash": "HKCoc2YC1ZfYALKfSTKgZQ4vGGbmnHLxAzfMhd3VWCMb",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:02:24.725Z",
+      "before": "9690422832747603300000000",
+      "gasBurntYocto": "319173498614900000000",
+      "finalAt": "2026-11-13T14:02:28.754Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NDcsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1haSIsIm93bmVyIjoia290b2JhLWJvb2stdjMtMjAyNjExMTMudGVzdG5ldCIsInllcyI6dHJ1ZSwiYnV5IjpmYWxzZSwicHJpY2UiOjMxLCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjoxLCJjcmVhdGVkX25zIjoxNzk0NTc4NTQ1MjM3MzI2NTQ1LCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "seed-fill-ai-31",
+      "hash": "CJgikt4sC1brNqoAt8dzN4NCd3CboUGf5xn7hvZvNEeo",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "status": "final",
+      "at": "2026-11-13T14:02:29.515Z",
+      "before": "286463168224879500000000",
+      "attempts": [
+        {
+          "hash": "6TYe9gVJ3JoEcgDpiRbBfM8PGSRXw5Pg8Eg8X9TnHfBe",
+          "status": "absent-on-two-RPCs",
+          "at": "2026-11-13T14:06:48.377Z",
+          "reason": "Replace with the same nonce; at most one can execute."
+        }
+      ],
+      "nonce": "277519331000012",
+      "gasBurntYocto": "338968788147000000000",
+      "finalAt": "2026-11-13T14:07:43.459Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NDgsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1haSIsIm93bmVyIjoidHJhZGVyLmtvdG9iYS1ib29rLXYzLTIwMjYxMTEzLnRlc3RuZXQiLCJ5ZXMiOnRydWUsImJ1eSI6dHJ1ZSwicHJpY2UiOjMxLCJxdWFudGl0eSI6MSwicmVtYWluaW5nIjowLCJjcmVhdGVkX25zIjoxNzk0NTc4ODA5NjA1OTE2Njk2LCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "add-snapshot-view",
+      "hash": "3UZowDUUBFZoBwiY9nMzJn8FFvJ37PgbKCQjgpEUgAHG",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "nonce": "277517477000026",
+      "status": "final",
+      "at": "2026-11-13T14:07:39.266Z",
+      "before": "9695413659248988400000000",
+      "gasBurntYocto": "2407105465945600000000",
+      "finalAt": "2026-11-13T14:07:43.298Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "depth-ai",
+      "hash": "AtrEzphDebpGZXFvPtbJhDdfsoaDZqsNpBgU6TAP4rww",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "nonce": "277517477000027",
+      "status": "final",
+      "at": "2026-11-13T14:07:43.987Z",
+      "before": "9693006553783042800000000",
+      "gasBurntYocto": "2467829279449200000000",
+      "finalAt": "2026-11-13T14:07:46.950Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NTYsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1haSIsIm93bmVyIjoia290b2JhLWJvb2stdjMtMjAyNjExMTMudGVzdG5ldCIsInllcyI6ZmFsc2UsImJ1eSI6dHJ1ZSwicHJpY2UiOjYzLCJxdWFudGl0eSI6NSwicmVtYWluaW5nIjo1LCJjcmVhdGVkX25zIjoxNzk0NTc4ODY0MjI4Mzg0Njc5LCJjYW5jZWxsZWQiOmZhbHNlfQ=="
+      }
+    },
+    {
+      "label": "create-employment",
+      "hash": "CjLWkF9QfF9YcXLNKpBfegj6P4uG3aXFmEwVFXsxNAgd",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "nonce": "277517477000028",
+      "status": "final",
+      "at": "2026-11-13T14:07:47.450Z",
+      "before": "9690538724503593600000000",
+      "gasBurntYocto": "321782930049100000000",
+      "finalAt": "2026-11-13T14:07:50.754Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "mint-employment",
+      "hash": "58ZZb2p7hC7o62daszfCfV4rYN5Lim9E56AeMK33B4ug",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "nonce": "277517477000029",
+      "status": "final",
+      "at": "2026-11-13T14:07:51.263Z",
+      "before": "9690216941573544500000000",
+      "gasBurntYocto": "332578110556700000000",
+      "finalAt": "2026-11-13T14:07:54.188Z",
+      "outcome": {
+        "SuccessValue": ""
+      }
+    },
+    {
+      "label": "seed-ask-employment-49",
+      "hash": "GAqht1tVKk7Ue9BjSK4QAUw51DpRcKvbUjW2sty3Rku",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "nonce": "277517477000030",
+      "status": "final",
+      "at": "2026-11-13T14:07:54.705Z",
+      "before": "9689884363462987800000000",
+      "gasBurntYocto": "343536596110900000000",
+      "finalAt": "2026-11-13T14:07:57.801Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NTcsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1lbXBsb3ltZW50Iiwib3duZXIiOiJrb3RvYmEtYm9vay12My0yMDI2MTExMy50ZXN0bmV0IiwieWVzIjp0cnVlLCJidXkiOmZhbHNlLCJwcmljZSI6NDksInF1YW50aXR5IjoxLCJyZW1haW5pbmciOjEsImNyZWF0ZWRfbnMiOjE3OTQ1Nzg4NzUwODIxMzUyODksImNhbmNlbGxlZCI6ZmFsc2V9"
+      }
+    },
+    {
+      "label": "seed-fill-employment-49",
+      "hash": "3Gk4NhcPGgDTt8GL5yghMGBSf9qh4EMDFPHcBvaj5Ffp",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "nonce": "277519331000013",
+      "status": "final",
+      "at": "2026-11-13T14:07:58.323Z",
+      "before": "280814199436732500000000",
+      "gasBurntYocto": "363813483947800000000",
+      "finalAt": "2026-11-13T14:08:02.017Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NTgsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1lbXBsb3ltZW50Iiwib3duZXIiOiJ0cmFkZXIua290b2JhLWJvb2stdjMtMjAyNjExMTMudGVzdG5ldCIsInllcyI6dHJ1ZSwiYnV5Ijp0cnVlLCJwcmljZSI6NDksInF1YW50aXR5IjoxLCJyZW1haW5pbmciOjAsImNyZWF0ZWRfbnMiOjE3OTQ1Nzg4NzkzNTE2NDYxNzAsImNhbmNlbGxlZCI6ZmFsc2V9"
+      }
+    },
+    {
+      "label": "seed-ask-employment-52",
+      "hash": "5XCVMVudswvqYatSJLtC1VomcZdKUcWDvjH1vHZmbaod",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "nonce": "277517477000031",
+      "status": "final",
+      "at": "2026-11-13T14:08:02.525Z",
+      "before": "9695030826866876900000000",
+      "gasBurntYocto": "349849518478300000000",
+      "finalAt": "2026-11-13T14:08:05.655Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NTksIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1lbXBsb3ltZW50Iiwib3duZXIiOiJrb3RvYmEtYm9vay12My0yMDI2MTExMy50ZXN0bmV0IiwieWVzIjp0cnVlLCJidXkiOmZhbHNlLCJwcmljZSI6NTIsInF1YW50aXR5IjoxLCJyZW1haW5pbmciOjEsImNyZWF0ZWRfbnMiOjE3OTQ1Nzg4ODMwMjQwOTA0NTYsImNhbmNlbGxlZCI6ZmFsc2V9"
+      }
+    },
+    {
+      "label": "seed-fill-employment-52",
+      "hash": "Gvtgd61QE6sqvpmT37AuQkKJtWP2guFEd2oeCWovaRt5",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "nonce": "277519331000014",
+      "status": "final",
+      "at": "2026-11-13T14:08:06.193Z",
+      "before": "274960385952784700000000",
+      "gasBurntYocto": "370091541587200000000",
+      "finalAt": "2026-11-13T14:08:09.973Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NjAsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1lbXBsb3ltZW50Iiwib3duZXIiOiJ0cmFkZXIua290b2JhLWJvb2stdjMtMjAyNjExMTMudGVzdG5ldCIsInllcyI6dHJ1ZSwiYnV5Ijp0cnVlLCJwcmljZSI6NTIsInF1YW50aXR5IjoxLCJyZW1haW5pbmciOjAsImNyZWF0ZWRfbnMiOjE3OTQ1Nzg4ODcyNjIzNzU3MjksImNhbmNlbGxlZCI6ZmFsc2V9"
+      }
+    },
+    {
+      "label": "seed-ask-employment-54",
+      "hash": "EDRKngf6Q98gibMDkhjYB5G8gSLZT1aYRrKzZdCqBbVs",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "nonce": "277517477000032",
+      "status": "final",
+      "at": "2026-11-13T14:08:10.462Z",
+      "before": "9700200977348398600000000",
+      "gasBurntYocto": "355143393086500000000",
+      "finalAt": "2026-11-13T14:08:13.575Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NjEsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1lbXBsb3ltZW50Iiwib3duZXIiOiJrb3RvYmEtYm9vay12My0yMDI2MTExMy50ZXN0bmV0IiwieWVzIjp0cnVlLCJidXkiOmZhbHNlLCJwcmljZSI6NTQsInF1YW50aXR5IjoxLCJyZW1haW5pbmciOjEsImNyZWF0ZWRfbnMiOjE3OTQ1Nzg4OTA5MTEyOTg2NzcsImNhbmNlbGxlZCI6ZmFsc2V9"
+      }
+    },
+    {
+      "label": "seed-fill-employment-54",
+      "hash": "BkA44DkgUWu1PqtyRjdF73F43uVegfJmRCYgsWwzRMee",
+      "signer": "trader.kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "nonce": "277519331000015",
+      "status": "final",
+      "at": "2026-11-13T14:08:14.089Z",
+      "before": "269070294411197500000000",
+      "gasBurntYocto": "375232877233000000000",
+      "finalAt": "2026-11-13T14:08:17.879Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NjIsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1lbXBsb3ltZW50Iiwib3duZXIiOiJ0cmFkZXIua290b2JhLWJvb2stdjMtMjAyNjExMTMudGVzdG5ldCIsInllcyI6dHJ1ZSwiYnV5Ijp0cnVlLCJwcmljZSI6NTQsInF1YW50aXR5IjoxLCJyZW1haW5pbmciOjAsImNyZWF0ZWRfbnMiOjE3OTQ1Nzg4OTUxMTM3Mzc0OTYsImNhbmNlbGxlZCI6ZmFsc2V9"
+      }
+    },
+    {
+      "label": "depth-employment",
+      "hash": "CC7PBg4x5y9DrkWn1EFRQNXzTtm8U931TYtcmqorGN9j",
+      "signer": "kotoba-book-v3-20261113.testnet",
+      "receiver": "kotoba-book-v3-20261113.testnet",
+      "nonce": "277517477000033",
+      "status": "final",
+      "at": "2026-11-13T14:08:18.371Z",
+      "before": "9705385833955312100000000",
+      "gasBurntYocto": "2752660983076400000000",
+      "finalAt": "2026-11-13T14:08:21.461Z",
+      "outcome": {
+        "SuccessValue": "eyJvcmRlcl9pZCI6NzAsIm1hcmtldF9pZCI6ImZvbWMtMjAyNi0xMi1lbXBsb3ltZW50Iiwib3duZXIiOiJrb3RvYmEtYm9vay12My0yMDI2MTExMy50ZXN0bmV0IiwieWVzIjpmYWxzZSwiYnV5Ijp0cnVlLCJwcmljZSI6NDAsInF1YW50aXR5Ijo1LCJyZW1haW5pbmciOjUsImNyZWF0ZWRfbnMiOjE3OTQ1Nzg4OTg3ODg1NTk4MzEsImNhbmNlbGxlZCI6ZmFsc2V9"
+      }
+    }
+  ],
+  "startedAt": "2026-11-13T13:58:23.346Z",
+  "funding": "Own new testnet helper-faucet account; old contract and accounts not charged",
+  "limits": "Prototype: 32 markets, 4096 lifetime orders, 8192 fills; 0.005 NEAR nonrefundable storage per order; no audits",
+  "wasmSha256": "dc008965eba50ce13730ace8853da84c95f9cffeba26464c7e13b5877dd4b6d5",
+  "oracle": {
+    "wasm_url": "https://test.fastfs.io/kotoba-edfa2b47.testnet/outlayer.testnet/b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314.wasm",
+    "wasm_hash": "b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314",
+    "challenge_window_ns": 900000000000
+  },
+  "markets": [
+    {
+      "id": "fomc-2026-12-ai",
+      "event": "What will Powell say? · December FOMC press conference",
+      "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+      "phrase": "ai",
+      "threshold": 1,
+      "close_ns": 1796844600000000000,
+      "deadline_ns": 1799452800000000000,
+      "b": 100,
+      "yes": 30,
+      "no": 30,
+      "burned_yes": 0,
+      "burned_no": 0,
+      "creator": "kotoba-book-v3-20261113.testnet",
+      "status": "Open",
+      "result": null,
+      "challenge_until_ns": null,
+      "pending": false,
+      "resolver": null,
+      "challenger": null
+    },
+    {
+      "id": "fomc-2026-12-employment",
+      "event": "What will Powell say? · December FOMC press conference",
+      "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+      "phrase": "employment",
+      "threshold": 1,
+      "close_ns": 1796844600000000000,
+      "deadline_ns": 1799452800000000000,
+      "b": 100,
+      "yes": 30,
+      "no": 30,
+      "burned_yes": 0,
+      "burned_no": 0,
+      "creator": "kotoba-book-v3-20261113.testnet",
+      "status": "Open",
+      "result": null,
+      "challenge_until_ns": null,
+      "pending": false,
+      "resolver": null,
+      "challenger": null
+    },
+    {
+      "id": "fomc-2026-12-inflation",
+      "event": "What will Powell say? · December FOMC press conference",
+      "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+      "phrase": "inflation",
+      "threshold": 1,
+      "close_ns": 1796844600000000000,
+      "deadline_ns": 1799452800000000000,
+      "b": 100,
+      "yes": 30,
+      "no": 30,
+      "burned_yes": 0,
+      "burned_no": 0,
+      "creator": "kotoba-book-v3-20261113.testnet",
+      "status": "Open",
+      "result": null,
+      "challenge_until_ns": null,
+      "pending": false,
+      "resolver": null,
+      "challenger": null
+    },
+    {
+      "id": "fomc-2026-12-recession",
+      "event": "What will Powell say? · December FOMC press conference",
+      "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+      "phrase": "recession",
+      "threshold": 1,
+      "close_ns": 1796844600000000000,
+      "deadline_ns": 1799452800000000000,
+      "b": 100,
+      "yes": 30,
+      "no": 30,
+      "burned_yes": 0,
+      "burned_no": 0,
+      "creator": "kotoba-book-v3-20261113.testnet",
+      "status": "Open",
+      "result": null,
+      "challenge_until_ns": null,
+      "pending": false,
+      "resolver": null,
+      "challenger": null
+    },
+    {
+      "id": "fomc-2026-12-tariff",
+      "event": "What will Powell say? · December FOMC press conference",
+      "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261209.pdf",
+      "phrase": "tariff",
+      "threshold": 1,
+      "close_ns": 1796844600000000000,
+      "deadline_ns": 1799452800000000000,
+      "b": 100,
+      "yes": 30,
+      "no": 30,
+      "burned_yes": 0,
+      "burned_no": 0,
+      "creator": "kotoba-book-v3-20261113.testnet",
+      "status": "Open",
+      "result": null,
+      "challenge_until_ns": null,
+      "pending": false,
+      "resolver": null,
+      "challenger": null
+    }
+  ],
+  "books": [
+    {
+      "id": "fomc-2026-12-ai",
+      "yes": {
+        "bids": [
+          {
+            "order_id": 51,
+            "market_id": "fomc-2026-12-ai",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": true,
+            "price": 29,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578864228384800,
+            "cancelled": false
+          },
+          {
+            "order_id": 52,
+            "market_id": "fomc-2026-12-ai",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": true,
+            "price": 25,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578864228384800,
+            "cancelled": false
+          }
+        ],
+        "asks": [
+          {
+            "order_id": 49,
+            "market_id": "fomc-2026-12-ai",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": false,
+            "price": 35,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578864228384800,
+            "cancelled": false
+          },
+          {
+            "order_id": 50,
+            "market_id": "fomc-2026-12-ai",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": false,
+            "price": 39,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578864228384800,
+            "cancelled": false
+          }
+        ],
+        "last_price": 31,
+        "spread": 6,
+        "storage_fee": "5000000000000000000000",
+        "payout": "1000000000000000000000"
+      },
+      "no": {
+        "bids": [
+          {
+            "order_id": 55,
+            "market_id": "fomc-2026-12-ai",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": true,
+            "price": 67,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578864228384800,
+            "cancelled": false
+          },
+          {
+            "order_id": 56,
+            "market_id": "fomc-2026-12-ai",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": true,
+            "price": 63,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578864228384800,
+            "cancelled": false
+          }
+        ],
+        "asks": [
+          {
+            "order_id": 53,
+            "market_id": "fomc-2026-12-ai",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": false,
+            "price": 73,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578864228384800,
+            "cancelled": false
+          },
+          {
+            "order_id": 54,
+            "market_id": "fomc-2026-12-ai",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": false,
+            "price": 77,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578864228384800,
+            "cancelled": false
+          }
+        ],
+        "last_price": null,
+        "spread": 6,
+        "storage_fee": "5000000000000000000000",
+        "payout": "1000000000000000000000"
+      },
+      "trades": [
+        {
+          "trade_id": 10,
+          "market_id": "fomc-2026-12-ai",
+          "yes": true,
+          "price": 26,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 43,
+          "taker_order": 44,
+          "taker_buy": true,
+          "at_ns": 1794578531554088200
+        },
+        {
+          "trade_id": 11,
+          "market_id": "fomc-2026-12-ai",
+          "yes": true,
+          "price": 29,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 45,
+          "taker_order": 46,
+          "taker_buy": true,
+          "at_ns": 1794578540994604500
+        },
+        {
+          "trade_id": 12,
+          "market_id": "fomc-2026-12-ai",
+          "yes": true,
+          "price": 31,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 47,
+          "taker_order": 48,
+          "taker_buy": true,
+          "at_ns": 1794578809605916700
+        }
+      ]
+    },
+    {
+      "id": "fomc-2026-12-employment",
+      "yes": {
+        "bids": [
+          {
+            "order_id": 65,
+            "market_id": "fomc-2026-12-employment",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": true,
+            "price": 52,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578898788560000,
+            "cancelled": false
+          },
+          {
+            "order_id": 66,
+            "market_id": "fomc-2026-12-employment",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": true,
+            "price": 48,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578898788560000,
+            "cancelled": false
+          }
+        ],
+        "asks": [
+          {
+            "order_id": 63,
+            "market_id": "fomc-2026-12-employment",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": false,
+            "price": 58,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578898788560000,
+            "cancelled": false
+          },
+          {
+            "order_id": 64,
+            "market_id": "fomc-2026-12-employment",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": false,
+            "price": 62,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578898788560000,
+            "cancelled": false
+          }
+        ],
+        "last_price": 54,
+        "spread": 6,
+        "storage_fee": "5000000000000000000000",
+        "payout": "1000000000000000000000"
+      },
+      "no": {
+        "bids": [
+          {
+            "order_id": 69,
+            "market_id": "fomc-2026-12-employment",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": true,
+            "price": 44,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578898788560000,
+            "cancelled": false
+          },
+          {
+            "order_id": 70,
+            "market_id": "fomc-2026-12-employment",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": true,
+            "price": 40,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578898788560000,
+            "cancelled": false
+          }
+        ],
+        "asks": [
+          {
+            "order_id": 67,
+            "market_id": "fomc-2026-12-employment",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": false,
+            "price": 50,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578898788560000,
+            "cancelled": false
+          },
+          {
+            "order_id": 68,
+            "market_id": "fomc-2026-12-employment",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": false,
+            "price": 54,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578898788560000,
+            "cancelled": false
+          }
+        ],
+        "last_price": null,
+        "spread": 6,
+        "storage_fee": "5000000000000000000000",
+        "payout": "1000000000000000000000"
+      },
+      "trades": [
+        {
+          "trade_id": 13,
+          "market_id": "fomc-2026-12-employment",
+          "yes": true,
+          "price": 49,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 57,
+          "taker_order": 58,
+          "taker_buy": true,
+          "at_ns": 1794578879351646200
+        },
+        {
+          "trade_id": 14,
+          "market_id": "fomc-2026-12-employment",
+          "yes": true,
+          "price": 52,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 59,
+          "taker_order": 60,
+          "taker_buy": true,
+          "at_ns": 1794578887262375700
+        },
+        {
+          "trade_id": 15,
+          "market_id": "fomc-2026-12-employment",
+          "yes": true,
+          "price": 54,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 61,
+          "taker_order": 62,
+          "taker_buy": true,
+          "at_ns": 1794578895113737500
+        }
+      ]
+    },
+    {
+      "id": "fomc-2026-12-inflation",
+      "yes": {
+        "bids": [
+          {
+            "order_id": 37,
+            "market_id": "fomc-2026-12-inflation",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": true,
+            "price": 84,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578511822255600,
+            "cancelled": false
+          },
+          {
+            "order_id": 38,
+            "market_id": "fomc-2026-12-inflation",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": true,
+            "price": 80,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578511822255600,
+            "cancelled": false
+          }
+        ],
+        "asks": [
+          {
+            "order_id": 35,
+            "market_id": "fomc-2026-12-inflation",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": false,
+            "price": 90,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578511822255600,
+            "cancelled": false
+          },
+          {
+            "order_id": 36,
+            "market_id": "fomc-2026-12-inflation",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": false,
+            "price": 94,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578511822255600,
+            "cancelled": false
+          }
+        ],
+        "last_price": 86,
+        "spread": 6,
+        "storage_fee": "5000000000000000000000",
+        "payout": "1000000000000000000000"
+      },
+      "no": {
+        "bids": [
+          {
+            "order_id": 41,
+            "market_id": "fomc-2026-12-inflation",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": true,
+            "price": 12,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578511822255600,
+            "cancelled": false
+          },
+          {
+            "order_id": 42,
+            "market_id": "fomc-2026-12-inflation",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": true,
+            "price": 8,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578511822255600,
+            "cancelled": false
+          }
+        ],
+        "asks": [
+          {
+            "order_id": 39,
+            "market_id": "fomc-2026-12-inflation",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": false,
+            "price": 18,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578511822255600,
+            "cancelled": false
+          },
+          {
+            "order_id": 40,
+            "market_id": "fomc-2026-12-inflation",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": false,
+            "price": 22,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578511822255600,
+            "cancelled": false
+          }
+        ],
+        "last_price": null,
+        "spread": 6,
+        "storage_fee": "5000000000000000000000",
+        "payout": "1000000000000000000000"
+      },
+      "trades": [
+        {
+          "trade_id": 7,
+          "market_id": "fomc-2026-12-inflation",
+          "yes": true,
+          "price": 81,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 29,
+          "taker_order": 30,
+          "taker_buy": true,
+          "at_ns": 1794578488690200800
+        },
+        {
+          "trade_id": 8,
+          "market_id": "fomc-2026-12-inflation",
+          "yes": true,
+          "price": 84,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 31,
+          "taker_order": 32,
+          "taker_buy": true,
+          "at_ns": 1794578498450766000
+        },
+        {
+          "trade_id": 9,
+          "market_id": "fomc-2026-12-inflation",
+          "yes": true,
+          "price": 86,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 33,
+          "taker_order": 34,
+          "taker_buy": true,
+          "at_ns": 1794578508132424200
+        }
+      ]
+    },
+    {
+      "id": "fomc-2026-12-recession",
+      "yes": {
+        "bids": [
+          {
+            "order_id": 23,
+            "market_id": "fomc-2026-12-recession",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": true,
+            "price": 22,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578469363280400,
+            "cancelled": false
+          },
+          {
+            "order_id": 24,
+            "market_id": "fomc-2026-12-recession",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": true,
+            "price": 18,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578469363280400,
+            "cancelled": false
+          }
+        ],
+        "asks": [
+          {
+            "order_id": 21,
+            "market_id": "fomc-2026-12-recession",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": false,
+            "price": 28,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578469363280400,
+            "cancelled": false
+          },
+          {
+            "order_id": 22,
+            "market_id": "fomc-2026-12-recession",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": false,
+            "price": 32,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578469363280400,
+            "cancelled": false
+          }
+        ],
+        "last_price": 24,
+        "spread": 6,
+        "storage_fee": "5000000000000000000000",
+        "payout": "1000000000000000000000"
+      },
+      "no": {
+        "bids": [
+          {
+            "order_id": 27,
+            "market_id": "fomc-2026-12-recession",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": true,
+            "price": 74,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578469363280400,
+            "cancelled": false
+          },
+          {
+            "order_id": 28,
+            "market_id": "fomc-2026-12-recession",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": true,
+            "price": 70,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578469363280400,
+            "cancelled": false
+          }
+        ],
+        "asks": [
+          {
+            "order_id": 25,
+            "market_id": "fomc-2026-12-recession",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": false,
+            "price": 80,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578469363280400,
+            "cancelled": false
+          },
+          {
+            "order_id": 26,
+            "market_id": "fomc-2026-12-recession",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": false,
+            "price": 84,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578469363280400,
+            "cancelled": false
+          }
+        ],
+        "last_price": null,
+        "spread": 6,
+        "storage_fee": "5000000000000000000000",
+        "payout": "1000000000000000000000"
+      },
+      "trades": [
+        {
+          "trade_id": 4,
+          "market_id": "fomc-2026-12-recession",
+          "yes": true,
+          "price": 19,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 15,
+          "taker_order": 16,
+          "taker_buy": true,
+          "at_ns": 1794578446427511800
+        },
+        {
+          "trade_id": 5,
+          "market_id": "fomc-2026-12-recession",
+          "yes": true,
+          "price": 22,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 17,
+          "taker_order": 18,
+          "taker_buy": true,
+          "at_ns": 1794578455440422700
+        },
+        {
+          "trade_id": 6,
+          "market_id": "fomc-2026-12-recession",
+          "yes": true,
+          "price": 24,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 19,
+          "taker_order": 20,
+          "taker_buy": true,
+          "at_ns": 1794578465080835300
+        }
+      ]
+    },
+    {
+      "id": "fomc-2026-12-tariff",
+      "yes": {
+        "bids": [
+          {
+            "order_id": 9,
+            "market_id": "fomc-2026-12-tariff",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": true,
+            "price": 60,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578426341442800,
+            "cancelled": false
+          },
+          {
+            "order_id": 10,
+            "market_id": "fomc-2026-12-tariff",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": true,
+            "price": 56,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578426341442800,
+            "cancelled": false
+          }
+        ],
+        "asks": [
+          {
+            "order_id": 7,
+            "market_id": "fomc-2026-12-tariff",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": false,
+            "price": 66,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578426341442800,
+            "cancelled": false
+          },
+          {
+            "order_id": 8,
+            "market_id": "fomc-2026-12-tariff",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": true,
+            "buy": false,
+            "price": 70,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578426341442800,
+            "cancelled": false
+          }
+        ],
+        "last_price": 62,
+        "spread": 6,
+        "storage_fee": "5000000000000000000000",
+        "payout": "1000000000000000000000"
+      },
+      "no": {
+        "bids": [
+          {
+            "order_id": 13,
+            "market_id": "fomc-2026-12-tariff",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": true,
+            "price": 36,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578426341442800,
+            "cancelled": false
+          },
+          {
+            "order_id": 14,
+            "market_id": "fomc-2026-12-tariff",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": true,
+            "price": 32,
+            "quantity": 5,
+            "remaining": 5,
+            "created_ns": 1794578426341442800,
+            "cancelled": false
+          }
+        ],
+        "asks": [
+          {
+            "order_id": 11,
+            "market_id": "fomc-2026-12-tariff",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": false,
+            "price": 42,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578426341442800,
+            "cancelled": false
+          },
+          {
+            "order_id": 12,
+            "market_id": "fomc-2026-12-tariff",
+            "owner": "kotoba-book-v3-20261113.testnet",
+            "yes": false,
+            "buy": false,
+            "price": 46,
+            "quantity": 10,
+            "remaining": 10,
+            "created_ns": 1794578426341442800,
+            "cancelled": false
+          }
+        ],
+        "last_price": null,
+        "spread": 6,
+        "storage_fee": "5000000000000000000000",
+        "payout": "1000000000000000000000"
+      },
+      "trades": [
+        {
+          "trade_id": 1,
+          "market_id": "fomc-2026-12-tariff",
+          "yes": true,
+          "price": 57,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 1,
+          "taker_order": 2,
+          "taker_buy": true,
+          "at_ns": 1794578403556335400
+        },
+        {
+          "trade_id": 2,
+          "market_id": "fomc-2026-12-tariff",
+          "yes": true,
+          "price": 60,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 3,
+          "taker_order": 4,
+          "taker_buy": true,
+          "at_ns": 1794578412915771000
+        },
+        {
+          "trade_id": 3,
+          "market_id": "fomc-2026-12-tariff",
+          "yes": true,
+          "price": 62,
+          "quantity": 1,
+          "maker": "kotoba-book-v3-20261113.testnet",
+          "taker": "trader.kotoba-book-v3-20261113.testnet",
+          "maker_order": 5,
+          "taker_order": 6,
+          "taker_buy": true,
+          "at_ns": 1794578422219793700
+        }
+      ]
+    }
+  ],
+  "oldReservedReadback": [
+    {
+      "id": "fomc-2026-10-inflation-replay",
+      "event": "FOMC press conference · 2026-10-28 · replay demo",
+      "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf",
+      "phrase": "inflation",
+      "threshold": 1,
+      "close_ns": 1794466435989000000,
+      "deadline_ns": 1795651200000000000,
+      "b": 100,
+      "yes": 0,
+      "no": 0,
+      "burned_yes": 0,
+      "burned_no": 0,
+      "creator": "kotoba-edfa2b47.testnet",
+      "status": "Open",
+      "result": null,
+      "challenge_until_ns": null,
+      "pending": false,
+      "resolver": null,
+      "challenger": null
+    },
+    {
+      "id": "fomc-2026-10-employment-replay",
+      "event": "FOMC press conference · 2026-10-28 · replay demo",
+      "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf",
+      "phrase": "employment",
+      "threshold": 1,
+      "close_ns": 1794476408188000000,
+      "deadline_ns": 1795651200000000000,
+      "b": 100,
+      "yes": 0,
+      "no": 0,
+      "burned_yes": 0,
+      "burned_no": 0,
+      "creator": "kotoba-edfa2b47.testnet",
+      "status": "Open",
+      "result": null,
+      "challenge_until_ns": null,
+      "pending": false,
+      "resolver": null,
+      "challenger": null
+    }
+  ],
+  "status": "final",
+  "completedAt": "2026-11-13T14:08:24.454Z"
+}
