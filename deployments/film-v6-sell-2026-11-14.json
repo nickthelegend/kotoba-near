@@ -1,0 +1,23 @@
+{
+  "film": "videos/kotoba-near/kotoba-near-film.mp4 (v6: new Sell button, bm_lewis voice, no subtitles)",
+  "date": "2026-11-14 (UTC)",
+  "network": "testnet",
+  "signer": "trader.kotoba-markets.testnet",
+  "contract": "kotoba-markets.testnet",
+  "note": "v6 re-takes only the sell scene so the coral Sell button shows; approved on camera on the QA signer's Approve transaction sheet, then shown on nearvalidate.org. The buy, limit and cancel in the film are the v5 transactions in film-v5-signing-2026-11-13.json. Testnet only.",
+  "transactions": [
+    {
+      "what": "Market sell: 5 Yes on \"oil\" (Dec 9), filled at 53c in two trades",
+      "hash": "HPixhU5EtgyUG7m8W7A9rAoYSh6EHbBbZokrRQJ8hHDq",
+      "methods": [
+        "place_order"
+      ],
+      "depositYocto": "3000000000000000000000",
+      "gas": "150000000000000",
+      "stage": "final",
+      "at": "2026-11-14T09:02:03.939Z",
+      "gasBurntYocto": "728260556490600000000",
+      "explorer": "https://testnet.nearblocks.io/txns/HPixhU5EtgyUG7m8W7A9rAoYSh6EHbBbZokrRQJ8hHDq"
+    }
+  ]
+}
