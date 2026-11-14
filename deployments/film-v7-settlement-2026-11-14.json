@@ -1,0 +1,70 @@
+{
+  "contract": "kotoba-edfa2b47.testnet",
+  "market": "fomc-2026-01-tariffs-live",
+  "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf",
+  "steps": [
+    {
+      "step": "fund trader (1 NEAR from kotoba-mm.testnet)",
+      "tx": "CufT9Px3XirQyXnCRCRqzjpHvjVkv5pufEZRHZYEjF8b",
+      "explorer": "https://testnet.nearblocks.io/txns/CufT9Px3XirQyXnCRCRqzjpHvjVkv5pufEZRHZYEjF8b",
+      "signer": "kotoba-mm.testnet",
+      "receiver": "trader.kotoba-markets.testnet",
+      "status": "final",
+      "at": "2026-11-14T09:26:45.100Z"
+    },
+    {
+      "step": "create market (contract account)",
+      "tx": "HFCcL2Lw7EwB8YQU9MFXLtwdbEeAW2HZbAHtTUHARvSp",
+      "explorer": "https://testnet.nearblocks.io/txns/HFCcL2Lw7EwB8YQU9MFXLtwdbEeAW2HZbAHtTUHARvSp",
+      "signer": "kotoba-edfa2b47.testnet",
+      "receiver": "kotoba-edfa2b47.testnet",
+      "status": "final",
+      "at": "2026-11-14T09:26:47.630Z",
+      "args": {
+        "id": "fomc-2026-01-tariffs-live",
+        "event": "FOMC press conference · 2026-01-28 · live settlement demo",
+        "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf",
+        "phrase": "tariffs",
+        "threshold": 10,
+        "close_ns": 1794648885883000000,
+        "deadline_ns": 1795651200000000000,
+        "b": 100
+      },
+      "source_check": {
+        "status": 200,
+        "sha256": "2c2683d9d1f08b06668c0cf3257918e68dd748ef7a804dd14094e6e2c3e35cd3"
+      }
+    },
+    {
+      "step": "buy 20 Yes (trader)",
+      "tx": "C48wC5fbtX8USTAD1kbUxkK1ssm1WxFBniEnU82Qgaou",
+      "explorer": "https://testnet.nearblocks.io/txns/C48wC5fbtX8USTAD1kbUxkK1ssm1WxFBniEnU82Qgaou",
+      "signer": "trader.kotoba-markets.testnet",
+      "receiver": "kotoba-edfa2b47.testnet",
+      "status": "final",
+      "at": "2026-11-14T09:26:59.598Z",
+      "quote_yocto": "11110000000000000000000"
+    }
+  ],
+  "market_after": {
+    "id": "fomc-2026-01-tariffs-live",
+    "event": "FOMC press conference · 2026-01-28 · live settlement demo",
+    "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf",
+    "phrase": "tariffs",
+    "threshold": 10,
+    "close_ns": 1794648885883000000,
+    "deadline_ns": 1795651200000000000,
+    "b": 100,
+    "yes": 0,
+    "no": 0,
+    "burned_yes": 0,
+    "burned_no": 0,
+    "creator": "kotoba-edfa2b47.testnet",
+    "status": "Open",
+    "result": null,
+    "challenge_until_ns": null,
+    "pending": false,
+    "resolver": null,
+    "challenger": null
+  }
+}

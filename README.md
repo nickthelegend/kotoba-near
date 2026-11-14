@@ -4,6 +4,17 @@
 
 Right now: **What will Warsh say?** Twelve words for the December 9, 2026 FOMC press conference and five for the (tentative) January 27, 2027 one, on [`kotoba-markets.testnet`](https://testnet.nearblocks.io/address/kotoba-markets.testnet). Kevin Warsh has given the Fed press conferences since June 2026 (Powell gave the January and April 2026 ones).
 
+## Why Kotoba
+
+Polymarket and Kalshi settle mention markets with people. On Polymarket, anyone proposes an answer with a bond, and a second dispute goes to a vote of UMA token holders. On Kalshi, the exchange settles, and a three-member Outcome Review Committee decides contested outcomes; its decisions are final. Kotoba settles with a program you can check:
+
+- **A pinned, open program decides.** It reads the official transcript inside an Intel TDX enclave on OutLayer, and your browser re-checks the seal.
+- **Anyone can challenge.** Bond 0.1 NEAR to rerun the same program. If the count changes, the challenger takes both bonds. The rerun is final.
+- **The counting rule is fixed before trading.** The phrase, threshold and source are set at listing, and the program hash is set at init.
+- **Trading is on chain.** Every word has a real on-chain order book on NEAR, with non-custodial escrow.
+
+Limits: Kotoba reads only Fed press-conference transcripts, and it runs on testnet. Sources, two real contested mention-market settlements, and the full list of limits are in [docs/POSITIONING.md](docs/POSITIONING.md).
+
 ## Try it
 
 Node.js and pnpm 10.29.2. No hosted URL is claimed. Reading markets needs no wallet.
