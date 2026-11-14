@@ -19,7 +19,9 @@ Limits: Kotoba reads only Fed press-conference transcripts, and it runs on testn
 
 ## Try it
 
-Node.js and pnpm 10.29.2. No hosted URL is claimed. Reading markets needs no wallet.
+**Live app: https://kotoba-near.vercel.app** (NEAR testnet; reading markets needs no wallet). Check the proofs yourself with no install: `node scripts/judge-verify.mjs` (24/24 passed on Nov 14, 21:10 UTC).
+
+To run it locally: Node.js and pnpm 10.29.2.
 
 1. `pnpm install --frozen-lockfile`, then `pnpm dev` - open the printed URL. See the landing page with live chances from the book.
 2. **Markets** (`/markets`) - the event grid: two live Warsh events, plus markets already resolved by the seal on the previous contract.
@@ -148,7 +150,7 @@ When Nick is ready to publish, the one command from the repository root is:
 pnpm dlx vercel --prod
 ```
 
-Hosting was prepared but not deployed. Keep the eventual hosted app available through judging. Repo publication, the X post and human Meteor approval remain human steps.
+Deployed on Nov 14, 2026 at https://kotoba-near.vercel.app (static build of `packages/web`, reading NEAR testnet). It stays up through judging. Repo publication, the X post and human Meteor approval remain human steps.
 
 ## How settlement is verified
 
