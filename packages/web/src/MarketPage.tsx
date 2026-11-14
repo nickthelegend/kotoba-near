@@ -79,6 +79,7 @@ function Transcript({ m }: { m: Market }) {
     marks[n].scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }
   if (!m.result && m.id.endsWith('-replay') && m.source_url === JUDGE_DEMO.source_check.url) return <State kind="empty" art="transcript" title="Published transcript · replay demo">This uses the published October 28 transcript, not a forecast. A funded testnet wallet can resolve it after bets close and before {new Date(m.deadline_ns / 1e6).toUTCString().replace(':00 GMT', ' UTC')}. <a href={m.source_url} target="_blank" rel="noreferrer">Official published PDF</a></State>;
+  if (!m.result && (eventDate(m)?.getTime() ?? Infinity) < Date.now() - 864e5) return <State kind="empty" art="transcript" title="Transcript published · not counted yet">The official PDF is out. Every counted word shows here once anyone resolves the market. <a href={m.source_url} target="_blank" rel="noreferrer">Official PDF</a></State>;
   if (!m.result) return <State kind="empty" art="transcript" title="Transcript not published yet">The Fed posts the press conference PDF after the event. The market can be resolved from its close until the deadline. <a href={m.source_url} target="_blank" rel="noreferrer">Expected source URL</a></State>;
   if (!pinned) return <State kind="setup" art="magnifier" title="Transcript text not pinned in this app">Open the official PDF and compare its SHA-256 to <code>{short(m.result.transcript_sha256, 12, 8)}</code>.</State>;
   if (err) return <State kind="error" title="Could not load the transcript text">{err}</State>;
@@ -152,6 +153,7 @@ function SettleBox({ m, wallet, now }: { m: Market; wallet: Wallet; now: number 
   return <div className="settle">
     <p className="settle-step">{step}</p>
     {act}
+    {held && m.status !== 'Final' && held.yes + held.no > 0 && <p className="why">You hold {[held.yes ? `${held.yes} Yes` : '', held.no ? `${held.no} No` : ''].filter(Boolean).join(' and ')}.</p>}
     {stage?.step === 'failed' && stage.problem && <Problem x={stage.problem} compact />}
     {stage?.step === 'confirmed' && (method === 'claim'
       ? <div className="claimed" role="status"><Obj name="trophy" size={64} /><p><b>Winnings claimed.</b>{stage.tx && <> <a href={txUrl(stage.tx)} target="_blank" rel="noreferrer">View transaction</a></>}</p></div>
