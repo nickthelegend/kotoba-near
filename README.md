@@ -103,6 +103,8 @@ Raw records: [deployments/real-run.json](deployments/real-run.json) (every tx wi
 
 ### Judge replay
 
+> **November 14, 2026:** every `resolve` sent through the contract that day failed on OutLayer's side ("Execution promise failed"). Each bond was refunded and each market stayed Open. Direct runs of the same pinned program succeeded. See [BLOCKED.md](BLOCKED.md) item 0. A replay resolve may therefore return your bond without a result.
+
 Two untouched October 28 transcript replays are available. Each is **one-shot**: the first resolver uses that market; another judge can use the other one. Both have closed betting and accept resolution until **November 26, 2026 at 00:00 UTC**. Both were read back Open with no result after the proof run. The original inflation market was not used for any R3 bet, resolve, challenge or finalize.
 
 | Market route | Phrase | Creation transaction |

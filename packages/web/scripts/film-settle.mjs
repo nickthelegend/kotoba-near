@@ -75,4 +75,15 @@ if (cmd === 'status') {
   const trader = await account(ACTOR);
   const out = await trader.functionCall({ contractId: CONTRACT, methodName: 'buy', args: { id: ID, yes: true, quantity: qty }, gas: 30_000_000_000_000n, attachedDeposit: quote });
   await record(`buy ${qty} Yes (${trader.accountId})`, out, { quote_yocto: quote.toString() });
-} else throw Error('USAGE: status | fund | create <secs> | buy');
+} else if (cmd === 'resolve') {
+  // Resolve signed by the contract account itself (the only signer whose contract-routed OutLayer runs completed on Nov 14).
+  const deployer = await account('deployer.json');
+  const out = await deployer.functionCall({ contractId: CONTRACT, methodName: 'resolve', args: { id: ID }, gas: 300_000_000_000_000n, attachedDeposit: BigInt(process.env.KOTOBA_RESOLVE_MILLI ?? 120) * 10n ** 21n });
+  const logs = out.receipts_outcome.flatMap(r => r.outcome.logs).filter(l => !l.startsWith('EVENT_JSON'));
+  await record('resolve (contract account)', out, { logs });
+  console.log(logs.join('\n'));
+} else if (cmd === 'claim') {
+  const holder = await account(ACTOR);
+  const out = await holder.functionCall({ contractId: CONTRACT, methodName: 'claim', args: { id: ID }, gas: 30_000_000_000_000n, attachedDeposit: 0n });
+  await record(`claim (${holder.accountId})`, out);
+} else throw Error('USAGE: status | fund | create <secs> | buy | resolve | claim');
