@@ -22,7 +22,7 @@
       "at": "2026-11-14T09:26:47.630Z",
       "args": {
         "id": "fomc-2026-01-tariffs-live",
-        "event": "FOMC press conference · 2026-01-28 · live settlement demo",
+        "event": "FOMC press conference \u00b7 2026-01-28 \u00b7 live settlement demo",
         "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf",
         "phrase": "tariffs",
         "threshold": 10,
@@ -66,7 +66,7 @@
       "at": "2026-11-14T11:07:34.461Z",
       "args": {
         "id": "fomc-2026-01-tariffs-film",
-        "event": "FOMC press conference · 2026-01-28 · live settlement demo",
+        "event": "FOMC press conference \u00b7 2026-01-28 \u00b7 live settlement demo",
         "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf",
         "phrase": "tariffs",
         "threshold": 10,
@@ -93,7 +93,7 @@
   ],
   "market_after": {
     "id": "fomc-2026-01-tariffs-live",
-    "event": "FOMC press conference · 2026-01-28 · live settlement demo",
+    "event": "FOMC press conference \u00b7 2026-01-28 \u00b7 live settlement demo",
     "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf",
     "phrase": "tariffs",
     "threshold": 10,
@@ -115,7 +115,7 @@
   "markets_after": {
     "fomc-2026-01-tariffs-live": {
       "id": "fomc-2026-01-tariffs-live",
-      "event": "FOMC press conference · 2026-01-28 · live settlement demo",
+      "event": "FOMC press conference \u00b7 2026-01-28 \u00b7 live settlement demo",
       "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf",
       "phrase": "tariffs",
       "threshold": 10,
@@ -136,7 +136,7 @@
     },
     "fomc-2026-01-tariffs-film": {
       "id": "fomc-2026-01-tariffs-film",
-      "event": "FOMC press conference · 2026-01-28 · live settlement demo",
+      "event": "FOMC press conference \u00b7 2026-01-28 \u00b7 live settlement demo",
       "source_url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf",
       "phrase": "tariffs",
       "threshold": 10,
@@ -155,5 +155,59 @@
       "resolver": null,
       "challenger": null
     }
-  }
+  },
+  "app_resolve_attempts": [
+    {
+      "tx": "HPQmJpgFejVy2LstfqfeBJy5RpgS9dHcBKvQfPNoeiNU",
+      "explorer": "https://testnet.nearblocks.io/txns/HPQmJpgFejVy2LstfqfeBJy5RpgS9dHcBKvQfPNoeiNU",
+      "signer": "trader.kotoba-markets.testnet",
+      "market": "fomc-2026-01-tariffs-live",
+      "signed_at": "2026-11-14T10:25:57.214Z",
+      "result": "OutLayer \"Execution promise failed\"; bond refunded; market stayed Open"
+    },
+    {
+      "tx": "8HEhoagDjues7XnDBrvcBA5E4pxKhJgYsZ9xnJvoZDXK",
+      "explorer": "https://testnet.nearblocks.io/txns/8HEhoagDjues7XnDBrvcBA5E4pxKhJgYsZ9xnJvoZDXK",
+      "signer": "trader.kotoba-markets.testnet",
+      "market": "fomc-2026-01-tariffs-live",
+      "signed_at": "2026-11-14T10:57:46.373Z",
+      "result": "OutLayer \"Execution promise failed\"; bond refunded; market stayed Open"
+    },
+    {
+      "tx": "Es1BNPMYwNSzHDTFvT56ayKaURkzM4LRfhmgoSDHGRAZ",
+      "explorer": "https://testnet.nearblocks.io/txns/Es1BNPMYwNSzHDTFvT56ayKaURkzM4LRfhmgoSDHGRAZ",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "market": "fomc-2026-01-tariffs-film",
+      "signed_at": "2026-11-14T11:18:45.545Z",
+      "result": "OutLayer \"Execution promise failed\"; bond refunded; market stayed Open"
+    },
+    {
+      "tx": "Bkk8fP9gRVAySykksGQGVAv2SP78kvPmcf2LvgrjC9Cj",
+      "explorer": "https://testnet.nearblocks.io/txns/Bkk8fP9gRVAySykksGQGVAv2SP78kvPmcf2LvgrjC9Cj",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "market": "fomc-2026-01-tariffs-film",
+      "signed_at": "2026-11-14T11:21:13.953Z",
+      "result": "OutLayer \"Execution promise failed\"; bond refunded; market stayed Open"
+    },
+    {
+      "tx": "Gr92jFVP7RGFGA2UvWpk6z1WwRNb3zbNah9eh38nVzbc",
+      "explorer": "https://testnet.nearblocks.io/txns/Gr92jFVP7RGFGA2UvWpk6z1WwRNb3zbNah9eh38nVzbc",
+      "signer": "player.kotoba-edfa2b47.testnet",
+      "market": "fomc-2026-01-tariffs-film",
+      "signed_at": "2026-11-14T11:23:42.728Z",
+      "result": "OutLayer \"Execution promise failed\"; bond refunded; market stayed Open"
+    }
+  ],
+  "contract_account_resolve_attempts": [
+    {
+      "tx": "8ki9mQJM5KtwDFTabuyHQXuPepBQZCz2QKqEyh42DzEu",
+      "attached": "0.12 NEAR",
+      "result": "OutLayer \"Execution promise failed\"; refunded"
+    },
+    {
+      "tx": "55zpF6ZASyPA6Y6er3AxzYqo5f2Z6Kk9aYsnRFuM2xgg",
+      "attached": "0.135 NEAR",
+      "result": "OutLayer \"Execution promise failed\"; refunded"
+    }
+  ]
 }
