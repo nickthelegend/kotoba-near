@@ -6,6 +6,7 @@ import { PriceChart } from './Chart';
 import { seriesFor, Countdown, Fills } from './Event';
 import { useResolved } from './Markets';
 import { Footer } from './Shell';
+import { PROOF_ROUTE } from './data';
 
 const FAQ: [string, string][] = [
   ['What is a mention market?', 'A Yes/No market on whether a speaker says a word. “Will Warsh say ‘AI’ at the December press conference?” If you buy Yes at 88¢ and the word is said, each share pays 100¢.'],
@@ -14,6 +15,71 @@ const FAQ: [string, string][] = [
   ['Does it count only the speaker?', 'Not yet. The counter reads the whole transcript, reporters’ questions included. The rules page says so for every market.'],
   ['Is this real money?', 'No. Kotoba runs on NEAR testnet: one winning share pays 0.001 test NEAR. The books are seeded by Kotoba’s own demo market makers, and every order and fill is a real testnet transaction.'],
 ];
+
+// Every claim about other markets is from their own published rules; sources are listed in docs/POSITIONING.md.
+const WHY: { q: string; kotoba: string; poly: string; kalshi: string }[] = [
+  {
+    q: 'Who decides the result?',
+    kotoba: 'A pinned, open program counts the word in the official Fed transcript inside an Intel TDX enclave.',
+    poly: 'Anyone proposes an answer with a $750 bond. After a second dispute, UMA token holders vote, in about 48 hours.',
+    kalshi: 'Kalshi settles it. Contested outcomes go to a three-member Outcome Review Committee, whose decisions are final.',
+  },
+  {
+    q: 'How do you challenge it?',
+    kotoba: 'Bond 0.1 NEAR and rerun the same program. If the count changes, you take both bonds. No human override.',
+    poly: 'Post a matching bond within the 2-hour window. A disputed market takes 4 to 6 days to settle.',
+    kalshi: 'Kalshi decides whether to open an outcome review, “at its sole discretion”.',
+  },
+  {
+    q: 'When is the counting rule fixed?',
+    kotoba: 'Before the first trade: the program’s SHA-256 is pinned in the contract, and you can run it yourself.',
+    poly: 'Written rules, read by people. Polymarket can add “additional context” after trading starts.',
+    kalshi: 'Written terms, read by people. Kalshi can change a contract’s source and terms after trading starts.',
+  },
+];
+
+const DISPUTES: { what: string; href: string; src: string }[] = [
+  { what: 'Kalshi, Jan 2026: Melania Trump’s live stream was muted for 30 seconds, so “Zoom” and “education” settled No although the recording has them. A trader called it a scandal.', href: 'https://casinobeats.com/2026/01/22/muted-melania-trump-causes-trouble-kalshi-mention-market-backers/', src: 'CasinoBeats' },
+  { what: 'Polymarket, May 2026: “Will Trump say ‘Iran’ during events with Xi Jinping?” was disputed three times before it resolved No.', href: 'https://gamma-api.polymarket.com/events?slug=what-will-trump-say-during-bilateral-events-with-xi-jinping', src: 'Polymarket record' },
+];
+
+function Why({ proof }: { proof: string }) {
+  return (
+    <section className="k-l-why" id="why">
+      <div className="k-l-wrap">
+        <div className="k-l-head">
+          <h2>Who decides what was said?</h2>
+          <p>Other mention markets settle words by a human vote or a committee. Kotoba settles them with a program you can check.</p>
+        </div>
+        <div className="k-card k-why" role="table" aria-label="How Kotoba, Polymarket and Kalshi settle mention markets">
+          <div className="k-why-row k-why-top" role="row">
+            <span role="columnheader" />
+            <span role="columnheader" className="k-why-k"><b>Kotoba</b></span>
+            <span role="columnheader">Polymarket</span>
+            <span role="columnheader">Kalshi</span>
+          </div>
+          {WHY.map(r => (
+            <div key={r.q} className="k-why-row" role="row">
+              <b role="rowheader">{r.q}</b>
+              <p role="cell" className="k-why-k" data-who="Kotoba">{r.kotoba}</p>
+              <p role="cell" data-who="Polymarket">{r.poly}</p>
+              <p role="cell" data-who="Kalshi">{r.kalshi}</p>
+            </div>
+          ))}
+        </div>
+        <div className="k-why-foot">
+          <ul className="k-why-cases">
+            {DISPUTES.map(d => <li key={d.href}>{d.what} <a href={d.href} target="_blank" rel="noreferrer">{d.src} ↗</a></li>)}
+          </ul>
+          <div className="k-why-cta">
+            <Link to={proof} className="k-btn k-btn-dark">Check a settled market yourself</Link>
+            <p>Limits today: Fed press-conference transcripts only, on NEAR testnet. The count is whole words across the whole transcript, reporters included.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export function Landing({ events, snap }: { events: KEvent[]; snap: Snapshot | null }) {
   const event = events[0];
@@ -30,6 +96,7 @@ export function Landing({ events, snap }: { events: KEvent[]; snap: Snapshot | n
       <header className="l-nav">
         <Link to="/" aria-label="Kotoba home"><Wordmark /></Link>
         <nav aria-label="Primary">
+          <a href="#why" className="l-link">Why Kotoba</a>
           <a href="#how" className="l-link">How it works</a>
           <a href="#faq" className="l-link">FAQ</a>
           <Link to="/markets" className="pill-white">Open markets</Link>
@@ -89,6 +156,8 @@ export function Landing({ events, snap }: { events: KEvent[]; snap: Snapshot | n
           </dl>
         </div>
       </section>
+
+      <Why proof={PROOF_ROUTE} />
 
       <section className="k-l-how" id="how">
         <div className="k-l-wrap">

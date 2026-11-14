@@ -3,6 +3,8 @@ import { useEffect, useSyncExternalStore } from 'react';
 
 export const CONTRACT = 'kotoba-markets.testnet';
 export const PREVIOUS_CONTRACT = 'kotoba-edfa2b47.testnet';
+// A market that settled end to end with the pinned program: resolved, challenged and re-run, then paid out.
+export const PROOF_ROUTE = '/market/fomc-2026-01-inflation-40';
 export const MAKERS = ['kotoba-mm.testnet', 'flow.kotoba-mm.testnet'];
 // Public testnet RPCs rate-limit per IP, so reads rotate and stick to whichever answered last.
 const RPCS = ['https://rpc.testnet.fastnear.com', 'https://archival-rpc.testnet.fastnear.com', 'https://near-testnet.drpc.org', 'https://test.rpc.fastnear.com'];

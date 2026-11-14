@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from '../ui';
-import { type KEvent, type Snapshot, type Market, type Trade, chance, yesAsk, noAsk, volumeOf, label, near, ago, fmtDate, speaker, shortAccount, accountURL, MAKERS } from './data';
+import { type KEvent, type Snapshot, type Market, type Trade, PROOF_ROUTE, chance, yesAsk, noAsk, volumeOf, label, near, ago, fmtDate, speaker, shortAccount, accountURL, MAKERS } from './data';
 import { PriceChart, COLORS, type Series } from './Chart';
 import { OrderBook } from './OrderBook';
 import { TradePanel, type Ticket } from './TradePanel';
@@ -61,6 +61,7 @@ export function EventPage({ event, snap, wallet, tab, initialWord }: { event: KE
           <span><b><Countdown ms={event.closeMs} /></b> until trading closes</span>
           <span className="k-live"><i />Live book</span>
         </div>
+        <p className="k-resolves"><b>How this resolves:</b> a pinned program counts each word in the official Fed transcript inside an Intel TDX enclave. <Link to={PROOF_ROUTE}>See the proof →</Link></p>
         <div className="k-tabs" role="tablist">
           <Link to={`/event/${event.id}`} aria-current={tab === 'market' ? 'page' : undefined}>Market</Link>
           <Link to={`/event/${event.id}/rules`} aria-current={tab === 'rules' ? 'page' : undefined}>Rules &amp; resolution</Link>

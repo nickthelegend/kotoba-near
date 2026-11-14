@@ -406,6 +406,42 @@ a.k-l-row:hover span { color: var(--k-coral-ink); }
   .k-landing .k-footer { padding: 32px 16px 40px; }
   .k-table th, .k-table td { padding: 10px 12px; }
 }
+/* ---------- landing: why Kotoba (comparison) */
+.k-l-why { background: #fff; padding: 96px 0; border-bottom: 1px solid var(--k-line); }
+.k-l-why .k-l-head { max-width: 760px; }
+.k-why { padding: 0; overflow: hidden; }
+.k-why-row { display: grid; grid-template-columns: minmax(150px, 1.1fr) repeat(3, minmax(0, 2fr)); border-top: 1px solid var(--k-line); }
+.k-why-row > * { margin: 0; padding: 18px 20px; font-size: 15px; line-height: 1.5; color: var(--k-ink-2); }
+.k-why-row > b { font-size: 16px; color: var(--k-ink); letter-spacing: -.01em; }
+.k-why-top { border-top: 0; }
+.k-why-top > span { padding-top: 16px; padding-bottom: 14px; font-size: 14px; font-weight: 700; color: var(--k-muted); }
+.k-why-top > span.k-why-k b { display: inline-flex; align-items: center; gap: 8px; color: var(--k-ink); font-size: 16px; }
+.k-why-top > span.k-why-k b::before { content: ''; width: 10px; height: 10px; border-radius: 3px; background: var(--k-coral); }
+.k-why-row .k-why-k { background: #fff6f4; color: var(--k-ink); font-weight: 600; box-shadow: inset 2px 0 0 var(--k-coral); }
+.k-why-foot { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px; margin-top: 26px; align-items: start; }
+.k-why-cases { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.k-why-cases li { font-size: 14px; line-height: 1.55; color: var(--k-muted); padding-left: 14px; border-left: 2px solid var(--k-line-2); }
+.k-why-cases a { color: var(--k-ink-2); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
+.k-why-cta { display: grid; gap: 12px; justify-items: start; }
+.k-why-cta .k-btn { text-decoration: none; }
+.k-why-cta p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--k-muted); }
+.k-resolves { margin: 0; font-size: 14px; line-height: 1.5; color: var(--k-muted); }
+.k-resolves b { color: var(--k-ink); }
+.k-resolves a { color: var(--k-coral-ink); font-weight: 600; white-space: nowrap; }
+.k-resolves a:hover { text-decoration: underline; }
+@media (max-width: 900px) {
+  .k-l-why { padding: 64px 0; }
+  .k-why-top { display: none; }
+  .k-why-row { grid-template-columns: 1fr; padding: 6px 0 10px; }
+  .k-why-row:nth-child(2) { border-top: 0; }
+  .k-why-row > * { padding: 8px 16px; }
+  .k-why-row > b { padding-top: 14px; font-size: 17px; }
+  .k-why-row > p::before { content: attr(data-who); display: block; font-size: 12px; font-weight: 700; color: var(--k-muted); margin-bottom: 2px; }
+  .k-why-row .k-why-k { margin: 0 10px; border-radius: 10px; padding: 10px 14px; }
+  .k-why-row .k-why-k::before { color: var(--k-coral-ink); }
+  .k-why-foot { grid-template-columns: 1fr; gap: 22px; }
+  .k-why-cases a { white-space: normal; }
+}
 @media (prefers-reduced-motion: reduce) {
   .k-app *, .k-landing * { animation: none !important; transition: none !important; }
 }
