@@ -1,5 +1,7 @@
 # Kotoba (言葉)
 
+> **Judges and screening agents:** start at [JUDGES.md](JUDGES.md). `node scripts/judge-verify.mjs` re-checks 24 on-chain proofs with no install and no keys.
+
 **Bet on what they'll say.** Kotoba is a mention prediction market on NEAR: every word a speaker might say is its own Yes/No market with a real on-chain order book, settled from the official transcript by a sealed, hash-pinned counting program.
 
 Right now: **What will Warsh say?** Twelve words for the December 9, 2026 FOMC press conference and five for the (tentative) January 27, 2027 one, on [`kotoba-markets.testnet`](https://testnet.nearblocks.io/address/kotoba-markets.testnet). Kevin Warsh has given the Fed press conferences since June 2026 (Powell gave the January and April 2026 ones).

@@ -1,0 +1,11 @@
+# Kotoba
+
+> A word-mention prediction market on NEAR testnet. Each word is a Yes/No market with an on-chain order book. A pinned WASM program counts the word in the official Fed transcript inside an OutLayer Intel TDX enclave; the market contract accepts the result only from the OutLayer callback, and anyone can bond 0.1 NEAR to re-run it.
+
+- [Judge guide](JUDGES.md): verification commands, "do X → see Y" steps, NEAR features used, limits
+- [README](README.md): product, order-book rules, live testnet table, build and run
+- [Market contract](packages/contract/src/lib.rs): resolve, challenge, private on_result, claim
+- [Order-book contract](packages/book-contract/src/lib.rs): per-word books, mint/merge matching, escrow
+- [Live verifier](scripts/judge-verify.mjs): `node scripts/judge-verify.mjs` re-checks 24 on-chain proofs
+- [Blocked items and the OutLayer failure](BLOCKED.md)
+- [Testing](TESTING.md)
