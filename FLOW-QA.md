@@ -1,5 +1,17 @@
 # Full-flow QA
 
+## V7: positioning and resolution, 2026-11-14
+
+Captures at 1440 and 375 are in `grokbot/orchestration/shots/kotoba/why/`. There is no horizontal overflow on `/` or `/event/fed-2026-12-09` at either width. "Before" captures were taken from the previous commit.
+
+| Step | Result |
+| --- | --- |
+| Landing → Why Kotoba (`#why`) | Asks "Who decides what was said?" and compares Kotoba, Polymarket and Kalshi on three rows: who decides, how to challenge, and when the rule is fixed. Two sourced contested cases are listed below, with "Check a settled market yourself" and a limits line. At 375 px, each row stacks into labelled cells with Kotoba highlighted. |
+| Event → How this resolves | Under the stats, one line explains that a pinned program counts each word in the official Fed transcript inside an Intel TDX enclave, linking to the settled January market as proof. |
+| Settled market (`/market/fomc-2026-01-inflation-40`) | The resolution and challenge re-run seals pass their five browser checks live. The transcript highlights 40 hits (browser 40 = attested 40). The resolve, challenge and claim transactions open on nearvalidate.org through its archival-RPC setting. |
+| Settle box (previous contract) | Shows "You hold N Yes" before settlement. A past event's empty transcript now reads "Transcript published · not counted yet". |
+| Live settlement attempt | Not possible on Nov 14. Every contract-routed OutLayer run failed and its bond was refunded (BLOCKED.md item 0). |
+
 ## V4 — kotoba-markets.testnet, 2026-11-13
 
 Screens captured at 1440 and 390 into `grokbot/orchestration/shots/kotoba/v4/` (outside the repo): `home`, `markets`, `event_fed_2026_12_09`, `event_fed_2026_12_09_rules`, `activity`, `portfolio`. Horizontal overflow was 0 on every route at both widths; console errors appeared only while every public RPC answered HTTP 429, and the page then showed its busy/retry state. Polymarket and Kalshi refused automated Chrome from this network (SSL errors), so the layout follows their public structure from the brief; nothing of theirs ships.
