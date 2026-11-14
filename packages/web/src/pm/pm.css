@@ -4,7 +4,7 @@
   --k-ink: #15120f; --k-ink-2: #3b352f; --k-muted: #787066; --k-dim: #a39b90;
   --k-coral: #ff5a4e; --k-coral-ink: #c8382d;
   --k-yes: #11875a; --k-yes-bg: #e6f5ee; --k-yes-hi: #d3eee1; --k-yes-solid: #14a067;
-  --k-no: #d23c3c; --k-no-bg: #fcebea; --k-no-hi: #f8dad8; --k-no-solid: #e04848;
+  --k-no: #d23c3c; --k-no-bg: #fcebea; --k-no-hi: #f8dad8; --k-no-solid: #e04848; --k-sell-solid: #ef4f3c; --k-sell-bg: #fdebe7;
   --k-r: 16px; --k-shadow: 0 1px 2px rgba(30, 20, 10, .04), 0 8px 24px rgba(30, 20, 10, .05);
   color-scheme: light;
   font-family: var(--sans); color: var(--k-ink); font-variant-numeric: tabular-nums;
@@ -232,10 +232,16 @@ a.k-erow:hover > span { color: var(--k-coral-ink); }
 .k-towin.no { background: var(--k-no-bg); }
 .k-towin b { margin-left: auto; font-size: 20px; color: var(--side); }
 .k-towin small { color: var(--side); font-weight: 700; }
-.k-submit { height: 52px; border: 0; border-radius: 12px; font-size: 17px; font-weight: 700; color: #fff; background: var(--k-ink); transition: filter .15s, transform .1s; }
-.k-submit.yes { background: var(--k-yes-solid); } .k-submit.no { background: var(--k-no-solid); }
+.k-submit { height: 52px; border: 0; border-radius: 12px; font-size: 17px; font-weight: 700; color: #fff; background: var(--k-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 14px; transition: filter .15s, transform .1s, background .15s, color .15s; }
+.k-submit.yes { background: var(--k-yes-solid); } .k-submit.no { background: var(--k-no-solid); } .k-submit.sell { background: var(--k-sell-solid); }
 .k-submit:hover:not(:disabled) { filter: brightness(1.06); } .k-submit:active:not(:disabled) { transform: scale(.99); }
-.k-submit:disabled { opacity: .5; cursor: not-allowed; }
+/* Disabled (bad input, nothing to sell): a pale tint of the side's colour, never a dark block. While signing it stays solid. */
+.k-submit:disabled { cursor: not-allowed; }
+.k-submit:disabled:not(.busy) { opacity: 1; background: var(--k-sunk); color: var(--k-dim); }
+.k-submit.yes:disabled:not(.busy) { background: var(--k-yes-bg); color: #7cbfa3; }
+.k-submit.no:disabled:not(.busy) { background: var(--k-no-bg); color: #e79a97; }
+.k-submit.sell:disabled:not(.busy) { background: var(--k-sell-bg); color: #ee9a8f; }
+.k-submit.busy { opacity: .82; cursor: progress; }
 .k-field-error { color: var(--k-no); font-size: 13px; font-weight: 600; }
 .k-receipt { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; background: var(--k-sunk); font-size: 14px; }
 .k-receipt a { margin-left: auto; font-weight: 700; white-space: nowrap; text-decoration: underline; }

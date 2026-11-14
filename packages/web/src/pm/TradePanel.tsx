@@ -36,6 +36,9 @@ export function TradePanel({ market, book, snap, wallet, ticket, setTicket, onDo
     : kind === 'market' && !best ? `No ${buy ? 'sellers' : 'buyers'} right now. Use a limit order.`
     : ownCross ? 'This would cross your own resting order. Cancel it in Portfolio first.' : '';
   const busy = status.step === 'signing' || status.step === 'confirming';
+  // What the order is worth at the book now (plus any limit remainder at its price): the cost of a buy, the proceeds of a sale.
+  const gross = BigInt(Math.round(est.cost + (kind === 'limit' && validQty ? (q - est.filled) * (price ?? 0) : 0))) * CENT;
+  const action = buy ? `Buy ${yes ? 'Yes' : 'No'}` : !problem && gross > 0n ? `Sell ${q} ${yes ? 'Yes' : 'No'} · ${near(gross)}` : `Sell ${yes ? 'Yes' : 'No'}`;
 
   async function submit() {
     if (!wallet.account) { await wallet.connect(); return; }
@@ -104,7 +107,7 @@ export function TradePanel({ market, book, snap, wallet, ticket, setTicket, onDo
       <dl className="k-summary">
         <div><dt>Avg price</dt><dd>{est.avg === null ? (kind === 'limit' ? `rests at ${price}¢` : '—') : fmtAvg(est.avg)}</dd></div>
         <div><dt>Fills now</dt><dd>{est.filled} of {validQty ? q : 0}</dd></div>
-        <div><dt>{buy ? 'Cost' : 'You receive'}</dt><dd>{near(BigInt(Math.round(est.cost + (kind === 'limit' && validQty ? (q - est.filled) * (price ?? 0) : 0))) * CENT)}</dd></div>
+        <div><dt>{buy ? 'Cost' : 'You receive'}</dt><dd>{near(gross)}</dd></div>
         <div><dt>Order fee</dt><dd>{near(ORDER_FEE)}</dd></div>
       </dl>
       {buy && (
@@ -115,8 +118,8 @@ export function TradePanel({ market, book, snap, wallet, ticket, setTicket, onDo
         </div>
       )}
       {problem && wallet.account && <p className="k-field-error">{problem}</p>}
-      <button className={'k-submit ' + (buy ? sideClass : 'sell')} disabled={busy || (!!wallet.account && !!problem)} onClick={submit}>
-        {!wallet.account ? 'Connect wallet to trade' : status.step === 'signing' ? 'Signing in your wallet…' : status.step === 'confirming' ? 'Confirming on NEAR…' : `${buy ? 'Buy' : 'Sell'} ${yes ? 'Yes' : 'No'}`}
+      <button className={'k-submit ' + (buy ? sideClass : 'sell') + (busy ? ' busy' : '')} disabled={busy || (!!wallet.account && !!problem)} aria-busy={busy || undefined} onClick={submit}>
+        {!wallet.account ? 'Connect wallet to trade' : status.step === 'signing' ? 'Signing in your wallet…' : status.step === 'confirming' ? 'Confirming on NEAR…' : action}
       </button>
       {status.step === 'done' && <div className="k-receipt ok" role="status"><b>{status.text}</b><a href={txURL(status.hash)} target="_blank" rel="noreferrer">Receipt ↗</a></div>}
       {status.step === 'confirming' && status.hash && <div className="k-receipt" role="status"><span className="k-spin" />Waiting for finality<a href={txURL(status.hash)} target="_blank" rel="noreferrer">Receipt ↗</a></div>}
