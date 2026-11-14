@@ -1,0 +1,11 @@
+{
+  "tx": "DqVG7Kh7uLJqvZWyH1G79vnU4zAY5fknyx6qgCQjfhfN",
+  "explorer": "https://testnet.nearblocks.io/txns/DqVG7Kh7uLJqvZWyH1G79vnU4zAY5fknyx6qgCQjfhfN",
+  "input": "{\"source_url\":\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260916.pdf\",\"phrase\":\"inflation\",\"code_hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\"}",
+  "output": "{\"code_hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\",\"count\":22,\"source_url\":\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260916.pdf\",\"transcript_sha256\":\"aa308d25613c429101f2b2ac540d5d3b38a1448cf30ebf61b6f15acd74ae927c\"}",
+  "failure": null,
+  "logs": [
+    "[[yNEAR charged: \"1169650300000000000000\"]]",
+    "Execution completed successfully. Output: Json(267 bytes), Resources: { instructions: 503147426, time_ms: 1696 }, Cost: 1169650300000000000000 yoctoNEAR, Refund: 28830349700000000000000 yoctoNEAR, Cached WASM from 2026-11-09T16:22:35.525391+00:00"
+  ]
+}

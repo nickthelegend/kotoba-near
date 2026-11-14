@@ -1,0 +1,11 @@
+{
+  "tx": "2ZMiWLvmMEhpqdv1ZkHzgiWy6ksTpDJPnWnsqVoqXK25",
+  "explorer": "https://testnet.nearblocks.io/txns/2ZMiWLvmMEhpqdv1ZkHzgiWy6ksTpDJPnWnsqVoqXK25",
+  "input": "{\"source_url\":\"https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf\",\"phrase\":\"tariffs\",\"code_hash\":\"b46b08da60dcd4d4970a0712beb0e1b33aab6e332646de4e090974419a7b2314\"}",
+  "output": "null",
+  "failure": null,
+  "logs": [
+    "[[yNEAR charged: \"1000000000000000000000\"]]",
+    "Execution promise failed: Failed. Refunded 29000000000000000000000 yoctoNEAR"
+  ]
+}

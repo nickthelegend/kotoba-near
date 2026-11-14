@@ -1,6 +1,9 @@
 // Set-up for the v7 film's live settlement: one replay market on the published January 28, 2026 transcript,
 // on the settlement contract kotoba-edfa2b47.testnet, so the film can resolve, challenge and claim it in the app.
 // Steps (each signs once, testnet only, project-owned accounts only; keys are loaded by path and never printed):
+// The first market, fomc-2026-01-tariffs-live, could not be resolved by trader.kotoba-markets.testnet: OutLayer failed every
+// run that account requested (direct runs too), so the film uses player.kotoba-edfa2b47.testnet on fomc-2026-01-tariffs-film.
+// Select with KOTOBA_FILM_MARKET=<id> and KOTOBA_FILM_ACCOUNT=<credential file> (defaults: the first market, trader-v4.json).
 //   node film-settle.mjs status
 //   node film-settle.mjs fund            kotoba-mm.testnet -> trader.kotoba-markets.testnet, 1 NEAR (gas and bonds for the film)
 //   node film-settle.mjs create <secs>   the contract account lists the market; betting closes <secs> from now
@@ -13,7 +16,8 @@ import { resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '../../..');
 const CONTRACT = 'kotoba-edfa2b47.testnet';
 const RPC = 'https://rpc.testnet.fastnear.com';
-const ID = 'fomc-2026-01-tariffs-live';
+const ID = process.env.KOTOBA_FILM_MARKET ?? 'fomc-2026-01-tariffs-live';
+const ACTOR = process.env.KOTOBA_FILM_ACCOUNT ?? 'trader-v4.json';
 const SOURCE = 'https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260128.pdf';
 const FILE = resolve(root, 'deployments/film-v7-settlement-2026-11-14.json');
 const cmd = process.argv[2] ?? 'status';
@@ -39,21 +43,22 @@ let evidence; try { evidence = JSON.parse(await readFile(FILE, 'utf8')); } catch
 async function record(step, outcome, extra = {}) {
   const hash = outcome.transaction.hash;
   const failed = [outcome.status, ...outcome.receipts_outcome.map(r => r.outcome.status)].some(s => s?.Failure);
-  evidence.steps.push({ step, tx: hash, explorer: `https://testnet.nearblocks.io/txns/${hash}`, signer: outcome.transaction.signer_id, receiver: outcome.transaction.receiver_id, status: failed ? 'failed' : 'final', at: new Date().toISOString(), ...extra });
-  evidence.market_after = await view('get_market', { id: ID }).catch(() => null);
+  evidence.steps.push({ market: ID, step, tx: hash, explorer: `https://testnet.nearblocks.io/txns/${hash}`, signer: outcome.transaction.signer_id, receiver: outcome.transaction.receiver_id, status: failed ? 'failed' : 'final', at: new Date().toISOString(), ...extra });
+  evidence.markets_after = { ...(evidence.markets_after ?? {}), [ID]: await view('get_market', { id: ID }).catch(() => null) };
   await writeFile(FILE, JSON.stringify(evidence, null, 2) + '\n');
   console.log(step, failed ? 'FAILED' : 'ok', hash);
   if (failed) throw Error(`${step} failed on chain: ${hash}`);
 }
 
 if (cmd === 'status') {
-  console.log('trader', await balance('trader.kotoba-markets.testnet'), 'mm', await balance('kotoba-mm.testnet'), 'contract', await balance(CONTRACT));
+  console.log('trader', await balance('trader.kotoba-markets.testnet'), 'player', await balance('player.kotoba-edfa2b47.testnet'), 'mm', await balance('kotoba-mm.testnet'), 'contract', await balance(CONTRACT));
   console.log(JSON.stringify(await view('get_market', { id: ID }), null, 1));
 } else if (cmd === 'fund') {
   const mm = await account('mm.json');
+  const to = JSON.parse(await readFile(resolve(root, '.near-credentials', ACTOR), 'utf8')).account_id;
   const amount = utils.format.parseNearAmount('1');
-  const out = await mm.sendMoney('trader.kotoba-markets.testnet', BigInt(amount));
-  await record('fund trader (1 NEAR from kotoba-mm.testnet)', out);
+  const out = await mm.sendMoney(to, BigInt(amount));
+  await record(`fund ${to} (1 NEAR from kotoba-mm.testnet)`, out);
 } else if (cmd === 'create') {
   const secs = Number(process.argv[3] ?? 240);
   if (!(secs >= 60 && secs <= 3600)) throw Error('CLOSE_SECONDS_60_TO_3600');
@@ -67,7 +72,7 @@ if (cmd === 'status') {
 } else if (cmd === 'buy') {
   const qty = 20;
   const quote = BigInt(await view('quote', { id: ID, yes: true, quantity: qty }));
-  const trader = await account('trader-v4.json');
+  const trader = await account(ACTOR);
   const out = await trader.functionCall({ contractId: CONTRACT, methodName: 'buy', args: { id: ID, yes: true, quantity: qty }, gas: 30_000_000_000_000n, attachedDeposit: quote });
-  await record(`buy ${qty} Yes (trader)`, out, { quote_yocto: quote.toString() });
+  await record(`buy ${qty} Yes (${trader.accountId})`, out, { quote_yocto: quote.toString() });
 } else throw Error('USAGE: status | fund | create <secs> | buy');
