@@ -239,7 +239,7 @@ Built with AI coding agents (Claude Code, Codex) under human direction; all code
 
 ### Other projects by the same team in this hackathon
 
-Lead: <TBD by Nick>
+Lead: Nivesh Gajengi. Nivesh also leads **Magen** (https://github.com/nickthelegend/magen-near), a quantum-safe multichain wallet. The two are independent products.
 
 ### License
 
